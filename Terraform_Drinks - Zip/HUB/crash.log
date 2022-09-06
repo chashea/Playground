@@ -1,0 +1,55 @@
+2021/06/16 10:04:20 [INFO] Terraform version: 0.14.7  
+2021/06/16 10:04:20 [INFO] Go runtime version: go1.15.6
+2021/06/16 10:04:20 [INFO] CLI args: []string{"C:\\Users\\vsantana\\.terraform\\terraform.exe", "providers", "schema", "-json", "-no-color"}
+2021/06/16 10:04:20 [DEBUG] Attempting to open CLI config file: C:\Users\vsantana\AppData\Roaming\terraform.rc
+2021/06/16 10:04:20 [DEBUG] File doesn't exist, but doesn't need to. Ignoring.
+2021/06/16 10:04:20 [DEBUG] Using modified User-Agent: HashiCorp Terraform/0.14.7 (+https://www.terraform.io) HashiCorp-terraform-exec/0.13.3
+2021/06/16 10:04:20 [DEBUG] ignoring non-existing provider search directory terraform.d/plugins
+2021/06/16 10:04:20 [DEBUG] ignoring non-existing provider search directory C:\Users\vsantana\AppData\Roaming\terraform.d\plugins
+2021/06/16 10:04:20 [DEBUG] ignoring non-existing provider search directory C:\Users\vsantana\AppData\Roaming\HashiCorp\Terraform\plugins
+2021/06/16 10:04:20 [INFO] CLI command args: []string{"providers", "schema", "-json", "-no-color"}
+2021/06/16 10:04:20 [DEBUG] Using modified User-Agent: Terraform/0.14.7 HashiCorp-terraform-exec/0.13.3
+2021/06/16 10:04:20 [DEBUG] Using modified User-Agent: HashiCorp Terraform/0.14.7 (+https://www.terraform.io) HashiCorp-terraform-exec/0.13.3
+2021/06/16 10:04:20 [TRACE] Meta.Backend: BackendOpts.Config not set, so using settings loaded from provider.tf:9,3-20
+2021/06/16 10:04:20 [TRACE] Meta.Backend: built configuration for "azurerm" backend with hash value 1579948698
+2021/06/16 10:04:20 [TRACE] Preserving existing state lineage "fdf8bf49-b239-21b5-1c4e-da033c615fb7"
+2021/06/16 10:04:20 [TRACE] Preserving existing state lineage "fdf8bf49-b239-21b5-1c4e-da033c615fb7"
+2021/06/16 10:04:20 [TRACE] Meta.Backend: working directory was previously initialized for "azurerm" backend
+2021/06/16 10:04:20 [TRACE] Meta.Backend: using already-initialized, unchanged "azurerm" backend configuration
+2021/06/16 10:04:20 [TRACE] Meta.Backend: instantiated backend of type *azure.Backend
+2021/06/16 10:04:20 [TRACE] providercache.fillMetaCache: scanning directory .terraform\providers
+2021/06/16 10:04:20 [TRACE] getproviders.SearchLocalDirectory: .terraform\providers is a symlink to .terraform\providers
+2021/06/16 10:04:20 [TRACE] getproviders.SearchLocalDirectory: found registry.terraform.io/hashicorp/azurerm v2.50.0 for windows_amd64 at .terraform\providers\registry.terraform.io\hashicorp\azurerm\2.50.0\windows_amd64
+2021/06/16 10:04:20 [TRACE] providercache.fillMetaCache: including .terraform\providers\registry.terraform.io\hashicorp\azurerm\2.50.0\windows_amd64 as a candidate package for registry.terraform.io/hashicorp/azurerm 2.50.0
+2021/06/16 10:04:24 [DEBUG] checking for provisioner in "."
+2021/06/16 10:04:24 [DEBUG] checking for provisioner in "C:\\Users\\vsantana\\.terraform"
+2021/06/16 10:04:24 [INFO] Failed to read plugin lock file .terraform\plugins\windows_amd64\lock.json: open .terraform\plugins\windows_amd64\lock.json: The system cannot find the path specified.
+2021/06/16 10:04:24 [TRACE] Meta.Backend: backend *azure.Backend does not support operations, so wrapping it in a local backend
+2021/06/16 10:04:24 [TRACE] backend/local: requesting state manager for workspace "default"
+2021/06/16 10:04:24 [DEBUG] Using modified User-Agent: Terraform/0.14.7 HashiCorp-terraform-exec/0.13.3
+2021/06/16 10:04:24 [TRACE] backend/local: requesting state lock for workspace "default"
+2021/06/16 10:04:24 [TRACE] backend/local: reading remote state for workspace "default"
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal 0xc0000005 code=0x0 addr=0x10 pc=0x1d4fe3a]
+
+goroutine 1 [running]:
+github.com/hashicorp/terraform/backend/remote-state/azure.(*RemoteClient).Get(0xc000a030e0, 0xc00093cd70, 0xc00022ec60, 0xc0000a0080)
+	/home/circleci/project/project/backend/remote-state/azure/client.go:42 +0x17a
+github.com/hashicorp/terraform/states/remote.(*State).refreshState(0xc0009e71a0, 0xc00093cd70, 0x43)
+	/home/circleci/project/project/states/remote/state.go:111 +0x3f
+github.com/hashicorp/terraform/states/remote.(*State).RefreshState(0xc0009e71a0, 0x0, 0x0)
+	/home/circleci/project/project/states/remote/state.go:104 +0x73
+github.com/hashicorp/terraform/backend/local.(*Local).context(0xc000941790, 0xc00093f0a0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/home/circleci/project/project/backend/local/backend_local.go:65 +0x5ff
+github.com/hashicorp/terraform/backend/local.(*Local).Context(0xc000941790, 0xc00093f0a0, 0x0, 0x0, 0xc000941790, 0x1, 0x0, 0x0)
+	/home/circleci/project/project/backend/local/backend_local.go:33 +0x134
+github.com/hashicorp/terraform/command.(*ProvidersSchemaCommand).Run(0xc0009a21c0, 0xc00005a0b0, 0x1, 0x5, 0xc0002f85c0)
+	/home/circleci/project/project/command/providers_schema.go:92 +0x75f
+github.com/mitchellh/cli.(*CLI).Run(0xc0006717c0, 0xc0006717c0, 0xc00089fd48, 0x1)
+	/go/pkg/mod/github.com/mitchellh/cli@v1.1.0/cli.go:260 +0x1cf
+main.wrappedMain(0x0)
+	/home/circleci/project/project/main.go:304 +0xe85
+main.realMain(0x0)
+	/home/circleci/project/project/main.go:106 +0xf1
+main.main()
+	/home/circleci/project/project/main.go:42 +0x45

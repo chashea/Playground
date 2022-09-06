@@ -1,0 +1,5 @@
+terraform init -backend-config="azure.conf.hcl"
+
+terraform plan -out spoke.plan
+
+terraform apply .\spoke.plan

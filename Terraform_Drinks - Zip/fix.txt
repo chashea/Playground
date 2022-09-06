@@ -1,0 +1,9 @@
+Firewall configuration must be a map not a single entry
+Need to implement firewall network service tags and FQDNs using source_ip_Groups and destination_ip_groups
+Need to implement application rules and nat rules
+
+Work needed:
+VMs
+Principals = SP, MID, UID
+Private DNS
+Private AKS
