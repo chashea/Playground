@@ -18,8 +18,8 @@ resource "azurerm_resource_group" "rg" {
   name     = var.rg_name
   location = var.rg_location
   tags = {
-    Environemnt = "Terraform Getting Started"
-    Team        = "ADO"
+    Environemnt = "Pre-Prod"
+    Team        = "FTA"
   }
 }
 
@@ -29,22 +29,5 @@ resource "azurerm_virtual_network" "hubvnet" {
   address_space    = var.hubvnet_address_space
   location         = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  subnet {
-    name           = var.fw_subnet_name
-    address_prefix = var.fw_address_prefix
-  }
-  subnet {
-    name           = var.bastion_subnet_name
-    address_prefix = var.bastion_address-prefix
-  }
-  subnet {
-    name           = var.mgmt_subnet_name
-    address_prefix = var.mgmt_address_prefix
-  }
   tags = azurerm_resource_group.rg.tags
-}
-
-# Create a Spoke Vnet
-resource "azurerm_virtual.network" "spokevnet" {
-
 }
