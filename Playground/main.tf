@@ -31,3 +31,7 @@ resource "azurerm_virtual_network" "hubvnet" {
   resource_group_name = azurerm_resource_group.rg.name
   tags = azurerm_resource_group.rg.tags
 }
+
+
+
+
