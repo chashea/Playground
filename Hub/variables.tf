@@ -24,3 +24,7 @@ variable "adds_sub" {
   default = "ADDS-Subnet"
 }
 
+variable "bastion_name" {
+  default = "Bastion-WUS"
+}
+
