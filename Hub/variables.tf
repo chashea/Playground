@@ -12,6 +12,15 @@ variable "hubvnet_name" {
   default = "Vnet-Hub-WUS"
 }
 
-variable "hubvnet_address_space" {
-  default = "10.15.0.0/24"
+variable "bastion_sub" {
+  default = "AzureBastionSubnet"
 }
+
+variable "fw_sub" {
+  default = "AzureFirewallSubnet"
+}
+
+variable "adds_sub" {
+  default = "ADDS-Subnet"
+}
+
