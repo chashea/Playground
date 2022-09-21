@@ -28,3 +28,19 @@ variable "bastion_name" {
   default = "Bastion-WUS"
 }
 
+variable "fw_name" {
+  default = "Fw-WUS"
+}
+
+variable "fw_policy_name" {
+  default = "FW-Policy-WUS"
+}
+
+variable "fw_rule_collection_group" {
+  default = "FW-RuleCollection-WUS"
+}
+
+variable "fw_net_rule" {
+  default = "FW-NetRule-WUS"
+
+}
