@@ -1,6 +1,8 @@
-resource "azurerm_virtual_network" "hub-vnet" {
-  name = "${var.hub-vnet-name}"
-  location = var.hub-vnet-location
+resource "azurerm_virtual_network" "hub-net" {
+  name = "${var.hub-net-name}"
+  location = var.hub-net-location
   address_space = [ "10.0.0.0/16" ]
+  resource_group_name = var.hub-net-rg
+  tags = var.hub-net-tags
 
 }

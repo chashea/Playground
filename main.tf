@@ -1,14 +1,14 @@
 module "resource-group" {
-  source = "./Modules/resource-group"
-  rg-name = "RG-WUS"
-  rg-location = "WestUS"
+  source        = "./Modules/resource-group"
+  rg-name       = "RG-WUS"
+  rg-location   = "WestUS"
 }
 
 module "hub-net" {
-  source = "./Modules/hub-net"
-  hub-vnet-name = "vnet-hub-wus"
-  location = azurerm_resource_group.rg.location
-  tags = azurerm_resource_group.rg.tags
-  resource_group_name = resource_group_name.rg.name
-
-}
+  source            = "./Modules/hub-net"
+  hub-net-name      = "vnet-hub-wus"
+  hub-net-location  = module.resource-group.resource_group_location
+  hub-net-rg        = module.resource-group.resource_group_name
+  hub-net-tags      = module.resource-group.resource_group_tags
+  
+  }
