@@ -9,6 +9,4 @@ module "hub-net" {
   hub-net-name      = "vnet-hub-wus"
   hub-net-location  = module.resource-group.resource_group_location
   hub-net-rg        = module.resource-group.resource_group_name
-  hub-net-tags      = module.resource-group.resource_group_tags
-  
   }
