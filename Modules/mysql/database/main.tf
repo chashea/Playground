@@ -10,13 +10,13 @@ resource "azurerm_mysql_server" "mysql-server" {
     storage_mb              = var.mysqlserver_storage_mb
     version                 = var.mysqlserver_version
 
-    create_mode             = "replica"
+    create_mode             = "Default"
     ssl_enforcement_enabled = true
     ssl_minimal_tls_version_enforced = "TLS1_2"
     public_network_access_enabled = true
     geo_redundant_backup_enabled = true
 
-    tags = var.rg-tags
+    tags = var.rg_tags
 
 }
 

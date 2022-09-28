@@ -8,3 +8,7 @@ variable "rg_location" {
   description = "location of your resources"
 }
 
+variable "rg_tags" {
+  type = map(string)
+  description = "tags for your resources"
+}
