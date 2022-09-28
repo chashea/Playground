@@ -1,26 +1,20 @@
-module "resource-group" {
+module "resource_group" {
   source        = "./Modules/resource-group"
-  rg-name       = "RG-WUS"
-  rg-location   = "WestUS"
+  rg_name       = "RG-WUS"
+  rg_location   = "WestUS"
 }
-
-## module "hub-net" {
-##  source            = "./Modules/hub-net"
-## hub-net-name      = "vnet-hub-wus"
-## hub-net-location  = module.resource-group.resource_group_location
-##  hub-net-rg        = module.resource-group.resource_group_name
-##  }
 
 module "mysql" {
-  source            = "./Modules/mysql"
-  mysqlserver_server_name = "mysqlserver-wus"
-  mysqlserver_version = "5.7"
-  mysqlserver_sku_name = "GP_Gen5_2"
-  mysqlserver_storage_mb = 5120
-  mysqldb_name = "mysqldb"
-  mysqldb_charset = "utf8"
-  mysqldb_collation = "utf8_general_ci"
-  mysqlserver_location = module.resource-group.resource_group_location
-  mysqlserver_rg = module.resource-group.resource_group_name
+  source                            = "./Modules/mysql/database"
+  mysqlserver_server_name           = "mysqlserver-wus"
+  rg_location                       = module.resource_group.rg_location
+  rg_name                           = module.resource_group.rg_name 
+  rg_tags                           = module.resource_group.rg_tags
+  mysqlserver_version               = "5.7"
+  mysqlserver_sku_name              = "GP_Gen5_2"
+  mysqlserver_storage_mb            = 5120
+  mysqldb_name                      = "mysqldb"
+  mysqldb_charset                   = "utf8"
+  mysqldb_collation                 = "utf8_general_ci"
+
 }
-  

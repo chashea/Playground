@@ -1,7 +1,7 @@
 resource "azurerm_mysql_server" "mysql-server" {
     name                    = var.mysqlserver_server_name
-    location                = module.resource-group.azurerm_resource_group.rg.location
-    resource_group_name     = module.resource-group.azurerm_resource_group.rg.name
+    location                = var.rg_location
+    resource_group_name     = var.rg_name
     
     administrator_login          = "mysqladmin"
     administrator_login_password = "mysqladminpassword"
@@ -16,14 +16,14 @@ resource "azurerm_mysql_server" "mysql-server" {
     public_network_access_enabled = true
     geo_redundant_backup_enabled = true
 
-    tags = module.resource-group.azurerm_resource_group.rg.tags
-    
+    tags = var.rg-tags
+
 }
 
 ## Configuration
 resource "azurerm_mysql_configuration" "mysql-config" {
     name                = "max_connections"
-    resource_group_name = module.resource-group.azurerm_resource_group.rg.name
+    resource_group_name = var.rg_name
     server_name         = azurerm_mysql_server.mysql-server.name
     value               = "1000"
 }
@@ -32,7 +32,7 @@ resource "azurerm_mysql_configuration" "mysql-config" {
 ## Database
 resource "azurerm_mysql_database" "mysql-db" {
     name                = "${var.mysqldb_name}"
-    resource_group_name = module.resource-group.azurerm_resource_group.rg.name
+    resource_group_name = var.rg_name
     server_name         = azurerm_mysql_server.mysql-server.name
     charset             = var.mysqldb_charset
     collation           = var.mysqldb_collation

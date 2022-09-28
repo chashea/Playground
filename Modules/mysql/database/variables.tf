@@ -1,4 +1,21 @@
+variable "rg_name" {
+  description = "The name of the resource group in which to create the MySQL Server."
+  type        = string
+}
+
+variable "rg_location" {
+  description = "The Azure Region in which to create the MySQL Server."
+  type        = string
+}
+
+variable "rg_tags" {
+  description = "The tags to associate with the MySQL Server."
+  type        = map(string)  
+}
+
 ## Server variables
+
+
 variable "mysqlserver_server_name" {
   type = string
   description = "this is the namne of the mysql server"
