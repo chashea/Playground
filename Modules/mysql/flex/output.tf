@@ -9,6 +9,11 @@ output "flex_server_id" {
 
 
 output "flex_database_name" {
-  value = azurerm_mysql_flexible_server_database.flex_db.name
+  value = azurerm_mysql_flexible_database.flex_db.name
+}
+
+
+output "flex_database_id" {
+  value = azurerm_mysql_flexible_database.flex_db.id
 }
 

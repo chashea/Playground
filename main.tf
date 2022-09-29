@@ -10,16 +10,18 @@ module "resource_group" {
 }
 
 module "mysql" {
-  source                            = "./Modules/mysql/database"
-  mysqlserver_server_name           = "mysqlserver-wus"
-  rg_location                       = module.resource_group.rg_location
+  source                            = "./Modules/mysql/flex"
   rg_name                           = module.resource_group.rg_name
+  rg_location                       = module.resource_group.rg_location
   rg_tags                           = module.resource_group.rg_tags
-  mysqlserver_version               = "5.7"
-  mysqlserver_sku_name              = "GP_Gen5_2"
-  mysqlserver_storage_mb            = 5120
-  mysqldb_name                      = "mysqldb"
-  mysqldb_charset                   = "utf8"
-  mysqldb_collation                 = "utf8_general_ci"
-
+  flex_server_name                  = "mysqlserverflex"
+  flex_administrator_login          = "mysqladmin"
+  flex_administrator_password       = "P@ssw0rd1234"
+  flex_sku_name                     = "B_Standard_B1s"
+  flex_backup_retention_days        = 7
+  flex_db_name                      = "mysqldbflex"
+  flex_db_charset                   = "utf8"
+  flex_db_collation                 = "utf8_general_ci"
 }
+
+
