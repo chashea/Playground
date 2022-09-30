@@ -20,10 +20,11 @@ module "mysql" {
   flex_sku_name                     = "B_Standard_B1s"
   flex_backup_retention_days        = 7
   flex_version                      = "8.0.21"
-  flex_create_mode                  = "Default"
+  flex_create_mode                  = "GeoRestore"
   flex_geo_redundant_backup_enabled = true
   flex_availability_zone            = "1,2,3"
   flex_high_availability            = "ZoneRedundant"
+  flex_source_server_id             = "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/RG-WUS/providers/Microsoft.DBforMySQL/flexibleServers/mysqlserverflex"
   flex_db_name                      = "mysqldbflex"
   flex_db_charset                   = "utf8"
   flex_db_collation                 = "utf8_general_ci"

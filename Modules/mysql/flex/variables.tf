@@ -64,11 +64,10 @@ variable "flex_create_mode" {
   description = "this is the create mode of the mysql server"
 }
 
-
-
-
-
-
+variable "flex_source_server_id" {
+  type = string
+  description = "this is the source server id of the mysql server"
+}
 
 ## Database
 

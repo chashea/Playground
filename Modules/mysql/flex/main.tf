@@ -11,6 +11,7 @@ resource "azurerm_mysql_flexible_server" "flex_server" {
     create_mode                       = var.flex_create_mode
     geo_redundant_backup_enabled      = var.flex_geo_redundant_backup_enabled
     zone                              = var.flex_availability_zone
+    source_server_id                  = var.flex_source_server_id
     high_availability {
         mode = var.flex_high_availability
     }
