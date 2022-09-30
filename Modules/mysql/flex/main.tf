@@ -6,6 +6,14 @@ resource "azurerm_mysql_flexible_server" "flex_server" {
     administrator_login               = var.flex_administrator_login
     administrator_password            = var.flex_administrator_password
     sku_name                          = var.flex_sku_name
+    backup_retention_days             = var.flex_backup_retention_days
+    version                           = var.flex_version
+    create_mode                       = var.flex_create_mode
+    geo_redundant_backup_enabled      = var.flex_geo_redundant_backup_enabled
+    zone                              = var.flex_availability_zone
+    high_availability {
+        mode = var.flex_high_availability
+    }
     tags                              = var.rg_tags
 }
 

@@ -40,6 +40,35 @@ variable "flex_administrator_password" {
   description = "this is the administrator password of the mysql server"
 }
 
+variable "flex_version" {
+  type = string
+  description = "this is the version of the mysql server"
+}
+variable "flex_availability_zone" {
+  type = string
+  description = "this is the availability zone of the mysql server"
+}
+
+variable "flex_high_availability" {
+  type = string
+  description = "this is the high availability of the mysql server"
+}
+
+variable "flex_geo_redundant_backup_enabled" {
+  type = bool
+  description = "this is the geo redundant backup enabled of the mysql server"
+}
+
+variable "flex_create_mode" {
+  type = string
+  description = "this is the create mode of the mysql server"
+}
+
+
+
+
+
+
 
 ## Database
 
@@ -57,7 +86,6 @@ variable "flex_db_collation" {
   type = string
   description = "this is the collation of the mysql database"
 }
-
 
 
 
