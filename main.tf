@@ -23,7 +23,19 @@ module "hub_net" {
   }
 
 
-module "mysql" {
+module "spoke_net" {
+  source                = "./Modules/networking/spoke-net"
+  rg_name               = module.resource_group.rg_name
+  rg_location           = module.resource_group.rg_location
+  rg_tags               = module.resource_group.rg_tags
+  spoke_net_name        = "SpokeNet"
+  spoke_net_address_space = "10.2.0.0/16"
+  spoke_net_subnet_name = "SpokeNetSubnet"
+  spoke_subnet_address_prefix = "10.2.0.0/24"  
+}
+
+
+module "flex" {
   source                            = "./Modules/mysql/flex"
   rg_name                           = module.resource_group.rg_name
   rg_location                       = module.resource_group.rg_location
