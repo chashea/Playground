@@ -11,7 +11,7 @@ module "resource_group" {
 
 
 module "hub_net" {
-  source                = "./Modules/hub-net"
+  source                = "./Modules/networking/hub-net"
   rg_name               = module.resource_group.rg_name
   rg_location           = module.resource_group.rg_location
   rg_tags               = module.resource_group.rg_tags
