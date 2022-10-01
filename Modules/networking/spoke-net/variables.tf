@@ -15,7 +15,12 @@ variable "rg_tags" {
   description = "this is the tags of the resource group"
 }
 
-# Hub Network
+variable "hub_net" {
+    type = string
+    description = "this is the name of the hub network"  
+}
+
+# spoke Network
 
 variable "spoke_net_name" {
   type = string
@@ -36,4 +41,15 @@ variable "spoke_subnet_address_prefix" {
   type = string
   description = "this is the address prefix of the hub network subnet"
 }
+
+variable "spoke_net_peering_name" {
+  type = string
+  description = "this is the name of the hub network peering"
+}
+
+variable "spoke_net_peering_remote_virtual_network_id" {
+  type = string
+  description = "this is the remote virtual network id of the hub network peering"
+}
+
 

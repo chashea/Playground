@@ -13,5 +13,3 @@ resource "azurerm_subnet" "spoke_net_subnet" {
     address_prefixes     = [var.spoke_subnet_address_prefix]
 }
 
-
-

@@ -31,7 +31,7 @@ module "spoke_net" {
   spoke_net_name        = "SpokeNet"
   spoke_net_address_space = "10.2.0.0/16"
   spoke_net_subnet_name = "SpokeNetSubnet"
-  spoke_subnet_address_prefix = "10.2.0.0/24"  
+  spoke_subnet_address_prefix = "10.2.0.0/24"
 }
 
 
