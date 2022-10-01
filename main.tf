@@ -9,6 +9,20 @@ module "resource_group" {
   }
 }
 
+
+module "hub_net" {
+  source                = "./Modules/hub-net"
+  rg_name               = module.resource_group.rg_name
+  rg_location           = module.resource_group.rg_location
+  rg_tags               = module.resource_group.rg_tags
+  hub_net_name          = "HubNet"
+  hub_net_address_space = "10.1.0.0/16"
+  dns_servers           = ["10.1.0.4", "10.1.0.5"] 
+  hub_net_subnet_name   = "HubNetSubnet"
+  hub_net_subnet_address_prefix = "10.1.0.0/24"
+  }
+
+
 module "mysql" {
   source                            = "./Modules/mysql/flex"
   rg_name                           = module.resource_group.rg_name
