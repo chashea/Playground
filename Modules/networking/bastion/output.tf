@@ -10,9 +10,8 @@ output "bastion_public_ip_id" {
   value = azurerm_public_ip.bastion_pip.id
 }
 
-
-output "bastion_subnet_address_prefix" {
-  value = azurerm_subnet.bastion_subnet.address_prefix
+output "bastion_public_ip_name" {
+  value = azurerm_public_ip.bastion_pip.name
 }
 
 output "bastion_subnet_address_prefixes" {

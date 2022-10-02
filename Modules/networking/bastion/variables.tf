@@ -28,14 +28,8 @@ variable "bastion_subnet_name" {
   type = string
     description = "this is the name of the bastion subnet"
 }
-
-variable "bastion_subnet_address_prefix" {
-  type = string
-    description = "this is the address prefix of the bastion subnet"
-}
-
 variable "bastion_subnet_address_prefixes" {
-  type = list(string)
+  type = string
     description = "this is the address prefix of the bastion subnet"
 }
 
@@ -79,4 +73,3 @@ variable "bastion_tunneling_enabled" {
     type = bool
     description = "this is the tunneling enabled of the bastion"  
 }
-
