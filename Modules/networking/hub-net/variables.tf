@@ -15,8 +15,9 @@ variable "rg_tags" {
   description = "this is the tags of the resource group"
 }
 
-# Hub Network
+# Hub Required Variables
 
+## Hub Network
 variable "hub_net_name" {
   type = string
   description = "this is the name of the hub network"
@@ -32,6 +33,7 @@ variable "dns_servers" {
   description = "this is the dns servers of the hub network"
 }
 
+## Hub Subnet
 variable "hub_net_subnet_name" {
   type = string
   description = "this is the name of the hub network subnet"
@@ -41,4 +43,6 @@ variable "hub_net_subnet_address_prefix" {
   type = string
   description = "this is the address prefix of the hub network subnet"
 }
+
+
 
