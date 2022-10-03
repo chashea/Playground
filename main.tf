@@ -33,6 +33,9 @@ module "spoke_net" {
   spoke_net_address_space = "11.1.0.0/16"
   spoke_net_subnet_name = "SpokeNetSubnet"
   spoke_subnet_address_prefix = "11.1.0.0/26"
+  spoke_net_peering_name = module.peering.spoke_peering_name
+  spoke_net_peering_remote_virtual_network_id = module.peering.hub_peering_id
+  hub_net               = module.hub_net.hub_net_name
   }
 
   module "peering" {

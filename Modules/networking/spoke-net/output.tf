@@ -3,7 +3,7 @@ output "spoke_net_name" {
 }
 
 output "spoke_net_id" {
-  value = azurerm_virtual_network.spoke_net.id
+  value = azurerm_virtual_network.spoke_net_name.id
 }
 
 output "spoke_net_subnet_name" {
