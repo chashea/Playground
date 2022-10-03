@@ -23,24 +23,27 @@ module "hub_net" {
   }
 
 
-module "bastion_host" {
-  source                = "./Modules/networking/bastion"
+
+module "spoke_net" {
+  source                = "./Modules/networking/spoke-net"
   rg_name               = module.resource_group.rg_name
   rg_location           = module.resource_group.rg_location
   rg_tags               = module.resource_group.rg_tags
-  hub_net               = module.hub_net.hub_net_name
-  bastion_host_name     = "BastionHost"
-  bastion_subnet_name   = "AzureBastionSubnet"
-  bastion_subnet_address_prefixes = "10.1.0.64/26"
-  bastion_public_ip_name = "BastionPublicIP"
-  bastion_public_ip_sku = "Standard"
-  bastion_public_ip_allocation_method = "Static"
-  bastion_ip_configuration_name = "BastionIPConfiguration"
-  bastion_file_copy_enabled = true
-  bastion_scale_units = 1
-  shareable_link_enabled = true
-  bastion_tunneling_enabled = true
-
-    
+  spoke_net_name        = "SpokeNet"
+  spoke_net_address_space = "11.1.0.0/16"
+  spoke_net_subnet_name = "SpokeNetSubnet"
+  spoke_subnet_address_prefix = "11.1.0.0/26"
   }
+
+  module "peering" {
+    source              = "./Modules/networking/peering"
+    rg_name             = module.resource_group.rg_name
+    hub_net_name        = module.hub_net.hub_net_name
+    hub_net_id          = module.hub_net.hub_net_id
+    hub_peering_name    = "HubToSpoke"
+    spoke_net_name      = module.spoke_net.spoke_net_name
+    spoke_net_id        = module.spoke_net.spoke_net_id
+    spoke_peering_name  = "SpokeToHub"
+  }
+
 

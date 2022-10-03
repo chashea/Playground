@@ -30,12 +30,12 @@ variable "spoke_net_id" {
 
 # Peering
 
-variable "peering_hub_net_name" {
+variable "hub_peering_name" {
     type = string
     description = "this is the name of the hub network"  
 }
 
-variable "peering_spoke_net_name" {
+variable "spoke_peering_name" {
     type = string
     description = "this is the name of the spoke network"  
 }
