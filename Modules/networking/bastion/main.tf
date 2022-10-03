@@ -8,6 +8,7 @@ resource "azurerm_bastion_host" "bastion_host" {
         public_ip_address_id = azurerm_public_ip.bastion_pip.id
     }
   tags = var.rg_tags
+
 }
 resource "azurerm_public_ip" "bastion_pip" {
   name                = var.bastion_public_ip_name
@@ -17,8 +18,6 @@ resource "azurerm_public_ip" "bastion_pip" {
   allocation_method   = var.bastion_public_ip_allocation_method
   tags                = var.rg_tags
 }
-
-
 
 resource "azurerm_subnet" "bastion_subnet" {
   name                 = var.bastion_subnet_name

@@ -1,3 +1,4 @@
+# Resource Group
 variable "rg_name" {
   type = string
   description = "this is the name of the resource group"
@@ -13,17 +14,24 @@ variable "rg_tags" {
   description = "this is the tags of the resource group"
 }
 
-variable "hub_net" {
-    type = string
-    description = "this is the name of the hub network"  
-}
+# Bastion Required Variables
 
-
+## Bastion Host
 variable "bastion_host_name" {
   type = string
     description = "this is the name of the bastion host"
 }
 
+variable "bastion_ip_configuration_name" {
+  type = string
+    description = "this is the name of the bastion ip configuration"
+}
+
+## Bastion Subnet
+variable "hub_net" {
+    type = string
+    description = "this is the name of the hub network"  
+}
 variable "bastion_subnet_name" {
   type = string
     description = "this is the name of the bastion subnet"
@@ -32,6 +40,8 @@ variable "bastion_subnet_address_prefixes" {
   type = string
     description = "this is the address prefix of the bastion subnet"
 }
+
+## Bastion PIP
 
 variable "bastion_public_ip_name" {
   type = string
@@ -48,12 +58,8 @@ variable "bastion_public_ip_allocation_method" {
     description = "this is the allocation method of the bastion public ip"
 }
 
-variable "bastion_ip_configuration_name" {
-  type = string
-    description = "this is the name of the bastion ip configuration"
-}
 
-
+# Bastion Optional Variables
 variable "bastion_file_copy_enabled" {
     type = bool
     description = "this is the file copy enabled of the bastion"  
