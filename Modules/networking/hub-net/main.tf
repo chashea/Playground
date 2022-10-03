@@ -12,5 +12,6 @@ resource "azurerm_subnet" "hub_net_subnet" {
   resource_group_name  = var.rg_name
   virtual_network_name = azurerm_virtual_network.hub_net.name
   address_prefixes     = [var.hub_net_subnet_address_prefix]
+
 }
 
