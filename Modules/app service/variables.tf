@@ -16,6 +16,28 @@ variable "rg_tags" {
   description = "this is the tags of the resource group"
 }
 
+# Networking
+
+## Required Variables
+variable "spoke_net_name" {
+    type = string
+    description = "this is the name of the spoke network"  
+}
+
+variable "ase_subnet_name" {
+    type = string
+    description = "this is the name of the spoke network"  
+}
+
+variable "ase_subnet_address_prefix" {
+    type = string
+    description = "this is the name of the spoke network"  
+}
+variable "ase_subnet_id" {
+  type = string
+  description = "this is the subnet id of the app service"
+}
+
 # App Service Environment
 
 ## Required Variables
@@ -32,10 +54,6 @@ variable "ase_location" {
 variable "ase_tags" {
     type = map(string)
     description = "this is the tags of the app service environment"
-}
-variable "ase_subnet_id" {
-    type = string
-    description = "this is the subnet id of the app service environment"
 }
 
 ## Optional Variables
@@ -55,7 +73,7 @@ variable "ase_internal_load_balancing_mode" {
 }
 
 variable "ase_allowed_user_ip_cidrs" {
-    type = list(string)
+    type = string
     description = "this is the allowed user ip cidrs of the app service environment"
 }
 
@@ -73,5 +91,17 @@ variable "ase_cluster_setting_value" {
 
 
 
-# App Service Plan 
+# App Service 
+
+## Required Variables
+
+variable "app_service_name" {
+    type = string
+    description = "this is the name of the app service"  
+}
+
+variable "ase_id"{
+    type = string
+    description = "this is the id of the app service environment"
+}
 
