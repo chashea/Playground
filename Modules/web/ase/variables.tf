@@ -61,6 +61,12 @@ variable "ase_subnet_id" {
 
 
 ## Optional Variables
+variable "ase_zone_redundant" {
+    type = bool
+    description = "this is the zone redundant of the app service environment"
+}
+
+
 variable "ase_pricing_tier" {
     type = string
     description = "this is the pricing tier of the app service environment"

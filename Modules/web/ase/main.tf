@@ -14,6 +14,7 @@ resource "azurerm_app_service_environment_v3" "asev3" {
     resource_group_name                     = var.rg_name
     location                                = var.ase_location
     subnet_id                               = var.ase_subnet_id
+    zone_redundant                          = var.ase_zone_redundant
     tags                                    = var.ase_tags
     cluster_setting {
         name                                = var.ase_cluster_setting_name
