@@ -16,28 +16,6 @@ variable "rg_tags" {
   description = "this is the tags of the resource group"
 }
 
-# Networking
-
-## Required Variables
-variable "spoke_net_name" {
-    type = string
-    description = "this is the name of the spoke network"  
-}
-
-variable "ase_subnet_name" {
-    type = string
-    description = "this is the name of the spoke network"  
-}
-
-variable "ase_subnet_address_prefix" {
-    type = string
-    description = "this is the name of the spoke network"  
-}
-
-
-
-
-
 
 # App Service
 
