@@ -69,10 +69,6 @@ variable "ase_cluster_setting_value" {
     description = "this is the cluster setting value of the app service environment"
 }
 
-variable "ase_cluster_setting_slot_setting" {
-    type = bool
-    description = "this is the cluster setting slot setting of the app service environment"
-}
 
 
 

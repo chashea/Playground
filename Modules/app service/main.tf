@@ -13,7 +13,6 @@ resource "azurerm_app_service_environment" "ase" {
     cluster_setting {
         name                                = var.ase_cluster_setting_name
         value                               = var.ase_cluster_setting_value
-        slot_setting                        = var.ase_cluster_setting_slot_setting
     }
 }
 
