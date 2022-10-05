@@ -1,8 +1,12 @@
+locals {
+  name_suffix = "${var.worload_name}-${var.environment}-${var.location}"
+}
+
 module "resource_group" {
   source        = "./Modules/resource-group"
-  rg_name       = "RG-WUS"
-  rg_location   = "WestUS"
-  rg_tags       = {
+  resource_group_name       = "RG-WUS"
+  resource_group_location   = "WestUS"
+  resource_group_tags       = {
     "Environment" = "Dev"
     "Owner"       = "chashea"
     "Project"     = "Terraform"
