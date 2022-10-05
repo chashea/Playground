@@ -5,7 +5,13 @@ resource "azurerm_subnet" "ase_subnet" {
     resource_group_name                     = var.rg_name
     virtual_network_name                    = var.spoke_net_name
     address_prefixes                        = [var.ase_subnet_address_prefix]
-  
+    delegation {
+        name                                = "Microsoft.Web/hostingEnvironments"
+        service_delegation {
+            name                            = "Microsoft.Web/hostingEnvironments"
+            actions                         = ["Microsoft.Network/virtualNetworks/subnets/action"]
+        }
+    }
 }
 
 # App Service Environment

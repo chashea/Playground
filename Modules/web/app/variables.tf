@@ -61,3 +61,13 @@ variable "site_config_scm_type" {
     description = "this is the scm type of the app service"
 }
 
+# App Service Slot
+
+## Required Variables
+
+variable "app_slot_name" {
+    type = string
+    description = "this is the name of the app service slot"  
+}
+
+
