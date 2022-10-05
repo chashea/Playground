@@ -33,20 +33,63 @@ module "spoke_net" {
   spoke_net_address_space = "11.1.0.0/16"
   spoke_net_subnet_name = "SpokeNetSubnet"
   spoke_subnet_address_prefix = "11.1.0.0/26"
-  spoke_net_peering_name = module.peering.spoke_peering_name
-  spoke_net_peering_remote_virtual_network_id = module.peering.hub_peering_id
-  hub_net               = module.hub_net.hub_net_name
-  }
-
-  module "peering" {
-    source              = "./Modules/networking/peering"
-    rg_name             = module.resource_group.rg_name
-    hub_net_name        = module.hub_net.hub_net_name
-    hub_net_id          = module.hub_net.hub_net_id
-    hub_peering_name    = "HubToSpoke"
-    spoke_net_name      = module.spoke_net.spoke_net_name
-    spoke_net_id        = module.spoke_net.spoke_net_id
-    spoke_peering_name  = "SpokeToHub"
   }
 
 
+module "ase" {
+  source                = "./Modules/ase"
+  rg_name               = module.resource_group.rg_name
+  ase_location          = module.resource_group.rg_location
+  ase_name              = "ASE"
+  ase_sku               = "Standard"
+  ase_capacity          = 1
+  ase_subnet_id         = module.spoke_net.spoke_net_subnet_id
+  ase_vnet_name         = module.spoke_net.spoke_net_name
+  ase_vnet_rg           = module.resource_group.rg_name
+  ase_tags              = module.resource_group.rg_tags
+  asp_name              = "ASP"
+  sku {
+    tier                = "Standard"
+    size                = "S1"
+  }
+
+  }
+
+  module "app_service" {
+  source                = "./Modules/app-service"
+  rg_name               = module.resource_group.rg_name
+  app_service_name      = "AppService"
+  app_service_location  = module.resource_group.rg_location
+  app_service_plan_id   = module.app_service_plan.app_service_plan_id
+  site_config           = {
+    dotnet_framework_version = "v4.0"  
+  }
+
+  app_settings          = {
+    "WEBSITE_NODE_DEFAULT_VERSION" = "10.14.1"
+  }
+
+  connection_string    {
+    name               = "SQLConnectionString"
+    type               = "SQLAzure"
+    value              = "Server=tcp:sqlserver.database.windows.net,1433;Initial Catalog=sqlserver;Persist Security Info=False;User ID=sqladmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  }
+
+    app_slot_name          = "AppServiceSlot"
+    app_slot_location      = module.resource_group.rg_location
+    app_slot_plan_id       = module.app_service_plan.app_service_plan_id
+ site_config            {
+    dotnet_framework_version = "v4.0"  
+}
+
+ app_settings           {
+    WEBSITE_NODE_DEFAULT_VERSION = "10.14.1"
+}
+
+ connection_string     {
+    name               = "SQLConnectionString"
+    type               = "SQLAzure"
+    value              = "Server=tcp:sqlserver.database.windows.net,1433;Initial Catalog=sqlserver;Persist Security Info=False;User ID=sqladmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  }
+
+  }
