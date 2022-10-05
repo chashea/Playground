@@ -10,6 +10,11 @@ variable "resource_group_location" {
   description = "The resource group location"
 }
 
+variable "resource_tags" {
+  type        = map(string)
+  description = "The base tags for all the resources"
+}
+
 # Resource
 
 variable "resource_suffix" {
@@ -22,10 +27,6 @@ variable "resource_instance" {
   description = "The resource instance"
 }
 
-variable "resource_tags" {
-  type        = map(string)
-  description = "The base tags for all the resources"
-}
 
 # App Service Environment
 
