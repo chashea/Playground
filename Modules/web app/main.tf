@@ -35,3 +35,4 @@ resource "azurerm_windows_web_app" "web_app" {
     vnet_route_all_enabled                  = true
 }
 
+
