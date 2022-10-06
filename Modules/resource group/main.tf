@@ -1,8 +1,8 @@
 # Resource Group
 resource "azurerm_resource_group" "resource_group" {
-  name = "${var.resource_group_name}"
+  name = "rg-${var.resource_suffix}${var.resource_instance}"
   location = var.resource_group_location
-  tags = var.resource_group_tags
+  tags = var.resource_tags
 }
 
 
