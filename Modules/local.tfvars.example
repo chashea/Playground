@@ -1,0 +1,6 @@
+
+
+resource_location   = "East US"
+environment   = "Dev"
+workload_name = "infra"
+
