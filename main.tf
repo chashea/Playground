@@ -3,7 +3,7 @@ locals {
 }
 
 module "resource_group" {
-  source        = "./Modules/resource_group"
+  source        = "./Modules/resource group"
   resource_group_location   = "WestUS"
   resource_suffix = local.name_suffix
   resource_instance = "01"
