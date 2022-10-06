@@ -1,7 +1,7 @@
 resource "azurerm_mysql_server" "mysql-server" {
-    name                    = var.mysqlserver_server_name
-    location                = var.rg_location
-    resource_group_name     = var.rg_name
+    name                    = "${var.resource_suffix}${var.resource.instance}"
+    location                = var.resource_group_location
+    resource_group_name     = var.resource_group_name
     
     administrator_login          = "mysqladmin"
     administrator_login_password = "mysqladminpassword"
@@ -9,30 +9,16 @@ resource "azurerm_mysql_server" "mysql-server" {
     sku_name                = var.mysqlserver_sku_name
     storage_mb              = var.mysqlserver_storage_mb
     version                 = var.mysqlserver_version
-
-    create_mode             = "Default"
-    ssl_enforcement_enabled = true
-    ssl_minimal_tls_version_enforced = "TLS1_2"
-    public_network_access_enabled = true
-    geo_redundant_backup_enabled = true
-
-    tags = var.rg_tags
+    ssl_enforcement_enabled = var.mysqlserver_ssl_enforcement_enabled
+    
+    tags = var.resource_tags
 
 }
-
-## Configuration
-resource "azurerm_mysql_configuration" "mysql-config" {
-    name                = "max_connections"
-    resource_group_name = var.rg_name
-    server_name         = azurerm_mysql_server.mysql-server.name
-    value               = "1000"
-}
-  
 
 ## Database
 resource "azurerm_mysql_database" "mysql-db" {
-    name                = "${var.mysqldb_name}"
-    resource_group_name = var.rg_name
+    name                = "${var.resource_suffix}${var.resource.instance}"
+    resource_group_name = var.resource_group_name
     server_name         = azurerm_mysql_server.mysql-server.name
     charset             = var.mysqldb_charset
     collation           = var.mysqldb_collation
