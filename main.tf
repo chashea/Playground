@@ -15,7 +15,7 @@ module "resource_group" {
 }
 
 module "web_app" {
-  source        = "./Modules/web_app"
+  source        = "./Modules/web app"
   resource_group_name       = module.resource_group.resource_group_name
   resource_group_location   = module.resource_group.resource_group_location
   resource_suffix           = local.name_suffix
