@@ -30,13 +30,10 @@ variable "resource_tags" {
 ## Server variables
 
 # Required Variables
-
-
 variable "mysqlserver_version" {
   type = string
   description = "engine major version"
 }
-
 variable "mysqlserver_sku_name" {
   type = string
   description = "this is the sku name of the mysql server"
