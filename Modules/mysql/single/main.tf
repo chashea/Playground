@@ -1,5 +1,5 @@
 resource "azurerm_mysql_server" "mysql-server" {
-    name                    = "${var.resource_suffix}${var.resource.instance}"
+    name                    = "${var.resource_suffix}${var.resource_instance}"
     location                = var.resource_group_location
     resource_group_name     = var.resource_group_name
     
@@ -17,7 +17,7 @@ resource "azurerm_mysql_server" "mysql-server" {
 
 ## Database
 resource "azurerm_mysql_database" "mysql-db" {
-    name                = "${var.resource_suffix}${var.resource.instance}"
+    name                = "${var.resource_suffix}${var.resource_instance}"
     resource_group_name = var.resource_group_name
     server_name         = azurerm_mysql_server.mysql-server.name
     charset             = var.mysqldb_charset

@@ -1,18 +1,8 @@
-output "resource_group_id" {
-  value = azurerm_resource_group.resource_group.id
-}
-
 output "resource_group_name" {
-  value = azurerm_resource_group.resource_group.name
+  value = data.azurerm_resource_group.rg
 }
 
 output "resource_group_location" {
-  value = azurerm_resource_group.resource_group.location
+  value = data.azurerm_resource_group.rg
 }
-
-output "resource_tags" {
-  value = azurerm_resource_group.resource_group.tags
-}
-
-
 
