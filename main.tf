@@ -14,7 +14,7 @@ module "mysql" {
   resource_group_location   = module.resource_group.resource_group_location
   resource_suffix           = local.name_suffix
   resource_instance         = "001"
-  resource_tags             = module.resource_group.resource_tags
+  resource_tags             = var.resource_tags
   mysqlserver_sku_name            = "GP_Gen5_2"
   mysqlserver_version             = "5.7"
   mysqlserver_storage_mb          = "5120"
