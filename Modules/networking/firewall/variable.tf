@@ -38,7 +38,12 @@ variable "fw_public_ip" {
   description = "public ip of your firewall"
 }
 
-variable "fw_subnet_name" {
+variable "fw_subnet_id" {
     type = string
-    description = "name of your firewall subnet"  
+    description = "name of your firewall id"  
+}
+
+variable "fw_policy_id" {
+  type = string
+  description = "id of your firewall policy"
 }
