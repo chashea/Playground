@@ -27,3 +27,8 @@ variable "hub_net_name" {
   type = string
   description = "name of your hub network"
 }
+
+variable "subnet_name" {
+  type = string
+  description = "name of your hub subnet"
+}
