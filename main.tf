@@ -13,15 +13,6 @@ module "hub_net" {
   fw_subnet_name = var.fw_subnet_name
 }
 
-module "firewall" {
-  source        = "./Modules/networking/firewall"
-  resource_group_name = module.resource_group.resource_group_name
-  resource_group_location = module.resource_group.resource_group_location
-  resource_suffix = local.name_suffix
-  resource_instance = "01"
-  resource_tags = var.resource_tags
-  fw_policy_id = module.firewall_policy.fw_policy_id
-  fw_subnet_id = module.hub_net.fw_subnet_id
-}
+
 
 
