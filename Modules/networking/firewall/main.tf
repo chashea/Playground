@@ -5,6 +5,7 @@ resource "azurerm_firewall" "fw" {
   sku_name = "AZFW_Hub"
   sku_tier = "Premium"
   firewall_policy_id = var.fw_policy_id
+  
     ip_configuration {
         name = "configuration"
         subnet_id = var.fw_subnet_id
