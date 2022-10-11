@@ -7,20 +7,21 @@ module "resource_group" {
   resource_group_name = var.resource_group_name
 }
 
-
-module "mysql" {
-  source        = "./Modules/mysql/single"
-  resource_group_name       = module.resource_group.resource_group_name
-  resource_group_location   = module.resource_group.resource_group_location
-  resource_suffix           = local.name_suffix
-  resource_instance         = "001"
-  resource_tags             = var.resource_tags
-  mysqlserver_sku_name            = "GP_Gen5_2"
-  mysqlserver_version             = "5.7"
-  mysqlserver_storage_mb          = "5120"
-  mysqlserver_ssl_enforcement_enabled = true
-  mysqldb_collation = "utf8_general_ci"
-  mysqldb_charset = "utf8"
-
-
+module "hub_net" {
+  source        = "./Modules/networking/hub-net"
+  hub_net_name  = var.hub_net_name
+  fw_subnet_name = var.fw_subnet_name
 }
+
+module "firewall" {
+  source        = "./Modules/networking/firewall"
+  resource_group_name = module.resource_group.resource_group_name
+  resource_group_location = module.resource_group.resource_group_location
+  resource_suffix = local.name_suffix
+  resource_instance = "01"
+  resource_tags = var.resource_tags
+  fw_policy_id = module.firewall_policy.fw_policy_id
+  fw_subnet_id = module.hub_net.fw_subnet_id
+}
+
+

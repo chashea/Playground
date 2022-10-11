@@ -1,16 +1,10 @@
-output "hub_net_name" {
-  value = azurerm_virtual_network.hub_net.name
-}
-
 output "hub_net_id" {
-  value = azurerm_virtual_network.hub_net.id
+  value = data.azurerm_virtual_network.hub_net_name.id
 }
 
-output "hub_net_subnet_name" {
-  value = azurerm_subnet.hub_net_subnet.name
+output "fw_subnet_id" {
+  value = data.azurerm_subnet.fw_subnet_name.id
 }
 
-output "hub_net_subnet_id" {
-  value = azurerm_subnet.hub_net_subnet.id
-}
 
+  
