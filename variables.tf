@@ -22,3 +22,8 @@ variable "resource_tags" {
   type        = map(string)
   description = "The base tags for all the resources"
 }
+
+variable "hub_net_name" {
+  type = string
+  description = "name of your hub network"
+}
