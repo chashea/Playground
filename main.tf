@@ -14,3 +14,11 @@ module "hub_net" {
   subnet_name = var.subnet_name
 }
 
+
+module "firewall" {
+  source        = "./Modules/networking/firewall"
+  resource_group_name = module.resource_group.resource_group_name
+  fw_public_ip = var.fw_pip_name
+  fw_subnet_id = module.hub_net.subnet_id
+}
+

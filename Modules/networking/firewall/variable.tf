@@ -43,7 +43,3 @@ variable "fw_subnet_id" {
     description = "name of your firewall id"  
 }
 
-variable "fw_policy_id" {
-  type = string
-  description = "id of your firewall policy"
-}

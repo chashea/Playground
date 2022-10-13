@@ -32,3 +32,8 @@ variable "subnet_name" {
   type = string
   description = "name of your hub subnet"
 }
+
+variable "fw_pip_name" {
+  type = string
+  description = "name of your firewall public ip"
+}
