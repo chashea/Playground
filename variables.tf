@@ -24,16 +24,16 @@ variable "resource_tags" {
 }
 
 variable "hub_net_name" {
-  type = string
+  type        = string
   description = "name of your hub network"
 }
 
 variable "subnet_name" {
-  type = string
+  type        = string
   description = "name of your hub subnet"
 }
 
 variable "fw_pip_name" {
-  type = string
+  type        = string
   description = "name of your firewall public ip"
 }
