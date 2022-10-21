@@ -10,10 +10,10 @@ locals {
 
 resource "azurerm_application_gateway" "name" {
   name = "appgw-${var.resource_suffix}-${var.resource_instance}"
-  resource_group_name = module.resource_group.resource_group_name
-  location = var.location
+  resource_group_name = var.resource_group_name
+  location = var.resource_group_location
   zones = ["1", "2"]
-  firewall_policy_id = module.waf_policy.waf_policy_id
+  firewall_policy_id = module.wafpolicy.waf_policy_id
   force_firewall_policy_association = true
   sku {
     name = "WAF_Small"
@@ -23,7 +23,7 @@ resource "azurerm_application_gateway" "name" {
 
     gateway_ip_configuration {
       name = "appgw-ip-config-${local.name_suffix}"
-      subnet_id = module.hub_net.subnet_id
+      subnet_id = module.spoke_net.subnet_id
     }
 
     frontend_port {
@@ -33,7 +33,7 @@ resource "azurerm_application_gateway" "name" {
 
     frontend_ip_configuration {
       name = local.frontend_ip_name
-      subnet_id = module.hub_net.subnet_id
+      subnet_id = module.spoke_net.subnet_id
     }
 
     backend_address_pool {
@@ -73,5 +73,6 @@ resource "azurerm_application_gateway" "name" {
         request_body_check = true
     }
 
- 
+ tags = var.resource_tags
+
 }
