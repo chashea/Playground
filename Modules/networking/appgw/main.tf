@@ -1,3 +1,21 @@
+resource "azurerm_subnet" "appgw_subnet" {
+  name                 = "appgw-subnet"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = var.spoke_net_name
+  address_prefixes     = [""]
+  
+}
+
+resource "azurerm_public_ip" "appgw_pip" {
+  name                = "appgw-pip-${var.resource_suffix}-${var.resource_instance}"
+  resource_group_name = var.resource_group_name
+  location            = var.resource_group_location
+  allocation_method   = "Dynamic"
+  sku                 = "Standard"
+  tags                = var.resource_tags
+}
+  
+
 locals {
   backend_address_pool_name = "appgw-backend-pool-${local.name_suffix}"
   frontend_port_name = "appgw-frontend-port-${local.name_suffix}"
@@ -23,7 +41,7 @@ resource "azurerm_application_gateway" "name" {
 
     gateway_ip_configuration {
       name = "appgw-ip-config-${local.name_suffix}"
-      subnet_id = module.spoke_net.subnet_id
+      subnet_id = azurerm_subnet.appgw_subnet.id
     }
 
     frontend_port {
@@ -33,7 +51,7 @@ resource "azurerm_application_gateway" "name" {
 
     frontend_ip_configuration {
       name = local.frontend_ip_name
-      subnet_id = module.spoke_net.subnet_id
+      public_ip_address_id = azurerm_public_ip.appgw_pip.id
     }
 
     backend_address_pool {

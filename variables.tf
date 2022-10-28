@@ -28,7 +28,7 @@ variable "hub_net_name" {
   description = "name of your hub network"
 }
 
-variable "subnet_name" {
+variable "spoke_subnet_name" {
   type        = string
   description = "name of your hub subnet"
 }

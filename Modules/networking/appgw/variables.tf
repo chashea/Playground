@@ -22,3 +22,8 @@ variable "resource_tags" {
   type        = map(string)
   description = "The base tags for all the resources"
 }
+
+variable "spoke_net_name" {
+  type        = string
+  description = "The name of the spoke network"
+}
