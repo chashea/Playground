@@ -10,8 +10,6 @@ variable "resource_group_location" {
   description = "The resource group location"
 }
 
-# Resource
-
 variable "resource_suffix" {
   type        = string
   description = "The resource suffix for the naming convention ie: resource-workload-environment-location-instance"
@@ -27,19 +25,17 @@ variable "resource_tags" {
   description = "The resource tags"
 }
 
+# networking
+
+variable "hub_net_name" {
+  type        = string
+  description = "The hub network name"
+}
+
 # Firewall 
-variable "fw_name" {
-  type = string
-  description = "name of your firewall"
-}
 
-variable "fw_public_ip" {
-  type = string
-  description = "public ip of your firewall"
-}
-
-variable "fw_subnet_id" {
-    type = string
-    description = "name of your firewall id"  
+variable "fw_policy_id" {
+  type        = string
+  description = "The firewall policy id"
 }
 
