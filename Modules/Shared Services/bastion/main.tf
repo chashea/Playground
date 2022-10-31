@@ -8,10 +8,10 @@ resource "azurerm_public_ip" "bastion_pip" {
 }
 
 resource "azurerm_subnet" "bastion_subnet" {
-  name                 = var.bastion_subnet_name
+  name                 = "AzureBastionSubnet"
   resource_group_name  = var.resource_group_name
-  virtual_network_name = var.hub_net
-  address_prefixes     = [x.x.x.x.x/x]
+  virtual_network_name = var.hub_net_name
+  address_prefixes     = ["10.1.0.0/26"]
 }
 
 resource "azurerm_bastion_host" "bastion_host" {
