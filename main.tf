@@ -14,28 +14,3 @@ module "hub_net" {
   subnet_name         = var.subnet_name
 }
 */
-
-module "spoke_net" {
-  source              = "./Modules/networking/spoke-net"
-  resource_group_name = module.resource_group.resource_group_name
-  resource_suffix     = local.name_suffix
-  resource_instance   = "001"
-  resource_tags       = var.resource_tags
-}
-
-
-module "waf_policy" {
-  source              = "./Modules/networking/wafpolicy"
-  resource_group_name = module.resource_group.resource_group_name
-  resource_suffix     = local.name_suffix
-  resource_instance   = "001"
-  resource_tags       = var.resource_tags
-}
-
-module "appgw" {
-  source              = "./Modules/networking/appgw"
-  resource_group_name = module.resource_group.resource_group_name
-  resource_suffix     = local.name_suffix
-  resource_instance   = "001"
-  resource_tags       = var.resource_tags
-}

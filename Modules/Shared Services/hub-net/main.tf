@@ -9,8 +9,3 @@ data "azurerm_subnet" "subnet_name" {
   resource_group_name = var.resource_group_name
 }
 
-data "azurerm_public_ip" "fw_pip" {
-  name                = var.fw_pip_name
-  resource_group_name = var.resource_group_name
-}
-  
