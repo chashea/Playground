@@ -23,17 +23,3 @@ variable "resource_tags" {
   description = "The base tags for all the resources"
 }
 
-variable "hub_net_name" {
-  type        = string
-  description = "name of your hub network"
-}
-
-variable "spoke_subnet_name" {
-  type        = string
-  description = "name of your hub subnet"
-}
-
-variable "fw_pip_name" {
-  type        = string
-  description = "name of your firewall public ip"
-}

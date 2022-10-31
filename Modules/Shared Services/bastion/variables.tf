@@ -1,63 +1,28 @@
-# Resource Group
-variable "rg_name" {
-  type = string
-  description = "this is the name of the resource group"
+variable "resource_group_name" {
+  type        = string
+  description = "The resource group name"
 }
 
-variable "rg_location" {
-  type = string
-  description = "this is the location of the resource group"
+variable "resource_group_location" {
+  type        = string
+  description = "The resource group location"
 }
 
-variable "rg_tags" {
-  type = map(string)
-  description = "this is the tags of the resource group"
+variable "resource_suffix" {
+  type        = string
+  description = "The resource suffix for the naming convention ie: resource-workload-environment-location-instance"
 }
 
+variable "resource_instance" {
+  type        = string
+  description = "The resource instance"
+}
+
+variable "resource_tags" {
+  type        = map(string)
+  description = "The base tags for all the resources"
+}
 # Bastion Required Variables
-
-## Bastion Host
-variable "bastion_host_name" {
-  type = string
-    description = "this is the name of the bastion host"
-}
-
-variable "bastion_ip_configuration_name" {
-  type = string
-    description = "this is the name of the bastion ip configuration"
-}
-
-## Bastion Subnet
-variable "hub_net" {
-    type = string
-    description = "this is the name of the hub network"  
-}
-variable "bastion_subnet_name" {
-  type = string
-    description = "this is the name of the bastion subnet"
-}
-variable "bastion_subnet_address_prefixes" {
-  type = string
-    description = "this is the address prefix of the bastion subnet"
-}
-
-## Bastion PIP
-
-variable "bastion_public_ip_name" {
-  type = string
-    description = "this is the name of the bastion public ip"
-}
-
-variable "bastion_public_ip_sku" {
-  type = string
-    description = "this is the sku of the bastion public ip"
-}
-
-variable "bastion_public_ip_allocation_method" {
-  type = string
-    description = "this is the allocation method of the bastion public ip"
-}
-
 
 # Bastion Optional Variables
 variable "bastion_file_copy_enabled" {
