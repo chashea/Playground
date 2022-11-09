@@ -22,3 +22,8 @@ variable "resource_tags" {
   type        = map(string)
   description = "The resource tags"
 }
+
+variable "fw_name" {
+  type        = string
+  description = "The firewall name"  
+}
