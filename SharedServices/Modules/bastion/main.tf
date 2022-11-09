@@ -18,15 +18,15 @@ resource "azurerm_bastion_host" "bastion_host" {
   name                = "bastion-${var.resouce_suffix}-${var.location}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
-  sku = "Standard"
-    ip_configuration {
-        name                 = "bastion-ip-configuration"
-        subnet_id            = azurerm_subnet.bastion_subnet.id
-        public_ip_address_id = azurerm_public_ip.bastion_pip.id
-    }
-  tags = var.resource_tags
-  file_copy_enabled = "true" 
-  scale_units = 4
+  sku                 = "Standard"
+  ip_configuration {
+    name                 = "bastion-ip-configuration"
+    subnet_id            = azurerm_subnet.bastion_subnet.id
+    public_ip_address_id = azurerm_public_ip.bastion_pip.id
+  }
+  tags              = var.resource_tags
+  file_copy_enabled = "true"
+  scale_units       = 4
 }
 
 
