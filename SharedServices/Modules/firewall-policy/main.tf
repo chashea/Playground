@@ -15,125 +15,101 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_policy_rule_collect
     priority = 100
     action   = "Allow"
     rule {
-      name = "Service Traffic"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["443"]
+      name                  = "Service Traffic"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["WindowsVirtualDesktop"]
+      destination_ports     = ["443"]
     }
     rule {
-      name = "Agent Traffic"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["443"]
+      name                  = "Agent Traffic"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["AzureMonitor"]
+      destination_ports     = ["443"]
     }
     rule {
-      name = "Azure Marketplace"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["443"]
+      name                  = "Azure Marketplace"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["AzureFrontDoor.Frontend"]
+      destination_ports     = ["443"]
     }
     rule {
-      name = "Windows Activation"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["1688"]
+      name                  = "Windows Activation"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["kms.core.windows.net"]
+      destination_ports     = ["1688"]
     }
     rule {
-      name = "Auth to Msft Online Services"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["443"]
+      name                  = "Auth to Msft Online Services"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["login.microsoftonline.com	"]
+      destination_ports     = ["443"]
     }
 
     rule {
-      name = "Azure Windows Activation"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["1688"]
+      name                  = "Azure Windows Activation"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["azkms.core.windows.net"]
+      destination_ports     = ["1688"]
     }
     rule {
-      name = "Agent and SxS Stack Updates"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["443"]
+      name                  = "Agent and SxS Stack Updates"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["mrsglobalsteus2prod.blob.core.windows.net"]
+      destination_ports     = ["443"]
     }
     rule {
-      name = "Azure Portal Support"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["443"]
+      name                  = "Azure Portal Support"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["wvdportalstorageblob.blob.core.windows.net"]
+      destination_ports     = ["443"]
     }
     rule {
-      name = "Azure Instance Metadata Service Endpoint"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["80"]
+      name                  = "Azure Instance Metadata Service Endpoint"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["169.254.169.254"]
+      destination_ports     = ["80"]
     }
     rule {
-      name = "Session Host Health Monitoring"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["80"]
+      name                  = "Session Host Health Monitoring"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["168.63.129.16"]
+      destination_ports     = ["80"]
     }
     rule {
-      name = "Cert CRL OneOCSP"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["80"]
+      name                  = "Cert CRL OneOCSP"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["oneocsp.microsoft.com"]
+      destination_ports     = ["80"]
     }
     rule {
-      name = "Cert CRL MicrosoftDotCom"
-      protocols = {
-        type = "TCP"
-      }
-      destination_ports     = ["80"]
+      name                  = "Cert CRL MicrosoftDotCom"
+      protocols             = ["TCP"]
       source_addresses      = ["*"]
       destination_addresses = ["www.microsoft.com"]
+      destination_ports     = ["80"]
     }
   }
 
   ### Required Application Rules for AVD
   application_rule_collection {
     name     = "AVD-Application-Rule-Collection"
-    priority = 100
+    priority = 200
     action   = "Allow"
 
     rule {
       name = "TelemetryService"
-      protocols = {
+      protocols {
         type = "Https"
         port = 443
       }
@@ -142,7 +118,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_policy_rule_collect
     }
     rule {
       name = "Windows Update"
-      protocols = {
+      protocols {
         type = "Https"
         port = 443
       }
@@ -151,16 +127,16 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_policy_rule_collect
     }
     rule {
       name = "UpdatesforOneDrive"
-      protocols = {
+      protocols {
         type = "Https"
         port = 443
       }
-      source_addresses       = ["*"]
-      destination_fqdns_tags = ["WindowsUpdate"]
+      source_addresses      = ["*"]
+      destination_fqdn_tags = ["WindowsUpdate"]
     }
     rule {
       name = "DigitcertCRL"
-      protocols = {
+      protocols {
         type = "Https"
         port = 443
       }
@@ -169,7 +145,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_policy_rule_collect
     }
     rule {
       name = "AzureDNSResolution"
-      protocols = {
+      protocols {
         type = "Https"
         port = 443
       }
@@ -178,7 +154,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_policy_rule_collect
     }
     rule {
       name = "AzureDNSresolution2"
-      protocols = {
+      protocols {
         type = "Https"
         port = 443
       }
