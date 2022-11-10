@@ -23,3 +23,14 @@ variable "resource_tags" {
   description = "The base tags for all the resources"
 }
 
+
+variable "vnet" {
+  type        = string
+  description = "The virtual network name"
+}
+
+variable "fw_name" {
+  type        = string
+  description = "The firewall name"
+}
+
