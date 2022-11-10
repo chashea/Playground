@@ -3,6 +3,8 @@ resource "azurerm_firewall_policy" "fw_policy" {
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   tags                = var.resource_tags
+  sku                 = "Premium"
+
 }
 resource "azurerm_firewall_policy_rule_collection_group" "fw_policy_rule_collection_group" {
   name               = "AVD-FW-RCG"
