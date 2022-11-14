@@ -11,11 +11,11 @@ variable "resource_tags" {
   type        = map(string)
   description = "The resource tags"
 }
-
 variable "fw_policy_id" {
   type        = string
   description = "The firewall policy id"
 }
+
 variable "vnet" {
   type        = string
   description = "The virtual network name"
