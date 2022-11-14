@@ -7,6 +7,10 @@ variable "resource_group_location" {
   type        = string
   description = "The resource group location"
 }
+variable "resource_tags" {
+  type        = map(string)
+  description = "The resource tags"
+}
 
 variable "fw_policy_id" {
   type        = string
