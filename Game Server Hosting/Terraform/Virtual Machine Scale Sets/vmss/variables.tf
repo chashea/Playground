@@ -19,6 +19,32 @@ variable "resource_tags" {
   description = "The resource tags"
 }
 
+# Virtual Machine Scale Set
+variable "vmss_name" {
+  type        = string
+  description = "The name of the VMSS"
+}
+
+variable "admin_username" {
+  type        = string
+  description = "The admin username for the VMSS"
+}
+
+variable "admin_password" {
+  type        = string
+  description = "The admin password for the VMSS"
+}
+
+variable "vmss_sku" {
+  type        = string
+  description = "The VMSS SKU"
+}
+
+variable "vmss_count" {
+  type = number
+  description = "The number of VMSS instances"
+}
+
 # Virtual Network
 
 variable "spoke_vnet_name" {
@@ -27,17 +53,17 @@ variable "spoke_vnet_name" {
 }
 
 variable "subnet_id" {
-  type        = list(string)
+  type        = string
   description = "The subnet id"
 }
 
 variable "network_interface_name" {
-  type        = list(string)
+  type        = string
   description = "The network interface id"
 }
 
 variable "ip_configuration_name" {
-  type        = list(string)
+  type        = string
   description = "The ip configuration id"
 }
 

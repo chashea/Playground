@@ -1,11 +1,12 @@
 resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
-  name = "vmss-${var.resource_suffix}-${var.resource_instance}-${var.resource_location}"
+    count = var.vmss_count
+  name = var.vmss_name
     resource_group_name = var.resource_group_name
     location            = var.resource_location
-    sku                 = "Standard_D2s_v3"
+    sku                 = var.vmss_sku
     instances           = 2
-    admin_username      = "azureuser"
-    admin_password      = "P@ssw0rd1234!"
+    admin_username      = var.admin_username
+    admin_password      = var.admin_password
 
     source_image_reference {
         publisher = "MicrosoftWindowsServer"
@@ -20,7 +21,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
     }
 
     network_interface {
-        name                          = var.network_interface_id
+        name                          = var.network_interface_name
         primary                       = true
         enable_accelerated_networking = false
         enable_ip_forwarding          = false

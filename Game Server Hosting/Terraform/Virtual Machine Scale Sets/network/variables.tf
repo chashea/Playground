@@ -53,4 +53,8 @@ variable "subnet_range" {
   description = "The subnet range"
 }
 
+variable "nsg_name" {
+  type        = string
+  description = "The nsg name"
+}
 
