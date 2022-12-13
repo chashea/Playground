@@ -1,6 +1,6 @@
 resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
     count = var.vmss_count
-  name = var.vmss_name
+    name = var.vmss_name
     resource_group_name = var.resource_group_name
     location            = var.resource_location
     sku                 = var.vmss_sku

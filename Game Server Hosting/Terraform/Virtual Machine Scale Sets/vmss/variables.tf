@@ -41,7 +41,7 @@ variable "vmss_sku" {
 }
 
 variable "vmss_count" {
-  type = number
+  type        = number
   description = "The number of VMSS instances"
 }
 
@@ -73,4 +73,4 @@ variable "resource_group_name" {
   type        = string
   description = "The resource group name"
 }
-  
+
