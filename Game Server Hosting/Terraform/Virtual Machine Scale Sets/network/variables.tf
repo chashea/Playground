@@ -4,7 +4,7 @@ variable "resource_group_name" {
   description = "The resource group name"
 }
 
-#Subscriptions
+# Subscriptions
 variable "hub_subscription_id" {
   type        = string
   description = "Hub Subscription id"
@@ -16,16 +16,6 @@ variable "spoke_subscription_id" {
 }
 
 # Resource
-variable "resource_suffix" {
-  type        = string
-  description = "The resource suffix for the naming convention ie: resource-workload-environment-location-instance"
-}
-
-variable "resource_instance" {
-  type        = string
-  description = "The resource instance"
-}
-
 variable "resource_location" {
   type        = string
   description = "The resource group location"
@@ -48,7 +38,16 @@ variable "spoke_vnet_name" {
   description = "The spoke vnet name"
 }
 
-variable "subnet_range" {
+variable "spoke_vnet_address_space" {
+  type        = list(string)
+  description = "The spoke vnet address space"
+}
+variable "spoke_subnet_name" {
+  type        = string
+  description = "The spoke subnet name"
+}
+
+variable "subnet_address_prefix" {
   type        = list(string)
   description = "The subnet range"
 }
@@ -58,3 +57,12 @@ variable "nsg_name" {
   description = "The nsg name"
 }
 
+variable "peer1_name" {
+  type        = string
+  description = "The peer1 name"
+}
+
+variable "peer2_name" {
+  type        = string
+  description = "The peer2 name"
+}

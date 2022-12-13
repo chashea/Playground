@@ -6,18 +6,18 @@ data "azurerm_virtual_network" "hub_vnet" {
 
 # Creating the Spoke VNet, Subnet, and NSG for your VMSS
 resource "azurerm_virtual_network" "spoke_vnet" {
-  name                = "vnet=${var.workload_name}-${var.environment}-${var.resource_location}-${var.resource_instance}"
+  name                = var.spoke_vnet_name
   location            = var.resource_location
   resource_group_name = var.resource_group_name
-  address_space       = var.subnet_range
+  address_space       = var.spoke_vnet_address_space
   tags                = var.resource_tags
 }
 
 resource "azurerm_subnet" "spoke_subnet" {
-  name                 = "subnet-${var.resource_suffix}-${var.resource_instance}-${var.resource_location}"
+  name                 = var.spoke_subnet_name
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.spoke_vnet.name
-  address_prefixes     = var.subnet_range
+  address_prefixes     = var.subnet_address_prefix
 }
 
 resource "azurerm_subnet_network_security_group_association" "spoke_subnet_nsg" {
@@ -27,7 +27,7 @@ resource "azurerm_subnet_network_security_group_association" "spoke_subnet_nsg" 
 
 # Creating the Peering between your Hub Vnet and Spoke Vnet
 resource "azurerm_virtual_network_peering" "peer1" {
-  name                         = "peer1-${var.resource_suffix}-${var.resource_instance}-${var.resource_location}"
+  name                         = var.peer1_name
   resource_group_name          = var.resource_group_name
   virtual_network_name         = azurerm_virtual_network.spoke_vnet.name
   remote_virtual_network_id    = data.azurerm_virtual_network.hub_vnet.id
@@ -38,7 +38,7 @@ resource "azurerm_virtual_network_peering" "peer1" {
 }
 
 resource "azurerm_virtual_network_peering" "peer2" {
-  name                         = "peer2-${var.resource_suffix}-${var.resource_instance}-${var.resource_location}"
+  name                         = var.peer2_name
   resource_group_name          = var.resource_group_name
   virtual_network_name         = data.azurerm_virtual_network.hub_vnet.name
   remote_virtual_network_id    = azurerm_virtual_network.spoke_vnet.id
