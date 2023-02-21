@@ -1,13 +1,9 @@
 terraform {
-  required_version = ">=1.3.0"
+  # In modules we should only specify the min version
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.29.0"
+      version = "3.40.0"
     }
   }
-}
-
-provider "azurerm" {
-  features {}
 }

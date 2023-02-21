@@ -1,25 +1,28 @@
-variable "resource_group_name" {
+variable "resource_location" {
+  description = "Resource location"
   type        = string
-  description = "The resource group name"
 }
-
-/*variable "location" {
-  type        = string
-  description = "The resource location, typically matches resource group location"
-}
-*/
-variable "workload_name" {
-  type        = string
-  description = "The workload or application name"
-}
-
-variable "environment" {
-  type        = string
-  description = "The environment dev / test / prod"
-}
-
 variable "resource_tags" {
+  description = "Resource tags"
   type        = map(string)
-  description = "The base tags for all the resources"
 }
-
+variable "prefix" {
+  description = "Prefix for all resources"
+  type        = string
+}
+variable "vnet_address_space" {
+  description = "Virtual Network Address Space"
+  type        = list(string)
+}
+variable "subnet_address_prefix" {
+  description = "Subnet Address Prefix"
+  type        = list(string)
+}
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+variable "workload" {
+  description = "Workload name"
+  type        = string
+}

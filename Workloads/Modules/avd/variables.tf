@@ -21,11 +21,10 @@ variable "resource_tags" {
 }
 variable "vnet_address_space" {
   description = "Virtual Network Address Space"
-  type        = string
+  type        = list(string)
 }
 variable "subnet_address_prefix" {
   description = "Subnet Address Prefix"
-  type        = string
+  type        = list(string)
 }
-
 
