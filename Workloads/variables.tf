@@ -26,3 +26,8 @@ variable "workload" {
   description = "Workload name"
   type        = string
 }
+
+variable "sh_count" {
+  description = "Number of session hosts"
+  type        = number
+}

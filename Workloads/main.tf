@@ -11,4 +11,5 @@ module "avd" {
   subnet_address_prefix = var.subnet_address_prefix
   environment           = var.environment
   workload              = var.workload
+  sh_count              = var.sh_count
 }
