@@ -11,7 +11,7 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "AAD_IP_alerts" {
   name                       = "ms_security_incident_alert_rule"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   product_filter             = "Azure Active Directory Identity Protection"
-  severity_filter            = "High"
+  severity_filter            = ["High"]
   display_name               = "MS Security Incident Alert Rule"
 }
 
@@ -20,7 +20,7 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "DFC_alerts" {
   name                       = "ms_security_incident_alert_rule"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   product_filter             = "Azure Security Center"
-  severity_filter            = "High"
+  severity_filter            = ["High"]
   display_name               = "MS Security Incident Alert Rule"
   alert_rule_template_guid   = "90586451-7ba8-4c1e-9904-7d1b7c3cc4d6"
 }
@@ -31,7 +31,7 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "AATP" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   product_filter             = "Azure Advanced Threat Protection"
   display_name               = "MS Security Incident Alert Rule"
-  severity_filter            = "High"
+  severity_filter            = ["High"]
 }
 
 // Create Sentinel MS Security Incident Alert Rule for Cloud App Security
@@ -40,7 +40,7 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "CAS" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   product_filter             = "Microsoft Cloud App Security"
   display_name               = "MS Security Incident Alert Rule"
-  severity_filter            = "High"
+  severity_filter            = ["High"]
 }
 
 // Create Sentinel MS Security Incident Alert Rule for Office 365 Advanced Threat Protection
@@ -49,7 +49,7 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "O365_ATP" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   product_filter             = "Office 365 Advanced Threat Protection"
   display_name               = "MS Security Incident Alert Rule"
-  severity_filter            = "High"
+  severity_filter            = ["High"]
 }
 
 // Create Sentinel MS Security Incident Alert Rule for Defender Advanced Threat Protection
@@ -58,7 +58,7 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "DATP" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   product_filter             = "Microsoft Defender Advanced Threat Protection"
   display_name               = "MS Security Incident Alert Rule"
-  severity_filter            = "High"
+  severity_filter            = ["High"]
 }
 
 // Create Sentinel Machine Learning Behavior Analytics Alert Rule
@@ -70,7 +70,7 @@ resource "azurerm_sentinel_alert_rule_machine_learning_behavior_analytics" "mlba
 }
 
 // Create Sentinel Machine Learning Anomalous SSH Login Detection ALert Rule
-resource "azurerm_sentinel_alert_rule_machine_learning_anomaly_detection" "mlad_alert_rule" {
+resource "azurerm_sentinel_alert_rule_machine_learning_behavior_analytics" "mlad_alert_rule" {
   name                       = "mlanomalous_ssh_login_detection_alert_rule"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   alert_rule_template_guid   = "fa118b98-de46-4e94-87f9-8e6d5060b60b"
