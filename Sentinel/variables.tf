@@ -13,6 +13,12 @@ variable "resource_tags" {
   type        = map(string)
 }
 
+variable "sub_id" {
+  description = "The subscription id of the resource."
+  type        = string
+}
+
+/*
 variable "api_root_url" {
   description = "The root url of the api."
   type        = string
@@ -22,5 +28,6 @@ variable "collection_id" {
   description = "The collection id of the api."
   type        = string
 }
+*/
 
 

@@ -15,6 +15,11 @@ variable "prefix" {
   type        = string
 }
 
+variable "sub_id" {
+  description = "The subscription id of the resource group."
+  type        = string
+}
+/*
 // Threat Intelligence Taxii Variables
 variable "api_root_url" {
   description = "The root url of the api."
@@ -24,3 +29,4 @@ variable "collection_id" {
   description = "The collection id of the api."
   type        = string
 }
+*/
