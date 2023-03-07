@@ -74,23 +74,17 @@ resource "azurerm_sentinel_alert_rule_machine_learning_behavior_analytics" "mlba
 resource "azurerm_sentinel_alert_rule_machine_learning_behavior_analytics" "mlad_alert_rule" {
   name                       = "mlanomalous_ssh_login_detection_alert_rule"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-  depends_on = [
-    azurerm_log_analytics_solution.law_solution
-  ]
-  alert_rule_template_guid = "fa118b98-de46-4e94-87f9-8e6d5060b60b"
-  enabled                  = true
+  alert_rule_template_guid   = "fa118b98-de46-4e94-87f9-8e6d5060b60b"
+  enabled                    = true
 }
 
 // Create Sentinel Scheduled Alert Rule
 resource "azurerm_sentinel_alert_rule_scheduled" "scheduled_alert_rule" {
   name                       = "NOBELIUM_IOCs_related_to_FoggyWeb_backdoor"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-  depends_on = [
-    azurerm_log_analytics_solution.law_solution
-  ]
-  display_name = "NOBELIUM IOCs related to FoggyWeb backdoor"
-  severity     = "High"
-  query        = <<QUERY
+  display_name               = "NOBELIUM IOCs related to FoggyWeb backdoor"
+  severity                   = "High"
+  query                      = <<QUERY
   let iocs = externaldata(DateAdded:string,IoC:string,Type:string,TLP:string) [@"https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Sample%20Data/Feeds/FoggyWebIOC.csv"] with (format="csv", ignoreFirstRecord=True);
 let sha256Hashes = (iocs | where Type == "sha256" | project IoC);
 let FilePaths = (iocs | where Type =~ "FilePath" | project IoC);
@@ -217,12 +211,9 @@ QUERY
 resource "azurerm_sentinel_alert_rule_scheduled" "DNS_Domains_linked_to_WannaCry_ransomware_campaign" {
   name                       = "DNS Domains linked to WannaCry ransomware campaign"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-  depends_on = [
-    azurerm_log_analytics_solution.law_solution
-  ]
-  display_name = "DNS Domains linked to WannaCry ransomware campaign"
-  severity     = "High"
-  query        = <<QUERY
+  display_name               = "DNS Domains linked to WannaCry ransomware campaign"
+  severity                   = "High"
+  query                      = <<QUERY
   let badDomains = dynamic(["agrdwrtj.us", "bctxawdt.us", "cokfqwjmferc.us", "cxbenjiikmhjcerbj.us", "depuisgef.us", "edoknehyvbl.us", 
   "enyeikruptiukjorq.com", "frullndjtkojlu.us", "gcidpiuvamynj.us", "gxrytjoclpvv.us", "hanoluexjqcf.us", "iarirjjrnuornts.us", 
   "ifbjoosjqhaeqjjwaerri.us", "iouenviwrc.us", "kuuelejkfwk.us", "lkbsxkitgxttgaobxu.us", "nnnlafqfnrbynwor.us", "ns768.com", 

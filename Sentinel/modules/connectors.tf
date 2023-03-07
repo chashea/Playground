@@ -6,9 +6,6 @@ resource "azurerm_sentinel_data_connector_office_365" "o365" {
   exchange_enabled           = true
   teams_enabled              = true
   sharepoint_enabled         = true
-  depends_on = [
-    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
-  ]
 }
 
 // Create Data Connector for Azure Advanced Threat protection
@@ -16,9 +13,6 @@ resource "azurerm_sentinel_data_connector_office_365" "o365" {
 resource "azurerm_sentinel_data_connector_azure_advanced_threat_protection" "aad_advanced_threat_protection" {
   name                       = "azure_advanced_threat_protection"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-  depends_on = [
-    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
-  ]
 }
 
 // Create Data Connector for Defender for Cloud
@@ -26,18 +20,12 @@ resource "azurerm_sentinel_data_connector_azure_security_center" "dfc" {
   name                       = "azure_security_center"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   subscription_id            = var.sub_id
-  depends_on = [
-    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
-  ]
 }
 
 // Create Data Connector for Azure Active Directory
 resource "azurerm_sentinel_data_connector_azure_active_directory" "aad" {
   name                       = "azure_active_directory"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-  depends_on = [
-    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
-  ]
 }
 
 // Create Data Connector for Microsoft Cloud App Security
@@ -45,18 +33,12 @@ resource "azurerm_sentinel_data_connector_azure_active_directory" "aad" {
 resource "azurerm_sentinel_data_connector_microsoft_cloud_app_security" "microsoft_cloud_app_security" {
   name                       = "microsoft_cloud_app_security"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-  depends_on = [
-    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
-  ]
 }
 
 // Create Data Connector for Microsoft Defender for Endpoint
 resource "azurerm_sentinel_data_connector_microsoft_defender_advanced_threat_protection" "microsoft_defender_advanced_threat_protection" {
   name                       = "microsoft_defender_advanced_threat_protection"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-  depends_on = [
-    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
-  ]
 }
 /*
 // Create Data Connector for Threat Intelligence Taxii

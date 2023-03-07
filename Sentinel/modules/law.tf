@@ -23,8 +23,9 @@ resource "azurerm_log_analytics_solution" "law_solution" {
 }
 
 // Create resource to onboard Sentinel to Log Analytics Workspace
-resource "azurerm_sentinel_log_analytics_workspace_onboarding" "law_onboarding" {
+/* resource "azurerm_sentinel_log_analytics_workspace_onboarding" "law_onboarding" {
   resource_group_name        = azurerm_resource_group.rg_law.name
   workspace_name             = azurerm_log_analytics_workspace.law.name
 }
+*/
 
