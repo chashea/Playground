@@ -1,10 +1,13 @@
-/*
+
 // Create Sentinel Fusion Alert Rule
 resource "azurerm_sentinel_alert_rule_fusion" "fusion_alert_rule" {
   name                       = "fusion_alert_rule"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   alert_rule_template_guid   = "f71aba3d-28fb-450b-b192-4e76a83015c8"
   enabled                    = true
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel MS Security Incident Alert Rule
@@ -14,6 +17,9 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "AAD_IP_alerts" {
   product_filter             = "Azure Active Directory Identity Protection"
   severity_filter            = ["High"]
   display_name               = "MS Security Incident Alert Rule"
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel MS Security Incident Alert Rule for Defender for Cloud
@@ -24,6 +30,9 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "DFC_alerts" {
   severity_filter            = ["High"]
   display_name               = "MS Security Incident Alert Rule"
   alert_rule_template_guid   = "90586451-7ba8-4c1e-9904-7d1b7c3cc4d6"
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel MS Security Incident Alert Rule for Azure Advanced Threat Protection
@@ -33,6 +42,9 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "AATP" {
   product_filter             = "Azure Advanced Threat Protection"
   display_name               = "MS Security Incident Alert Rule"
   severity_filter            = ["High"]
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel MS Security Incident Alert Rule for Cloud App Security
@@ -42,6 +54,9 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "CAS" {
   product_filter             = "Microsoft Cloud App Security"
   display_name               = "MS Security Incident Alert Rule"
   severity_filter            = ["High"]
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel MS Security Incident Alert Rule for Office 365 Advanced Threat Protection
@@ -51,6 +66,9 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "O365_ATP" {
   product_filter             = "Office 365 Advanced Threat Protection"
   display_name               = "MS Security Incident Alert Rule"
   severity_filter            = ["High"]
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel MS Security Incident Alert Rule for Defender Advanced Threat Protection
@@ -60,6 +78,9 @@ resource "azurerm_sentinel_alert_rule_ms_security_incident" "DATP" {
   product_filter             = "Microsoft Defender Advanced Threat Protection"
   display_name               = "MS Security Incident Alert Rule"
   severity_filter            = ["High"]
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel Machine Learning Behavior Analytics Alert Rule
@@ -68,6 +89,9 @@ resource "azurerm_sentinel_alert_rule_machine_learning_behavior_analytics" "mlba
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   alert_rule_template_guid   = "737a2ce1-70a3-4968-9e90-3e6aca836abf"
   enabled                    = true
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel Machine Learning Anomalous SSH Login Detection ALert Rule
@@ -76,6 +100,9 @@ resource "azurerm_sentinel_alert_rule_machine_learning_behavior_analytics" "mlad
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   alert_rule_template_guid   = "fa118b98-de46-4e94-87f9-8e6d5060b60b"
   enabled                    = true
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
 }
 
 // Create Sentinel Scheduled Alert Rule
@@ -84,7 +111,10 @@ resource "azurerm_sentinel_alert_rule_scheduled" "scheduled_alert_rule" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   display_name               = "NOBELIUM IOCs related to FoggyWeb backdoor"
   severity                   = "High"
-  query                      = <<QUERY
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
+  query = <<QUERY
   let iocs = externaldata(DateAdded:string,IoC:string,Type:string,TLP:string) [@"https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Sample%20Data/Feeds/FoggyWebIOC.csv"] with (format="csv", ignoreFirstRecord=True);
 let sha256Hashes = (iocs | where Type == "sha256" | project IoC);
 let FilePaths = (iocs | where Type =~ "FilePath" | project IoC);
@@ -206,13 +236,16 @@ csHost, scStatus, sIP, csUriStem, csUriQuery, csUserName, csUserAgent, csCookie,
 )
 QUERY
 }
-
+/*
 // Create a new Sentinel Alert Rule for ransomware
 resource "azurerm_sentinel_alert_rule_scheduled" "DNS_Domains_linked_to_WannaCry_ransomware_campaign" {
   name                       = "DNS Domains linked to WannaCry ransomware campaign"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   display_name               = "DNS Domains linked to WannaCry ransomware campaign"
   severity                   = "High"
+  depends_on = [
+    azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
+  ]
   query                      = <<QUERY
   let badDomains = dynamic(["agrdwrtj.us", "bctxawdt.us", "cokfqwjmferc.us", "cxbenjiikmhjcerbj.us", "depuisgef.us", "edoknehyvbl.us", 
   "enyeikruptiukjorq.com", "frullndjtkojlu.us", "gcidpiuvamynj.us", "gxrytjoclpvv.us", "hanoluexjqcf.us", "iarirjjrnuornts.us", 
