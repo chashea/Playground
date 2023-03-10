@@ -1,4 +1,4 @@
-
+/*
 // Create Sentinel Fusion Alert Rule
 resource "azurerm_sentinel_alert_rule_fusion" "fusion_alert_rule" {
   name                       = "fusion_alert_rule"
@@ -228,3 +228,4 @@ resource "azurerm_sentinel_alert_rule_scheduled" "DNS_Domains_linked_to_WannaCry
     )
     QUERY
 }
+*/
