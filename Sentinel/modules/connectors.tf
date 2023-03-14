@@ -51,6 +51,7 @@ resource "azurerm_sentinel_data_connector_microsoft_cloud_app_security" "microso
   ]
 }
 
+/*
 // Create Data Connector for Microsoft Defender for Endpoint
 resource "azurerm_sentinel_data_connector_microsoft_defender_advanced_threat_protection" "microsoft_defender_advanced_threat_protection" {
   name                       = "microsoft_defender_advanced_threat_protection"
@@ -59,6 +60,7 @@ resource "azurerm_sentinel_data_connector_microsoft_defender_advanced_threat_pro
     azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
   ]
 }
+*/
 /*
 // Create Data Connector for Threat Intelligence Taxii
 resource "azurerm_sentinel_data_connector_threat_intelligence_taxii" "threat_intelligence_taxii" {
