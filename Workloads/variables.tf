@@ -1,14 +1,10 @@
-variable "resource_location" {
+variable "location" {
   description = "Resource location"
   type        = string
 }
-variable "resource_tags" {
+variable "tags" {
   description = "Resource tags"
   type        = map(string)
-}
-variable "prefix" {
-  description = "Prefix for all resources"
-  type        = string
 }
 variable "vnet_address_space" {
   description = "Virtual Network Address Space"
@@ -22,12 +18,5 @@ variable "environment" {
   description = "Environment name"
   type        = string
 }
-variable "workload" {
-  description = "Workload name"
-  type        = string
-}
 
-variable "sh_count" {
-  description = "Number of session hosts"
-  type        = number
-}
+
