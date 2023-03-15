@@ -9,4 +9,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   admin_password        = var.admin_password
   network_interface_ids = [azurerm_network_interface.nic.id]
   tags                  = var.tags
+  os_disk {
+    
+  }
 }
