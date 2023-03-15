@@ -1,5 +1,3 @@
-
-/*
 // Create Sentinel Fusion Alert Rule
 resource "azurerm_sentinel_alert_rule_fusion" "fusion_alert_rule" {
   name                       = "fusion_alert_rule_fusion"
@@ -10,7 +8,7 @@ resource "azurerm_sentinel_alert_rule_fusion" "fusion_alert_rule" {
     azurerm_sentinel_log_analytics_workspace_onboarding.law_onboarding
   ]
 }
-*/
+
 // Create Sentinel MS Security Incident Alert Rule
 resource "azurerm_sentinel_alert_rule_ms_security_incident" "AAD_IP_alerts" {
   name                       = "ms_security_incident_alert_rule_aad_ip"
