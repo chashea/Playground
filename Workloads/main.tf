@@ -3,8 +3,8 @@ provider "azurerm" {
 }
 
 module "vnet" {
-  source = "./Modules/vnet"
-  location = "eastus"
+  source      = "./Modules/vnet"
+  location    = "eastus"
   environment = "dev"
   tags = {
     environment = "dev"
