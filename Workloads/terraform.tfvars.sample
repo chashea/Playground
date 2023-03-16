@@ -1,0 +1,10 @@
+// Resources 
+resource_tags = {
+  "owner" = "chashea"
+}
+resource_location = "eastus"
+environment       = "dev"
+
+// Virtual Network
+vnet_address_space    = ["10.11.0.0/16"]
+subnet_address_prefix = ["10.11.0.0/24"]

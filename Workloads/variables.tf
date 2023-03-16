@@ -17,28 +17,12 @@ variable "vnet_address_space" {
   description = "Virtual Network Address Space"
   type        = list(string)
 }
-variable "subnet_address_prefix" {
-  description = "Subnet Address Prefix"
+variable "subnet_address_space" {
+  description = "Subnet Address Space"
   type        = list(string)
 }
 
-
 // Variables for VM
-variable "key_vault_key_id" {
-  description = "The Key Vault Key ID which should be used for Disk Encryption"
-  type        = string
-}
-
-variable "user_assigned_identity_id" {
-  description = "The User Assigned Identity ID which should be used for Disk Encryption"
-  type        = string
-}
-
-variable "disk_encryption_set_id" {
-  description = "The Disk Encryption Set ID which should be used for Disk Encryption"
-  type        = string
-}
-
 variable "vm_size" {
   description = "The size of the VM"
   type        = string

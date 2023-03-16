@@ -1,6 +1,6 @@
 // Create a Resource Group
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-net-${var.location}-${var.environment}"
+  name     = "rg-vm-${var.location}-${var.environment}"
   location = var.location
   tags     = var.tags
 }
@@ -20,7 +20,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
     caching                = "ReadWrite"
     storage_account_type   = "Premium_LRS"
     disk_encryption_set_id = var.disk_encryption_set_id
-    disk_size_gb = "128"
+    disk_size_gb           = "128"
   }
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
@@ -28,5 +28,4 @@ resource "azurerm_windows_virtual_machine" "vm" {
     sku       = "win11-22h2-entn"
     version   = "latest"
   }
-
 }

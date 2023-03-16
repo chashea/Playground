@@ -21,4 +21,3 @@ variable "environment" {
   type        = string
   description = "The environment in which the resources should exist."
 }
-
