@@ -22,5 +22,6 @@ module "dse" {
   location    = var.location
   environment = var.environment
   tags        = var.tags
+  prefix = var.prefix
 }
 

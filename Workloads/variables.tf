@@ -11,3 +11,8 @@ variable "environment" {
   description = "Environment name"
   type        = string
 }
+variable "prefix"  {
+  description = "Prefix for all resources"
+  type        = string
+}
+

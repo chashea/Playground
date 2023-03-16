@@ -9,19 +9,20 @@ resource "azurerm_resource_group" "rg" {
 
 // Create a Keyvault
 resource "azurerm_key_vault" "kv" {
-  name                        = "kv-${var.location}-${var.environment}"
+  name                        = "kv-${var.prefix}-${var.environment}"
   location                    = var.location
   resource_group_name         = azurerm_resource_group.rg.name
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   sku_name                    = "premium"
   enabled_for_disk_encryption = true
   purge_protection_enabled    = true
+  soft_delete_retention_days = "1"
   tags                        = var.tags
 }
 
 // Create a Keyvault Key
 resource "azurerm_key_vault_key" "kv_key" {
-  name         = "kv-key-${var.location}-${var.environment}"
+  name         = "kv-key-${var.prefix}-${var.location}-${var.environment}"
   key_vault_id = azurerm_key_vault.kv.id
   key_type     = "RSA"
   key_size     = 2048
@@ -39,7 +40,7 @@ resource "azurerm_key_vault_key" "kv_key" {
 
 // Create a Disk Encryption Set
 resource "azurerm_disk_encryption_set" "dse" {
-  name                = "dse-${var.environment}"
+  name                = "dse-${var.prefix}-${var.environment}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
   key_vault_key_id    = azurerm_key_vault_key.kv_key.id
