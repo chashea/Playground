@@ -28,7 +28,13 @@ resource "azurerm_key_vault_key" "kv_key" {
   depends_on = [
     azurerm_key_vault_access_policy.kv_policy
   ]
-  key_opts = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+  key_opts = [
+    "decrypt", 
+    "encrypt", 
+    "sign", 
+    "unwrapKey", 
+    "verify", 
+    "wrapKey"]
 }
 
 // Create a Disk Encryption Set
@@ -36,7 +42,7 @@ resource "azurerm_disk_encryption_set" "dse" {
   name                = "dse-${var.environment}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
-  key_vault_key_id    = var.key_vault_key_id
+  key_vault_key_id    = azurerm_key_vault_key.kv_key.id
   encryption_type     = "EncryptionAtRestWithCustomerKey"
   tags                = var.tags
   identity {
@@ -49,17 +55,7 @@ resource "azurerm_key_vault_access_policy" "kv_policy_disk" {
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = azurerm_disk_encryption_set.dse.identity.0.tenant_id
   object_id    = azurerm_disk_encryption_set.dse.identity.0.principal_id
-  key_permissions = [
-    "create",
-    "delete",
-    "get",
-    "list",
-    "update",
-    "purge",
-    "recover",
-    "decrypt",
-    "sign"
-  ]
+  key_permissions = ["Create", "Delete", "Get", "List", "Update", "Purge", "Recover", "Decrypt", "Sign"]
 }
 
 // Create a Keyvault Access Policy for the User
@@ -67,7 +63,7 @@ resource "azurerm_key_vault_access_policy" "kv_policy_user" {
   key_vault_id    = azurerm_key_vault.kv.id
   tenant_id       = data.azurerm_client_config.current.tenant_id
   object_id       = data.azurerm_client_config.current.object_id
-  key_permissions = ["get", "create", "delete", "list", "update", "import", "backup", "restore", "recover"]
+  key_permissions = ["Get", "Create", "Delete", "List", "Update", "Import", "Backup", "Restore", "Recover"]
 }
 
 // Create a role assignment for the Keyvault

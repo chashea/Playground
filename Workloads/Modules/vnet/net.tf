@@ -9,7 +9,7 @@ resource "azurerm_resource_group" "rg" {
 // Create a Virtual Network with a single subnet
 resource "azurerm_virtual_network" "vnet" {
   name                = "vnet-${var.location}-${var.environment}"
-  address_space       = [var.vnet_address_space]
+  address_space       = ["10.11.0.0/16"]
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   tags                = var.tags
@@ -18,6 +18,6 @@ resource "azurerm_subnet" "subnet" {
   name                 = "subnet-${var.location}-${var.environment}"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = [var.subnet_address_space]
+  address_prefixes     = ["10.11.0.0/24"]
 }
 

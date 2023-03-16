@@ -10,9 +10,9 @@ resource "azurerm_windows_virtual_machine" "vm" {
   name                       = "vm-${var.location}-${var.environment}"
   resource_group_name        = azurerm_resource_group.rg.name
   location                   = var.location
-  size                       = var.vm_size
-  admin_username             = var.admin_username
-  admin_password             = var.admin_password
+  size                       = "Standard_D2s_v3"
+  admin_username             = "chashea"
+  admin_password             = "Password1234!"
   network_interface_ids      = [azurerm_network_interface.nic.id]
   encryption_at_host_enabled = true
   tags                       = var.tags
