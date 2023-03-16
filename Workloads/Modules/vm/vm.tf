@@ -5,22 +5,6 @@ resource "azurerm_resource_group" "rg" {
   tags     = var.tags
 }
 
-// Create a Disk Encryption Set
-resource "azurerm_disk_encryption_set" "dse" {
-  name                = "dse-${var.environment}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
-  key_vault_key_id    = var.key_vault_key_id
-  encryption_type     = "EncryptionAtRestWithCustomerKey"
-  tags                = var.tags
-  identity {
-    type = "UserAssigned"
-    identity_ids = [
-      var.user_assigned_identity_id
-    ]
-  }
-}
-
 // Create a Windows VM
 resource "azurerm_windows_virtual_machine" "vm" {
   name                       = "vm-${var.location}-${var.environment}"
@@ -35,7 +19,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   os_disk {
     caching                = "ReadWrite"
     storage_account_type   = "Premium_LRS"
-    disk_encryption_set_id = azurerm_disk_encryption_set.dse.id
+    disk_encryption_set_id = var.disk_encryption_set_id
     disk_size_gb = "128"
   }
   source_image_reference {
@@ -44,5 +28,5 @@ resource "azurerm_windows_virtual_machine" "vm" {
     sku       = "win11-22h2-entn"
     version   = "latest"
   }
-  
+
 }

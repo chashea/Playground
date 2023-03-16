@@ -14,17 +14,6 @@ variable "environment" {
   description = "Environment name"
   type        = string
 }
-
-variable "key_vault_key_id" {
-  description = "The Key Vault Key ID which should be used for Disk Encryption"
-  type        = string
-}
-
-variable "user_assigned_identity_id" {
-  description = "The User Assigned Identity ID which should be used for Disk Encryption"
-  type        = string
-}
-
 variable "disk_encryption_set_id" {
   description = "The Disk Encryption Set ID which should be used for Disk Encryption"
   type        = string
