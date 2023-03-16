@@ -26,7 +26,7 @@ resource "azurerm_key_vault_key" "kv_key" {
   key_type     = "RSA"
   key_size     = 2048
   depends_on = [
-    azurerm_key_vault_access_policy.kv_policy
+    azurerm_key_vault_access_policy.kv_policy_user
   ]
   key_opts = [
     "decrypt", 
