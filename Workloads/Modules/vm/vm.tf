@@ -18,7 +18,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   tags                       = var.tags
   os_disk {
     caching                = "ReadWrite"
-    storage_account_type   = "Standard_LRS"
+    storage_account_type   = "Premium_LRS"
     disk_encryption_set_id = var.disk_encryption_set_id
     disk_size_gb           = "128"
   }

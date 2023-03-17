@@ -42,7 +42,7 @@ resource "azurerm_key_vault_key" "kv_key" {
     "sign",
     "unwrapKey",
     "verify",
-    "wrapKey"]
+  "wrapKey"]
 }
 
 // Create a Disk Encryption Set
