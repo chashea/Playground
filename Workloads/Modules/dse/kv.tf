@@ -1,3 +1,11 @@
+provider "azurerm" {
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+    }
+  }
+}
+
 data "azurerm_client_config" "current" {}
 
 // Create a resource group for the Keyvault
@@ -16,7 +24,6 @@ resource "azurerm_key_vault" "kv" {
   sku_name                    = "premium"
   enabled_for_disk_encryption = true
   purge_protection_enabled    = true
-  soft_delete_retention_days = "1"
   tags                        = var.tags
 }
 
@@ -30,12 +37,12 @@ resource "azurerm_key_vault_key" "kv_key" {
     azurerm_key_vault_access_policy.kv_policy_user
   ]
   key_opts = [
-    "decrypt", 
-    "encrypt", 
-    "sign", 
-    "unwrapKey", 
-    "verify", 
-    "wrapKey"]
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+  "wrapKey"]
 }
 
 // Create a Disk Encryption Set
@@ -53,9 +60,9 @@ resource "azurerm_disk_encryption_set" "dse" {
 
 // Create a Keyvault Access Policy for the Disk
 resource "azurerm_key_vault_access_policy" "kv_policy_disk" {
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = azurerm_disk_encryption_set.dse.identity.0.tenant_id
-  object_id    = azurerm_disk_encryption_set.dse.identity.0.principal_id
+  key_vault_id    = azurerm_key_vault.kv.id
+  tenant_id       = azurerm_disk_encryption_set.dse.identity.0.tenant_id
+  object_id       = azurerm_disk_encryption_set.dse.identity.0.principal_id
   key_permissions = ["Create", "Delete", "Get", "List", "Update", "Purge", "Recover", "Decrypt", "Sign"]
 }
 
@@ -64,7 +71,7 @@ resource "azurerm_key_vault_access_policy" "kv_policy_user" {
   key_vault_id    = azurerm_key_vault.kv.id
   tenant_id       = data.azurerm_client_config.current.tenant_id
   object_id       = data.azurerm_client_config.current.object_id
-  key_permissions = ["Get", "Create", "Delete", "List", "Update", "Import", "Backup", "Restore", "Recover"]
+  key_permissions = ["Get", "Create", "Delete", "Purge", "Recover", "Update", "List", "Decrypt", "Sign", "GetRotationPolicy"]
 }
 
 // Create a role assignment for the Keyvault

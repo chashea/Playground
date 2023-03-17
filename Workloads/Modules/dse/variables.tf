@@ -13,7 +13,7 @@ variable "environment" {
   type        = string
 }
 
-variable "prefix"  {
+variable "prefix" {
   description = "Prefix for all resources"
   type        = string
 }
