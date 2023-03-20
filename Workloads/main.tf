@@ -32,3 +32,10 @@ module "law" {
   prefix      = var.prefix
 }*/
 
+module "avd" {
+  source      = "./Modules/avd"
+  location    = var.location
+  environment = var.environment
+  tags        = var.tags
+  prefix      = var.prefix
+}
