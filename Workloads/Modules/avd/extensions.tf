@@ -1,9 +1,8 @@
 // Create Virtual Machine extension for AAD JOin
 resource "azurerm_virtual_machine_extension" "aad_join" {
-  name                       = "aad_join"
-  location                   = var.location
-  resource_group_name        = azurerm_resource_group.rg.name
-  virtual_machine_name       = azurerm_windows_virtual_machine.avd_vm[count.index].name
+  count                      = 1
+  name                       = "aad_join-${count.index + 1}"
+  virtual_machine_id         = azurerm_windows_virtual_machine.avd_vm[count.index].id
   publisher                  = "Microsoft.Compute"
   type                       = "JsonADDomainExtension"
   type_handler_version       = "1.9"
@@ -12,10 +11,9 @@ resource "azurerm_virtual_machine_extension" "aad_join" {
 
 // Create Virtual Machine extension for DSC
 resource "azurerm_virtual_machine_extension" "dsc" {
-  name                       = "dsc"
-  location                   = var.location
-  resource_group_name        = azurerm_resource_group.rg.name
-  virtual_machine_name       = azurerm_windows_virtual_machine.avd_vm[count.index].name
+  count                      = 1
+  name                       = "dsc-${count.index + 1}"
+  virtual_machine_id         = azurerm_windows_virtual_machine.avd_vm[count.index].id
   publisher                  = "Microsoft.Powershell"
   type                       = "DSC"
   type_handler_version       = "2.80"
@@ -25,7 +23,7 @@ resource "azurerm_virtual_machine_extension" "dsc" {
       "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_09-08-2022.zip",
       "configurationFunction": "Configuration.ps1\\AddSessionHost",
       "properties": {
-        "HostPoolName":"${azurerm_virtual_desktop_host_pool.hostpool.name}"
+        "HostPoolName":"${azurerm_virtual_desktop_host_pool.avd_host_pool.name}"
       }
     }
     SETTINGS
@@ -38,10 +36,9 @@ resource "azurerm_virtual_machine_extension" "dsc" {
 
 // Createa Virtual Machine extention for MMA Agent
 resource "azurerm_virtual_machine_extension" "mma_agent" {
-  name                       = "mma_agent"
-  location                   = var.location
-  resource_group_name        = azurerm_resource_group.rg.name
-  virtual_machine_name       = azurerm_windows_virtual_machine.avd_vm[count.index].name
+  count                      = 1
+  name                       = "mma_agent-${count.index + 1}"
+  virtual_machine_id         = azurerm_windows_virtual_machine.avd_vm[count.index].id
   publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
   type                       = "OmsAgentForWindows"
   type_handler_version       = "1.12"

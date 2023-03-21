@@ -1,18 +1,7 @@
-provider "azurerm" {
-  features {
-    key_vault {
-      purge_soft_delete_on_destroy = true
-    }
-    resource_group {
-      prevent_deletion_if_contains_resources = false // Set to True for Production
-    }
-  }
-}
-
 data "azurerm_client_config" "current" {}
 
 // Create a resource group for the Keyvault
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "rg_kv" {
   name     = "rg-kv-${var.location}-${var.environment}"
   location = var.location
   tags     = var.tags
@@ -22,7 +11,7 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_key_vault" "kv" {
   name                        = "kv-${var.prefix}-${var.environment}-001"
   location                    = var.location
-  resource_group_name         = azurerm_resource_group.rg.name
+  resource_group_name         = azurerm_resource_group.rg_kv.name
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   sku_name                    = "premium"
   enabled_for_disk_encryption = true
@@ -51,7 +40,7 @@ resource "azurerm_key_vault_key" "kv_key" {
 // Create a Disk Encryption Set
 resource "azurerm_disk_encryption_set" "dse" {
   name                = "dse-${var.prefix}-${var.environment}-001"
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = azurerm_resource_group.rg_kv.name
   location            = var.location
   key_vault_key_id    = azurerm_key_vault_key.kv_key.id
   encryption_type     = "EncryptionAtRestWithCustomerKey"

@@ -22,10 +22,6 @@ variable "avd_subnet_id" {
   description = "The Subnet ID which should be used for the VM"
   type        = string
 }
-variable "disk_encryption_set_id" {
-  description = "The Disk Encryption Set ID which should be used for Disk Encryption"
-  type        = string
-}
 variable "law_id" {
   description = "The Log Analytics Workspace ID which should be used for the VM"
   type        = string
