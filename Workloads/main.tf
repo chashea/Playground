@@ -10,6 +10,9 @@ provider "azurerm" {
       delete_os_disk_on_termination  = true
       skip_shutdown_and_force_delete = true
     }
+    key_vault {
+      purge_soft_delete_on_destroy = true
+    }
   }
 }
 
@@ -35,13 +38,13 @@ module "law" {
   prefix      = var.prefix
 }
 
-/*module "dse" {
+module "dse" {
   source      = "./Modules/dse"
   location    = var.location
   environment = var.environment
   tags        = var.tags
   prefix      = var.prefix
-}*/
+}
 
 module "avd" {
   source      = "./Modules/avd"
@@ -49,4 +52,8 @@ module "avd" {
   environment = var.environment
   tags        = var.tags
   prefix      = var.prefix
+  subnet_id   = module.vnet.subnet_id
+  law_id      = module.law.law_id
+  law_key     = module.law.law_key
+  dse_id      = module.dse.dse_id
 }
