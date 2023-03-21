@@ -1,14 +1,3 @@
-provider "azurerm" {
-  features {
-    log_analytics_workspace {
-      permanetly_delete_on_destroy = true
-    }
-    resource_group {
-      prevent_deletion_if_contains_resources = false // Set to True for Production
-    }
-  }
-}
-
 // Create a Resource Group for the Log Analytics Workspace
 resource "azurerm_resource_group" "rg" {
   name     = "rg-law-${var.location}-${var.environment}"

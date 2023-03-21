@@ -14,6 +14,7 @@ resource "azurerm_virtual_desktop_host_pool" "avd_host_pool" {
   load_balancer_type     = "BreadthFirst"
   validation_environment = true
   max_session_limit      = 10
+  start_vm_on_connect    = true
   tags                   = var.tags
 }
 

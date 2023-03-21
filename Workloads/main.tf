@@ -1,5 +1,16 @@
 provider "azurerm" {
-  features {}
+  features {
+    log_analytics_workspace {
+      permanetly_delete_on_destroy = true
+    }
+    resource_group {
+      prevent_deletion_if_contains_resources = false // Set to True for Production
+    }
+    virtual_machine {
+      delete_os_disk_on_termination  = true
+      skip_shutdown_and_force_delete = true
+    }
+  }
 }
 
 module "vnet" {
