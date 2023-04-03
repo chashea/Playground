@@ -17,10 +17,10 @@ resource "azurerm_windows_virtual_machine" "vm" {
   encryption_at_host_enabled = true
   tags                       = var.tags
   os_disk {
-    caching                = "ReadWrite"
-    storage_account_type   = "Premium_LRS"
-    disk_encryption_set_id = var.disk_encryption_set_id
-    disk_size_gb           = "128"
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+    //disk_encryption_set_id = var.disk_encryption_set_id
+    disk_size_gb = "128"
   }
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"

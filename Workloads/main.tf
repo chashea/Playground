@@ -22,20 +22,23 @@ module "vnet" {
   environment = var.environment
   tags        = var.tags
 }
-/*module "vm" {
-  source                 = "./Modules/vm"
-  location               = var.location
-  environment            = var.environment
-  tags                   = var.tags
-  subnet_id              = module.vnet.subnet_id
-  disk_encryption_set_id = module.dse.dse_id
-}*/
+module "vm" {
+  source      = "./Modules/vm"
+  location    = var.location
+  environment = var.environment
+  tags        = var.tags
+  subnet_id   = module.vnet.subnet_id
+  law_id      = module.law.law_id
+  law_key     = module.law.law_key
+  //disk_encryption_set_id = module.dse.dse_id
+}
 module "law" {
   source      = "./Modules/law"
   location    = var.location
   environment = var.environment
   tags        = var.tags
   prefix      = var.prefix
+
 }
 
 /*module "dse" {
@@ -46,13 +49,13 @@ module "law" {
   prefix      = var.prefix
 }*/
 
-module "avd" {
+/*module "avd" {
   source        = "./Modules/avd"
   location      = var.location
   environment   = var.environment
   tags          = var.tags
   prefix        = var.prefix
-  avd_subnet_id = module.vnet.subnet_id
+  avd_subnet_id = module.vnet.avd_subnet_id
   law_id        = module.law.law_id
   law_key       = module.law.law_key
-}
+}*/
