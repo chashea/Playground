@@ -8,7 +8,7 @@ resource "azurerm_virtual_machine_extension" "aad_join" {
   auto_upgrade_minor_version = true
 }
 
-
+/*
 // Createa Virtual Machine extention for MMA Agent
 resource "azurerm_virtual_machine_extension" "mma_agent" {
   name                       = "mma_agent"
@@ -33,7 +33,7 @@ resource "azurerm_virtual_machine_extension" "mma_agent" {
     azurerm_windows_virtual_machine.vm,
     var.law_key
   ]
-}
+}*/
 /*
 // Create a Virtual Machine extension for AMA Agent
 

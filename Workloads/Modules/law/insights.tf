@@ -1,3 +1,4 @@
+/*
 // Configure the AVD insights workbook settings
 
 // Capture the windows events for the AVD insights workbook
@@ -309,3 +310,4 @@ resource "azurerm_log_analytics_datasource_windows_performance_counter" "winperf
   instance_name       = "*"
   interval_seconds    = "30"
 }
+*/
