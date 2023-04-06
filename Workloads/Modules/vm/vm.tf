@@ -15,6 +15,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   admin_password             = "Password1234!"
   network_interface_ids      = [azurerm_network_interface.nic.id]
   encryption_at_host_enabled = true
+  allow_extension_operations = true
   tags                       = var.tags
   os_disk {
     caching              = "ReadWrite"
@@ -24,8 +25,8 @@ resource "azurerm_windows_virtual_machine" "vm" {
   }
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
-    offer     = "windows-11"
-    sku       = "win11-22h2-entn"
+    offer     = "Windows-11"
+    sku       = "win11-21h2-ent"
     version   = "latest"
   }
 }

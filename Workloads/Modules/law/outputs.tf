@@ -12,3 +12,4 @@ output "law_key" {
 output "law_name" {
   value = azurerm_log_analytics_workspace.law.name
 }
+

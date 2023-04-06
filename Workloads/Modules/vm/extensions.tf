@@ -8,7 +8,6 @@ resource "azurerm_virtual_machine_extension" "aad_join" {
   auto_upgrade_minor_version = true
 }
 
-/*
 // Createa Virtual Machine extention for MMA Agent
 resource "azurerm_virtual_machine_extension" "mma_agent" {
   name                       = "mma_agent"
@@ -19,46 +18,19 @@ resource "azurerm_virtual_machine_extension" "mma_agent" {
   auto_upgrade_minor_version = true
   settings                   = <<SETTINGS
   {
-    "workspaceId": "${var.law_id}"
+    "workspaceId": "${data.azurerm_log_analytics_workspace.law.id}"
   }
     SETTINGS
   protected_settings         = <<PROTECTED_SETTINGS
     {
-        "workspaceKey": "${var.law_key}"
+        "workspaceKey": "${data.azurerm_log_analytics_workspace.law.primary_shared_key}"
         }
     PROTECTED_SETTINGS
 
   depends_on = [
     azurerm_virtual_machine_extension.aad_join,
-    azurerm_windows_virtual_machine.vm,
-    var.law_key
-  ]
-}*/
-/*
-// Create a Virtual Machine extension for AMA Agent
-
-resource "azurerm_virtual_machine_extension" "ama_agent" {
-  name                       = "ama_agent"
-  virtual_machine_id         = azurerm_windows_virtual_machine.vm.id
-  publisher                  = "Microsoft.Azure.Monitor"
-  type                       = "AzureMonitorWindowsAgent"
-  type_handler_version       = "1.12"
-  auto_upgrade_minor_version = true
-  settings                   = <<SETTINGS
-  {
-    "workspaceId": "${var.law_id}"
-  }
-    SETTINGS
-  protected_settings         = <<PROTECTED_SETTINGS
-    {
-        "workspaceKey": "${var.law_key}"
-        }
-    PROTECTED_SETTINGS
-
-  depends_on = [
-    azurerm_virtual_machine_extension.aad_join,
-    azurerm_windows_virtual_machine.vm,
-    var.law_key
+    data.azurerm_log_analytics_workspace.law
   ]
 }
-*/
+
+
