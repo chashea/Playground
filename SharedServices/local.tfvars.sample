@@ -1,0 +1,12 @@
+location = "eastus"
+tags = {
+  "owner"       = "chashea"
+  "environment" = "dev"
+  "costcenter"  = "1234"
+}
+
+environment = "dev"
+
+vnet_address_space   = ["172.16.0.0/20"]
+subnet_address_space = ["172.16.1.0/24"]
+bastion_subnet       = ["172.16.2.0/26"]

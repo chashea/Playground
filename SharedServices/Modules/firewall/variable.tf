@@ -1,13 +1,8 @@
-variable "resource_group_name" {
-  type        = string
-  description = "The resource group name"
-}
-
-variable "resource_group_location" {
+variable "location" {
   type        = string
   description = "The resource group location"
 }
-variable "resource_tags" {
+variable "tags" {
   type        = map(string)
   description = "The resource tags"
 }
@@ -16,12 +11,17 @@ variable "fw_policy_id" {
   description = "The firewall policy id"
 }
 
-variable "vnet" {
+variable "vnet_name" {
   type        = string
   description = "The virtual network name"
 }
 
-variable "fw_name" {
+variable "fw_subnet" {
+  type        = list(string)
+  description = "The address prefix to use for the subnet."
+}
+
+variable "environment" {
   type        = string
-  description = "The firewall name"
+  description = "The environment dev / test / prod"
 }

@@ -39,6 +39,9 @@ module "vm" {
   # law_key     = module.law.law_key
   prefix      = var.prefix
   //disk_encryption_set_id = module.dse.dse_id
+  depends_on = [
+    module.law
+  ]
 }
 
 
