@@ -1,0 +1,10 @@
+
+resource_location = "eastus"
+resource_tags = {
+  "Environment" = "Dev"
+  "Owner"       = "Ops Team"
+  "Deployment"  = "Terraform"
+  "Application" = "Game Server Hosting"
+}
+prefix = "dev"
+
