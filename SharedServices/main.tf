@@ -14,21 +14,8 @@ module "net" {
   environment             = var.environment
   vnet_address_space      = var.vnet_address_space
   subnet_address_prefixes = var.subnet_address_prefixes
+  bastion_subnet          = var.bastion_subnet
 }
-
-// Create a Module for Bastion Host 
-module "bastion" {
-  source         = "./Modules/bastion"
-  location       = var.location
-  tags           = var.tags
-  vnet_name      = module.net.vnet_name
-  environment    = var.environment
-  bastion_subnet = var.bastion_subnet
-  depends_on = [
-    module.net
-  ]
-}
-
 
 /*
 module "firewall_policy" {

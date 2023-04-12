@@ -28,3 +28,8 @@ variable "subnet_address_prefixes" {
   description = "The address prefix to use for the subnet."
 }
 
+// Create a variable for Bastion Subnet Address Prefixes
+variable "bastion_subnet" {
+  type        = list(string)
+  description = "The address prefix to use for the subnet."
+}
