@@ -9,3 +9,5 @@ tf.plan
 
 *.lock.hcl
 
+plan.out
+

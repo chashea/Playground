@@ -37,7 +37,7 @@ module "vm" {
   subnet_id   = module.vnet.subnet_id
   # law_id      = module.law.law_id
   # law_key     = module.law.law_key
-  prefix      = var.prefix
+  prefix = var.prefix
   //disk_encryption_set_id = module.dse.dse_id
   depends_on = [
     module.law

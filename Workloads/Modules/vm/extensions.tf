@@ -4,6 +4,10 @@ data "azurerm_log_analytics_workspace" "law" {
   resource_group_name = "rg-law-${var.location}-${var.environment}"
 }
 
+output "law_id" {
+  value = data.azurerm_log_analytics_workspace.law.id
+}
+
 
 // Create Virtual Machine extension for AAD JOin
 resource "azurerm_virtual_machine_extension" "aad_join" {
@@ -27,12 +31,13 @@ resource "azurerm_virtual_machine_extension" "mma_agent" {
   {
     "workspaceId": "${data.azurerm_log_analytics_workspace.law.id}"
   }
-    SETTINGS
+SETTINGS
+
   protected_settings         = <<PROTECTED_SETTINGS
-    {
-        "workspaceKey": "${data.azurerm_log_analytics_workspace.law.primary_shared_key}"
-        }
-    PROTECTED_SETTINGS
+  {
+    "workspaceKey": "${data.azurerm_log_analytics_workspace.law.primary_shared_key}"
+  }
+PROTECTED_SETTINGS
 
   depends_on = [
     azurerm_virtual_machine_extension.aad_join,
