@@ -1,5 +1,3 @@
-
-
 // Create a Public IP for Bastion Host
 resource "azurerm_public_ip" "bastion_pip" {
   name                = local.bastion_pip_name
@@ -13,7 +11,6 @@ resource "azurerm_public_ip" "bastion_pip" {
     azurerm_resource_group.rg
   ]
 }
-
 // Create a Subnet for Bastion Host
 resource "azurerm_subnet" "bastion_subnet" {
   name                 = "AzureBastionSubnet"
@@ -22,7 +19,7 @@ resource "azurerm_subnet" "bastion_subnet" {
   address_prefixes     = var.bastion_subnet
   depends_on = [
     azurerm_resource_group.rg,
-    azurerm_public_ip.bastion_pip
+    azurerm_virtual_network.vnet
   ]
 }
 

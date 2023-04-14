@@ -17,11 +17,27 @@ provider "azurerm" {
 }
 
 module "vnet" {
-  source      = "./Modules/vnet"
+  source        = "./Modules/vnet"
+  location      = var.location
+  environment   = var.environment
+  rg_hub        = var.rg_hub
+  hub_vnet_name = var.hub_vnet_name
+  tags          = var.tags
+}
+
+module "vm" {
+  source      = "./Modules/vm"
   location    = var.location
   environment = var.environment
   tags        = var.tags
+  subnet_id   = module.vnet.subnet_id
+  prefix      = var.prefix
+  depends_on = [
+    module.law
+  ]
 }
+
+/*
 module "law" {
   source      = "./Modules/law"
   location    = var.location
@@ -29,21 +45,7 @@ module "law" {
   tags        = var.tags
   prefix      = var.prefix
 }
-module "vm" {
-  source      = "./Modules/vm"
-  location    = var.location
-  environment = var.environment
-  tags        = var.tags
-  subnet_id   = module.vnet.subnet_id
-  # law_id      = module.law.law_id
-  # law_key     = module.law.law_key
-  prefix = var.prefix
-  //disk_encryption_set_id = module.dse.dse_id
-  depends_on = [
-    module.law
-  ]
-}
-
+*/
 
 /*module "dse" {
   source      = "./Modules/dse"

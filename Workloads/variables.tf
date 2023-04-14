@@ -16,3 +16,13 @@ variable "prefix" {
   type        = string
 }
 
+variable "rg_hub" {
+  description = "Resource Group name"
+  type        = string
+}
+
+variable "hub_vnet_name" {
+  description = "Hub VNet name"
+  type        = string
+}
+

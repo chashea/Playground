@@ -11,3 +11,13 @@ variable "environment" {
   type        = string
   description = "The environment in which the resources should exist."
 }
+variable "hub_vnet_name" {
+  type        = string
+  description = "The name of the Hub Virtual Network."
+}
+
+variable "rg_hub" {
+  type        = string
+  description = "The name of the Resource Group."
+}
+

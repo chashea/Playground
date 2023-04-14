@@ -1,14 +1,8 @@
-// Create Local for Firewall and Public IP
-locals {
-  fw_name     = "fw-${var.environment}-${var.location}"
-  fw_pip_name = "fw-pip-${var.environment}-${var.location}"
-}
-
 // Create Subnet for Azure Firewall
 resource "azurerm_subnet" "fw_subnet" {
   name                 = "AzureFirewallSubnet"
   resource_group_name  = locals.rg_name
-  virtual_network_name = var.vnet_name
+  virtual_network_name = local.vnet_name
   address_prefixes     = var.fw_subnet
   tags                 = azurerm_resource_group.rg.tags
   depends_on = [
@@ -26,7 +20,6 @@ resource "azurerm_public_ip" "azfwpip" {
   tags                = azurerm_resource_group.rg.tags
   depends_on = [
     azurerm_resource_group.rg,
-    azurerm_subnet.fw_subnet
   ]
 }
 
