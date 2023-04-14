@@ -7,8 +7,8 @@ provider "azurerm" {
 }
 
 // Create a Module for Virtual Network and Subnet
-module "hub_net" {
-  source                  = "./Modules/hub_net"
+module "net" {
+  source                  = "./Modules/net"
   location                = var.location
   tags                    = var.tags
   environment             = var.environment
