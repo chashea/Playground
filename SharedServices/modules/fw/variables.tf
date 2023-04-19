@@ -15,18 +15,11 @@ variable "prefix" {
   description = "Prefix for all resources"
   type        = string
 }
-
-// Create Variables for Hub Virtual Network, Subnet, and Firewall
-variable "vnet_address_space" {
-  description = "Hub VNet address space"
+variable "fw_subnet" {
+  description = "Hub Firewall Subnet address prefix"
   type        = list(string)
 }
-variable "subnet_address_prefixes" {
-  description = "Hub Subnet address prefixes"
-  type        = list(string)
+variable "hub_vnet_name" {
+  description = "Hub VNet name"
+  type        = string
 }
-variable "bastion_subnet" {
-  description = "Hub Bastion Subnet address prefix"
-  type        = list(string)
-}
-

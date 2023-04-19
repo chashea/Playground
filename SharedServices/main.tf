@@ -12,11 +12,19 @@ module "net" {
   location                = var.location
   tags                    = var.tags
   environment             = var.environment
+  prefix                  = var.prefix
   vnet_address_space      = var.vnet_address_space
   subnet_address_prefixes = var.subnet_address_prefixes
   bastion_subnet          = var.bastion_subnet
-  fw_subnet               = var.fw_subnet
 }
 
-
-
+// Create a Module for Firewall
+module "fw" {
+  source                  = "./Modules/fw"
+  location                = var.location
+  tags                    = var.tags
+  environment             = var.environment
+  prefix                  = var.prefix
+  fw_subnet               = var.fw_subnet
+  hub_vnet_name           = module.net.vnet_name
+}
