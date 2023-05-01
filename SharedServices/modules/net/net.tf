@@ -27,7 +27,7 @@ resource "azurerm_subnet" "subnet" {
 resource "azurerm_subnet" "subnet_fw" {
   name                 = "AzureFirewallSubnet"
   resource_group_name  = local.fw_rg_name
-  virtual_network_name = var.hub_vnet_name
+  virtual_network_name = local.vnet_name
   address_prefixes     = var.fw_subnet
   depends_on = [
     azurerm_resource_group.rg_fw

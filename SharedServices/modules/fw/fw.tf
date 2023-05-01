@@ -28,7 +28,7 @@ resource "azurerm_firewall" "fw" {
   sku_tier            = "Premium"
   ip_configuration {
     name                 = "configuration"
-    subnet_id            = azurerm_subnet.subnet_fw.id
+    subnet_id            = var.fw_subnet_id
     public_ip_address_id = azurerm_public_ip.pip_fw.id
   }
   firewall_policy_id = azurerm_firewall_policy.fw_policy.id

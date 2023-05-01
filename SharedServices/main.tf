@@ -27,4 +27,5 @@ module "fw" {
   prefix                  = var.prefix
   fw_subnet               = var.fw_subnet
   hub_vnet_name           = module.net.vnet_name
+  fw_subnet_id            = module.net.fw_subnet_id
 }

@@ -29,4 +29,8 @@ variable "bastion_subnet" {
   description = "Hub Bastion Subnet address prefix"
   type        = list(string)
 }
+variable "fw_subnet" {
+  description = "fw subnet address prefixes"
+  type = list(string)
+}
 
