@@ -20,12 +20,12 @@ module "net" {
 
 // Create a Module for Firewall
 module "fw" {
-  source                  = "./Modules/fw"
-  location                = var.location
-  tags                    = var.tags
-  environment             = var.environment
-  prefix                  = var.prefix
-  fw_subnet               = var.fw_subnet
-  hub_vnet_name           = module.net.vnet_name
-  fw_subnet_id            = module.net.fw_subnet_id
+  source        = "./Modules/fw"
+  location      = var.location
+  tags          = var.tags
+  environment   = var.environment
+  prefix        = var.prefix
+  fw_subnet     = var.fw_subnet
+  hub_vnet_name = module.net.vnet_name
+  fw_subnet_id  = module.net.fw_subnet_id
 }

@@ -25,5 +25,5 @@ variable "hub_vnet_name" {
 }
 variable "fw_subnet_id" {
   description = "fw subnet id"
-  type =  string
+  type        = string
 }

@@ -6,6 +6,6 @@ locals {
   bastion_name     = "bastion-${var.prefix}-${var.environment}-${var.location}"
   bastion_pip_name = "pip-bastion-${var.prefix}-${var.environment}-${var.location}"
 
-  nsg_name         = "nsg-default-${var.prefix}-${var.environment}-${var.location}"
+  nsg_name          = "nsg-default-${var.prefix}-${var.environment}-${var.location}"
   nsg_rule_rdp_name = "nsg-rule-rdp-${var.prefix}-${var.environment}-${var.location}"
 }
