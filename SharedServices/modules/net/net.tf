@@ -23,18 +23,7 @@ resource "azurerm_subnet" "subnet" {
   ]
 }
 
-// Create Subnet for Azure Firewall
-resource "azurerm_subnet" "subnet_fw" {
-  name                 = "AzureFirewallSubnet"
-  resource_group_name  = local.fw_rg_name
-  virtual_network_name = local.vnet_name
-  address_prefixes     = var.fw_subnet
-  depends_on = [
-    azurerm_resource_group.rg_fw
-  ]
-}
-
-// Createa a default NSG
+// Create a default NSG
 resource "azurerm_network_security_group" "nsg" {
   name                = local.nsg_name
   location            = azurerm_resource_group.rg.location
