@@ -16,7 +16,7 @@ variable "prefix" {
   type        = string
 }
 
-// Create Variables for Hub Virtual Network, Subnet, and Firewall
+// Create Variables for Hub Virtual Network and Subnet
 variable "vnet_address_space" {
   description = "Hub VNet address space"
   type        = list(string)
@@ -25,12 +25,3 @@ variable "subnet_address_prefixes" {
   description = "Hub Subnet address prefixes"
   type        = list(string)
 }
-variable "bastion_subnet" {
-  description = "Hub Bastion Subnet address prefix"
-  type        = list(string)
-}
-variable "fw_subnet" {
-  description = "fw subnet address prefixes"
-  type        = list(string)
-}
-

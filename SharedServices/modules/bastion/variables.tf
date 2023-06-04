@@ -1,28 +1,26 @@
-// Create Variable for Environment
-variable "environment" {
-  description = "Environment name"
-  type        = string
-}
-
-// Create Variable for Location
+// Create Variables for Location, Environment, Prefix, and Tags
 variable "location" {
   description = "Resource location"
   type        = string
 }
-
-// Create Variable for Tags
 variable "tags" {
   description = "Resource tags"
   type        = map(string)
 }
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+variable "prefix" {
+  description = "Prefix for all resources"
+  type        = string
+}
 
-// Create Variable for Address Prefixes 
+// Create Variable for Bastion Subnet and Virtual Network
 variable "bastion_subnet" {
   description = "Hub VNet address space"
   type        = list(string)
 }
-
-// Create Variable for Virtual Network
 variable "vnet_name" {
   description = "Virtual Network Name"
   type        = string

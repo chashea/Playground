@@ -1,29 +1,22 @@
-// Create Variables for Location 
+// Create Variables for Location, Environment, Prefix, and Tags
 variable "location" {
   description = "Resource location"
   type        = string
 }
-
-// Create Variables for Tags
 variable "tags" {
   description = "Resource tags"
   type        = map(string)
 }
-
-// Create Variables for Environment
 variable "environment" {
   description = "Environment name"
   type        = string
 }
-
-// Create Variables for Prefix
-
 variable "prefix" {
   description = "Prefix for all resources"
   type        = string
 }
 
-// Create Variables for VNet Name
+// Create Variables for FW Subnet and Virtual Network
 variable "vnet_name" {
   description = "Virtual Network Name"
   type        = string

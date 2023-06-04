@@ -1,3 +1,19 @@
+
+locals {
+  vnet_name         = "vnet-hub-${var.prefix}-${var.environment}-${var.location}"
+  subnet_name       = "subnet-adds-${var.prefix}-${var.environment}-${var.location}"
+  rg_name           = "rg-hub-net-${var.prefix}-${var.environment}-${var.location}"
+  nsg_name          = "nsg-default-${var.prefix}-${var.environment}-${var.location}"
+  nsg_rule_rdp_name = "nsg-rule-rdp-${var.prefix}-${var.environment}-${var.location}"
+}
+
+// Create a Resource Group for Hub Virtual Network
+resource "azurerm_resource_group" "rg" {
+  name     = local.rg_name
+  location = var.location
+  tags     = var.tags
+}
+
 // Create a Virtual Network and Subnet
 resource "azurerm_virtual_network" "vnet" {
   name                = local.vnet_name
