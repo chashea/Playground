@@ -1,0 +1,16 @@
+Terraform init -upgrade
+
+terraform fmt --recursive
+
+terraform plan --var-file local.tfvars --out plan.out
+
+terraform plan -out=plan
+
+terraform apply "plan"
+
+terraform apply plan.out && terraform show
+
+terraform  destroy -var-file local.tfvars
+
+$Env:TF_LOG_path="c:\users\chashea\terraform.log"
+$Env:TF_LOG="debug"

@@ -1,27 +1,38 @@
-
-locals {
-  azfw_name        = "azfw-hub-${var.prefix}-${var.environment}-${var.location}"
-  pip_azfw_name    = "pip-azfw-${var.prefix}-${var.environment}-${var.location}"
-  rg_name          = "rg-vnet-hub-${var.prefix}-${var.environment}-${var.location}"
-  vnet_name        = "vnet-hub-${var.prefix}-${var.environment}-${var.location}"
-  azfw_policy_name = "azfw-policy-parent-${var.prefix}-${var.environment}-${var.location}"
-  workloadIPName   = "workload-ip-group-${var.prefix}-${var.environment}-${var.location}"
-  infraIPName      = "infra-ip-group-${var.prefix}-${var.environment}-${var.location}"
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.69.0"
+    }
+  }
 }
+
+provider "azurerm" {
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false // Set to True for Production
+    }
+  }
+}
+
 
 // Create a Resource Group
 resource "azurerm_resource_group" "azfw_rg" {
-  name     = local.rg_name
-  location = var.location
-  tags     = var.tags
+  name     = "azfw-rg"
+  location = "eastus"
+  tags     = {
+    environment = "dev"
+    costcenter  = "1234556677"
+    owner       = "cloud team"
+    workload    = "azure firewall"
+  }
 }
-
 // Create a Virtual Network
 resource "azurerm_virtual_network" "azfw_vnet" {
-  name                = local.vnet_name
+  name                = "azfw-vnet"
   location            = azurerm_resource_group.azfw_rg.location
-  resource_group_name = local.rg_name
-  address_space       = var.vnet_address_space
+  resource_group_name = azurerm_resource_group.azfw_rg.name
+  address_space       = ["10.10.0.0/24"]
   depends_on = [
     azurerm_resource_group.azfw_rg
   ]
@@ -29,20 +40,20 @@ resource "azurerm_virtual_network" "azfw_vnet" {
 
 // Create IP Groups
 resource "azurerm_ip_group" "workload_ip_group" {
-  name                = local.workloadIPName
-  resource_group_name = local.rg_name
+  name                = "workload-ip-group"
+  resource_group_name = azurerm_resource_group.azfw_rg.name
   location            = azurerm_resource_group.azfw_rg.location
-  cidrs               = var.workloadiPCIDR
+  cidrs               = ["10.20.0.0/24", "10.30.0.0/24"]
   depends_on = [
     azurerm_resource_group.azfw_rg,
     azurerm_virtual_network.azfw_vnet
   ]
 }
 resource "azurerm_ip_group" "infra_ip_group" {
-  name                = local.infraIPName
-  resource_group_name = local.rg_name
+  name                = "infra-ip-group"
+  resource_group_name = azurerm_resource_group.azfw_rg.name
   location            = azurerm_resource_group.azfw_rg.location
-  cidrs               = var.infraIPCIDR
+  cidrs               = ["10.40.0.0/24", "10.50.0.0/24"]
   depends_on = [
     azurerm_resource_group.azfw_rg,
     azurerm_virtual_network.azfw_vnet
@@ -52,9 +63,9 @@ resource "azurerm_ip_group" "infra_ip_group" {
 // Create the Azure Firewall Subnet
 resource "azurerm_subnet" "azfw_subnet" {
   name                 = "AzureFirewallSubnet"
-  resource_group_name  = local.rg_name
-  virtual_network_name = local.vnet_name
-  address_prefixes     = var.azfw_subnet
+  resource_group_name  = azurerm_resource_group.azfw_rg.name
+  virtual_network_name = azurerm_virtual_network.azfw_vnet.name
+  address_prefixes     = ["10.10.0.0/26"]
   depends_on = [
     azurerm_resource_group.azfw_rg,
     azurerm_virtual_network.azfw_vnet
@@ -63,12 +74,12 @@ resource "azurerm_subnet" "azfw_subnet" {
 
 // Create a Public IP Address for Azure Firewall
 resource "azurerm_public_ip" "pip_azfw" {
-  name                = local.pip_azfw_name
+  name                = "pip-azfw"
   location            = azurerm_resource_group.azfw_rg.location
-  resource_group_name = local.rg_name
+  resource_group_name = azurerm_resource_group.azfw_rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
-  tags                = var.tags
+  tags                = azurerm_resource_group.azfw_rg.tags
   depends_on = [
     azurerm_resource_group.azfw_rg
   ]
@@ -76,10 +87,10 @@ resource "azurerm_public_ip" "pip_azfw" {
 
 // Create a Azure Firewall Policy
 resource "azurerm_firewall_policy" "azfw_policy" {
-  name                = local.azfw_name
-  resource_group_name = local.rg_name
+  name                = "azfw-policy"
+  resource_group_name = azurerm_resource_group.azfw_rg.name
   location            = azurerm_resource_group.azfw_rg.location
-  sku                 = var.azfw_sku_tier
+  sku                 = "Premium"
   threat_intelligence_mode = "Alert"
 }
 
@@ -148,17 +159,15 @@ resource "azurerm_firewall_policy_rule_collection_group" "app_policy_rule_collec
   ]
 }
 
-
-
 // Create the Azure Firewall
 resource "azurerm_firewall" "fw" {
-  name                = local.azfw_name
+  name                = "azfw"
   location            = azurerm_resource_group.azfw_rg.location
-  resource_group_name = local.rg_name
-  sku_name            = var.azfw_sku_name
-  sku_tier            = var.azfw_sku_tier
+  resource_group_name = azurerm_resource_group.azfw_rg.name
+  sku_name            = "AZFW_VNet"
+  sku_tier            = "Premium"
   ip_configuration {
-    name                 = "configuration"
+    name                 = "azfw-ipconfig"
     subnet_id            = azurerm_subnet.azfw_subnet.id
     public_ip_address_id = azurerm_public_ip.pip_azfw.id
   }
