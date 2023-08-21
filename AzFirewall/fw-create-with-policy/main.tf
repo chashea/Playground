@@ -1,31 +1,9 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.69.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false // Set to True for Production
-    }
-  }
-}
-
 
 // Create a Resource Group
 resource "azurerm_resource_group" "azfw_rg" {
   name     = "azfw-rg"
-  location = "eastus"
-  tags     = {
-    environment = "dev"
-    costcenter  = "1234556677"
-    owner       = "cloud team"
-    workload    = "azure firewall"
-  }
+  location = var.location
+  tags     = var.tags
 }
 // Create a Virtual Network
 resource "azurerm_virtual_network" "azfw_vnet" {
@@ -87,10 +65,10 @@ resource "azurerm_public_ip" "pip_azfw" {
 
 // Create a Azure Firewall Policy
 resource "azurerm_firewall_policy" "azfw_policy" {
-  name                = "azfw-policy"
-  resource_group_name = azurerm_resource_group.azfw_rg.name
-  location            = azurerm_resource_group.azfw_rg.location
-  sku                 = "Premium"
+  name                     = "azfw-policy"
+  resource_group_name      = azurerm_resource_group.azfw_rg.name
+  location                 = azurerm_resource_group.azfw_rg.location
+  sku                      = var.fw_sku
   threat_intelligence_mode = "Alert"
 }
 
@@ -150,8 +128,8 @@ resource "azurerm_firewall_policy_rule_collection_group" "app_policy_rule_collec
         port = 443
       }
       destination_fqdns = ["*.microsoft.com"]
-      terminate_tls    = false
-      source_ip_groups = [azurerm_ip_group.workload_ip_group.id, azurerm_ip_group.infra_ip_group.id]
+      terminate_tls     = false
+      source_ip_groups  = [azurerm_ip_group.workload_ip_group.id, azurerm_ip_group.infra_ip_group.id]
     }
   }
   depends_on = [
@@ -165,7 +143,7 @@ resource "azurerm_firewall" "fw" {
   location            = azurerm_resource_group.azfw_rg.location
   resource_group_name = azurerm_resource_group.azfw_rg.name
   sku_name            = "AZFW_VNet"
-  sku_tier            = "Premium"
+  sku_tier            = var.fw_sku
   ip_configuration {
     name                 = "azfw-ipconfig"
     subnet_id            = azurerm_subnet.azfw_subnet.id

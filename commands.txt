@@ -4,9 +4,9 @@ terraform fmt --recursive
 
 terraform plan --var-file local.tfvars --out plan.out
 
-terraform plan -out=plan
+terraform plan -out main.tfplan
 
-terraform apply "plan"
+terraform apply main.tfplan
 
 terraform apply plan.out && terraform show
 

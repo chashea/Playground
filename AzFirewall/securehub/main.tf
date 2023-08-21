@@ -1,30 +1,9 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.69.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false // Set to True for Production
-    }
-  }
-}
 
 // Create a Resource Group
 resource "azurerm_resource_group" "azfw_rg" {
   name     = "rg-azfw-securehub-eus"
-  location = "eastus"
-  tags = {
-    environment = "dev"
-    costcenter  = "1234556677"
-    owner       = "cloud team"
-    workload    = "azure firewall"
-  }
+  location = var.location
+  tags     = var.tags
 }
 
 // Create resources for Azure Virtual WAN
@@ -60,6 +39,13 @@ resource "azurerm_virtual_hub_connection" "azfw_vwan_hub_connection" {
   virtual_hub_id            = azurerm_virtual_hub.azfw_vwan_hub.id
   remote_virtual_network_id = azurerm_virtual_network.azfw_vnet.id
   internet_security_enabled = true
+  routing {
+    associated_route_table_id = azurerm_virtual_hub_route_table.vhub_rt.id
+    propagated_route_table {
+      route_table_ids = [azurerm_virtual_hub_route_table.vhub_rt.id]
+      labels = ["VNet"]
+    }
+  }
   depends_on = [
     azurerm_virtual_hub.azfw_vwan_hub,
     azurerm_virtual_network.azfw_vnet
@@ -132,7 +118,7 @@ resource "azurerm_firewall" "fw" {
   location            = azurerm_resource_group.azfw_rg.location
   resource_group_name = azurerm_resource_group.azfw_rg.name
   sku_name            = "AZFW_Hub"
-  sku_tier            = "Premium"
+  sku_tier            = var.fw_sku
   tags                = azurerm_resource_group.azfw_rg.tags
   virtual_hub {
     virtual_hub_id  = azurerm_virtual_hub.azfw_vwan_hub.id
@@ -287,9 +273,9 @@ resource "azurerm_windows_virtual_machine" "vm_workload" {
   name                  = "workload-vm"
   resource_group_name   = azurerm_resource_group.azfw_rg.name
   location              = azurerm_resource_group.azfw_rg.location
-  size                  = "Standard_D2s_v3"
-  admin_username        = "adminuser"
-  admin_password        = "Password1234!"
+  size                  = var.vm_size
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
   network_interface_ids = [azurerm_network_interface.vm_workload_nic.id]
   os_disk {
     caching              = "ReadWrite"
@@ -311,9 +297,9 @@ resource "azurerm_windows_virtual_machine" "vm_jump" {
   name                  = "jump-vm"
   resource_group_name   = azurerm_resource_group.azfw_rg.name
   location              = azurerm_resource_group.azfw_rg.location
-  size                  = "Standard_D2s_v3"
-  admin_username        = "adminuser"
-  admin_password        = "Password1234!"
+  size                  = var.vm_size
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
   network_interface_ids = [azurerm_network_interface.vm_jump_nic.id]
   os_disk {
     caching              = "ReadWrite"
@@ -362,19 +348,20 @@ resource "azurerm_virtual_hub_route_table" "vhub_rt" {
   name           = "vhub-rt-azfw-securehub-eus"
   virtual_hub_id = azurerm_virtual_hub.azfw_vwan_hub.id
   route {
-    name                          = "workload-SNToFirewall"
-    destinations_type             = "CIDR"
-    destinations = ["10.10.1.0/24"]
-    next_hop_type                 = "ResourceId"
-    next_hop                      = azurerm_firewall.fw.id
+    name              = "workload-SNToFirewall"
+    destinations_type = "CIDR"
+    destinations      = ["10.10.1.0/24"]
+    next_hop_type     = "ResourceId"
+    next_hop          = azurerm_firewall.fw.id
   }
   route {
-    name                          = "InternetToFirewall"
-    destinations_type             = "CIDR"
-    destinations = ["0.0.0.0/0"]
-    next_hop_type                 = "ResourceId"
-    next_hop                      = azurerm_firewall.fw.id
+    name              = "InternetToFirewall"
+    destinations_type = "CIDR"
+    destinations      = ["0.0.0.0/0"]
+    next_hop_type     = "ResourceId"
+    next_hop          = azurerm_firewall.fw.id
   }
+  labels = ["VNet"]
   depends_on = [
     azurerm_virtual_hub.azfw_vwan_hub,
     azurerm_firewall.fw
