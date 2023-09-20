@@ -1,0 +1,41 @@
+# Create Variables for Resource Group
+$rgName = "rg-network-hub"
+$location = "eastus"
+$tags = "Owner=AzureTeam"
+#Create Variables for Hub Virtual Network
+$hubVnetName = "vnet-hub-eus-01"
+$hubVnetAddressPrefix = "10.0.0.0/16"
+$AzFwSubnetName = "AzureFirewallSubnet"
+$AzFwSubnetPrefix = "10.0.0.0/26"
+$AzBastionSubnetName = "AzureBastionSubnet"
+$AzBastionSubnetPrefix = "10.0.0.64/26"
+#Create Variables for Azure Bastion
+$bastionName = "bastion-hub-eus-01"
+$pipName = "pip-bastion-hub-eus-01"
+#Create Variables for Azure Firewall Policy
+$fwpolicyname = "fwparentpolicy-hub-eus-01"
+#Create Variables for Azure Firewall
+$fwname = "fw-hub-eus-01"
+$pipfw = "pip-fw-hub-eus-01"
+$fwpolicyname = "fwparentpolicy-hub-eus-01"
+$sku = "AZFW_Vnet"
+$tier = "Premium"
+$zones = "1,2,3"
+
+# Create Resource Group for Hub Network
+az group create --name $rgName --location $location --tags $tags
+
+# Create Hub Virtual Network
+az network vnet create --address-prefixes $hubVnetAddressPrefix --name $hubVnetName --resource-group $rgName --location $location --subnet-name $AzFwSubnetName --subnet-prefixes $AzFwSubnetPrefix --subnet-name $AzBastionSubnetName --subnet-prefixes $AzBastionSubnetPrefix
+
+#create pip for bastion
+az network public-ip create --name $pipName --resource-group $rgName --location $location --sku Standard --tags $tags 
+
+# Create Azure Bastion
+az network bastion create --name $bastionName --public-ip-address $pipName --resource-group $rgName --vnet-name $hubvnetName --location $location --tags $tags
+
+# Create Azure Firewall Policy
+az network firewall policy create --name $fwpolicyname --resource-group $rgName --location $location --enable-dns-proxy true --threat-intel-mode Alert
+
+# Create Azure Firewall
+az network firewall create --name $fwname --resource-group $rgName --location $location --vnet-name $hubVnetName --firewall-policy $fwpolicyname --public-ip $pipfw --sku $sku --tier $tier --tags $tags 
