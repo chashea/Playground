@@ -3,16 +3,8 @@ variable "location" {
   description = "Resource location"
   type        = string
 }
-variable "tags" {
-  description = "Resource tags"
-  type        = map(string)
-}
 variable "environment" {
   description = "Environment name"
-  type        = string
-}
-variable "prefix" {
-  description = "Prefix for all resources"
   type        = string
 }
 
@@ -23,15 +15,5 @@ variable "vnet_address_space" {
 }
 variable "subnet_address_prefixes" {
   description = "Hub Subnet address prefixes"
-  type        = list(string)
-}
-variable "bastion_subnet" {
-  description = "Hub Bastion Subnet address prefix"
-  type        = list(string)
-}
-
-// Create Variables for Firewall
-variable "fw_subnet" {
-  description = "Hub Firewall Subnet address prefix"
   type        = list(string)
 }
