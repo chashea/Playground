@@ -1,0 +1,10 @@
+.terraform
+
+tf.plan
+
+*.tfvars
+
+*.tfstate
+*.tfstate.*
+
+*.lock.hcl

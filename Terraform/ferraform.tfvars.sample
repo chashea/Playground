@@ -1,0 +1,27 @@
+rg_hub_name = "rg-hub-eus-001"
+location    = "eastus"
+//VNet Hub Resources
+hub_vnet_name               = "vnet-hub-eus-001"
+hub_vnet_address            = ["10.0.0.0/16"]
+fw_subnet_address           = ["10.0.0.0/26"]
+bastion_subnet_address      = ["10.0.0.64/26"]
+route_server_subnet_address = ["10.0.0.128/27"]
+// Firewall Resources
+fw_pip_name           = "pip-fw-eus-001"
+fw_name               = "fw-eus-001"
+fw_sku_tier           = "Premium"
+fw_sku_name           = "AZFW_VNet"
+fw_ip_config_name     = "fw-ipConfig"
+fw_parent_policy_name = "fw-parent-policy-001"
+// Bastion Resources
+bastion_pip_name       = "pip-bastion-eus-001"
+bastion_name           = "bastion-eus-001"
+bastion_ip_config_name = "bastion-ipConfig"
+// Route Server Variables
+route_server_pip_name            = "pip-rs-eus-001"
+route_server_name                = "rs-eus-001"
+route_server_ip_config_name      = "route-server-ipConfig"
+route_server_bgp_connection_name = "route-server-bgp-connection"
+route_server_branch_to_branch    = true
+peer_asn                         = 65001
+peer_ip                          = "140.0.14.10"
