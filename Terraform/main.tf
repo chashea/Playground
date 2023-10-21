@@ -15,16 +15,10 @@ module "hub" {
   rg_hub_name = var.rg_hub_name
   location    = var.location
   // VNet Variables
-  hub_vnet_name              = var.hub_vnet_name
-  hub_vnet_address            = var.hub_vnet_address
-  fw_subnet_address           = var.fw_subnet_address
-  bastion_subnet_address      = var.bastion_subnet_address
-  route_server_subnet_address = var.route_server_subnet_address
+  hub_vnet_name = var.hub_vnet_name
   // Firewall Variables
   fw_pip_name           = var.fw_pip_name
   fw_name               = var.fw_name
-  fw_sku_tier           = var.fw_sku_tier
-  fw_sku_name           = var.fw_sku_name
   fw_ip_config_name     = var.fw_ip_config_name
   fw_parent_policy_name = var.fw_parent_policy_name
   // Bastion Variables
@@ -35,8 +29,26 @@ module "hub" {
   route_server_pip_name            = var.route_server_pip_name
   route_server_name                = var.route_server_name
   route_server_ip_config_name      = var.route_server_ip_config_name
-  route_server_branch_to_branch    = var.route_server_branch_to_branch
   route_server_bgp_connection_name = var.route_server_bgp_connection_name
-  peer_asn                         = var.peer_asn
-  peer_ip                          = var.peer_ip
+}
+
+module "avd" {
+  source       = "./avd"
+  rg_avd_name  = var.rg_avd_name
+  avd_location = var.avd_location
+  // VNet Variables
+  avd_vnet_name           = var.avd_vnet_name
+  personal_subnet_name    = var.personal_subnet_name
+  pooled_subnet_name      = var.pooled_subnet_name
+  avd_vnet_peering        = var.avd_vnet_peering
+  hub_vnet_id             = module.hub.hub_vnet_id
+  hub_rg_name             = module.hub.rg_hub_name
+  hub_vnet_name           = module.hub.hub_vnet_name
+  vnet_avd_peering        = var.vnet_avd_peering
+  // AVD Variables
+  pooled_name            = var.pooled_name
+  pooled_dag_name        = var.pooled_dag_name
+  personal_hostpool_name = var.personal_hostpool_name
+  personal_dag_name      = var.personal_dag_name
+  workspace_name         = var.workspace_name  
 }

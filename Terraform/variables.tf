@@ -17,32 +17,6 @@ variable "hub_vnet_name" {
   description = "value of the hub virtual network name"
 }
 
-variable "hub_vnet_address" {
-  type        = list(string)
-  description = "value of the hub virtual network address space"
-}
-
-// Create Variables for Firewall Subnet
-
-variable "fw_subnet_address" {
-  type        = list(string)
-  description = "value of the firewall subnet address space"
-}
-
-// Create Variables for Bastion Subnet
-
-variable "bastion_subnet_address" {
-  type        = list(string)
-  description = "value of the bastion subnet address space"
-}
-
-// Create Variables for Route Server Subnet
-
-variable "route_server_subnet_address" {
-  type        = list(string)
-  description = "value of the route server subnet address space"
-}
-
 // Create Variables for Azure Firewall
 
 variable "fw_pip_name" {
@@ -53,16 +27,6 @@ variable "fw_pip_name" {
 variable "fw_name" {
   type        = string
   description = "value of the FW name"
-}
-
-variable "fw_sku_tier" {
-  type        = string
-  description = "value of the FW SKU tier"
-}
-
-variable "fw_sku_name" {
-  type        = string
-  description = "value of the FW SKU name"
 }
 
 variable "fw_ip_config_name" {
@@ -103,24 +67,9 @@ variable "route_server_ip_config_name" {
   description = "value of the route server IP configuration name"
 }
 
-variable "route_server_branch_to_branch" {
-  type        = bool
-  description = "value of the route server branch to branch traffic"
-}
-
 variable "route_server_bgp_connection_name" {
   type        = string
   description = "value of the route server BGP connection name"
-}
-
-variable "peer_asn" {
-  type        = number
-  description = "value of the peer ASN"
-}
-
-variable "peer_ip" {
-  type        = string
-  description = "value of the peer IP address"
 }
 
 // Create Variables for Azure Firewall Parent Policy
@@ -130,3 +79,81 @@ variable "fw_parent_policy_name" {
   description = "value of the FW parent policy name"
 }
 
+// Create Variables for Azure Virtual Desktop
+
+// Create Variables for AVD
+
+variable "rg_avd_name" {
+  type        = string
+  description = "value of the resource group name for hub network"
+}
+
+variable "avd_location" {
+  type        = string
+  description = "value of the location for hub network"
+
+}
+
+// Create VNet Variables for AVD Network
+
+variable "avd_vnet_name" {
+  type        = string
+  description = "value of the hub virtual network name"
+}
+
+// Create Variables for AVD VNet Peering
+
+variable "avd_vnet_peering" {
+  type        = string
+  description = "value of the AVD VNet peering name"
+}
+
+variable "vnet_avd_peering" {
+  type        = string
+  description = "value of the hub VNet peering name"
+}
+
+// Create Variables for Pooled Subnet
+
+variable "pooled_subnet_name" {
+  type        = string
+  description = "value of the AVD subnet name"
+}
+
+// Create Variables for Personal Subnet
+
+variable "personal_subnet_name" {
+  type        = string
+  description = "value of the AVD subnet name"
+}
+
+// Create Variables for Pooled Host Pool
+
+variable "pooled_name" {
+  type        = string
+  description = "value of the pooled host pool name"
+}
+
+variable "pooled_dag_name" {
+  type        = string
+  description = "value of the desktop app group name"
+}
+
+// Create Variables for Personal Host Pool
+
+variable "personal_hostpool_name" {
+  type        = string
+  description = "value of the personal host pool name"
+}
+
+variable "personal_dag_name" {
+  type        = string
+  description = "value of the personal desktop app group name"
+}
+
+// Create Workspace Variables
+
+variable "workspace_name" {
+  type        = string
+  description = "value of the workspace name"
+}

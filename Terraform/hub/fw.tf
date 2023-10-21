@@ -14,8 +14,8 @@ resource "azurerm_firewall" "fw" {
   name                = var.fw_name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  sku_tier            = var.fw_sku_tier
-  sku_name            = var.fw_sku_name
+  sku_tier            = "Premium"
+  sku_name            = "AZFW_VNet"
 
   ip_configuration {
     name                 = var.fw_ip_config_name

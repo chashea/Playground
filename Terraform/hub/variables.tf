@@ -17,32 +17,6 @@ variable "hub_vnet_name" {
   description = "value of the hub virtual network name"
 }
 
-variable "hub_vnet_address" {
-  type        = list(string)
-  description = "value of the hub virtual network address space"
-}
-
-// Create Variables for Firewall Subnet
-
-variable "fw_subnet_address" {
-  type        = list(string)
-  description = "value of the firewall subnet address space"
-}
-
-// Create Variables for Bastion Subnet
-
-variable "bastion_subnet_address" {
-  type        = list(string)
-  description = "value of the bastion subnet address space"
-}
-
-// Create Variables for Route Server Subnet
-
-variable "route_server_subnet_address" {
-  type        = list(string)
-  description = "value of the route server subnet address space"
-}
-
 // Create Variables for Azure Firewall
 
 variable "fw_pip_name" {
@@ -53,16 +27,6 @@ variable "fw_pip_name" {
 variable "fw_name" {
   type        = string
   description = "value of the FW name"
-}
-
-variable "fw_sku_tier" {
-  type        = string
-  description = "value of the FW SKU tier"
-}
-
-variable "fw_sku_name" {
-  type        = string
-  description = "value of the FW SKU name"
 }
 
 variable "fw_ip_config_name" {
@@ -103,24 +67,9 @@ variable "route_server_ip_config_name" {
   description = "value of the route server IP configuration name"
 }
 
-variable "route_server_branch_to_branch" {
-  type        = bool
-  description = "value of the route server branch to branch traffic"
-}
-
 variable "route_server_bgp_connection_name" {
   type        = string
   description = "value of the route server BGP connection name"
-}
-
-variable "peer_asn" {
-  type        = number
-  description = "value of the peer ASN"
-}
-
-variable "peer_ip" {
-  type        = string
-  description = "value of the peer IP address"
 }
 
 // Create Variables for Azure Firewall Parent Policy
