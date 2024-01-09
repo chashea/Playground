@@ -25,11 +25,18 @@ module "hub" {
   bastion_pip_name       = var.bastion_pip_name
   bastion_name           = var.bastion_name
   bastion_ip_config_name = var.bastion_ip_config_name
-  // Route Server Variables
-  route_server_pip_name            = var.route_server_pip_name
-  route_server_name                = var.route_server_name
-  route_server_ip_config_name      = var.route_server_ip_config_name
-  route_server_bgp_connection_name = var.route_server_bgp_connection_name
+  // Virtual WAN Variables
+  vwan_name = var.vwan_name
+  vhub_name = var.vhub_name
+  // Virtual Network Gateway Variables
+  vng_name           = var.vng_name
+  vng_sku            = var.vng_sku
+  vng_ip_config_name = var.vng_ip_config_name
+  vng_pip_name       = var.vng_pip_name
+
+  // Local Network Gateway Variables
+  lng_name          = var.lng_name
+  lng_address_space = var.lng_address_space
 }
 
 module "avd" {
@@ -37,18 +44,18 @@ module "avd" {
   rg_avd_name  = var.rg_avd_name
   avd_location = var.avd_location
   // VNet Variables
-  avd_vnet_name           = var.avd_vnet_name
-  personal_subnet_name    = var.personal_subnet_name
-  pooled_subnet_name      = var.pooled_subnet_name
-  avd_vnet_peering        = var.avd_vnet_peering
-  hub_vnet_id             = module.hub.hub_vnet_id
-  hub_rg_name             = module.hub.rg_hub_name
-  hub_vnet_name           = module.hub.hub_vnet_name
-  vnet_avd_peering        = var.vnet_avd_peering
+  avd_vnet_name        = var.avd_vnet_name
+  personal_subnet_name = var.personal_subnet_name
+  pooled_subnet_name   = var.pooled_subnet_name
+  avd_vnet_peering     = var.avd_vnet_peering
+  hub_vnet_id          = module.hub.hub_vnet_id
+  hub_rg_name          = module.hub.rg_hub_name
+  hub_vnet_name        = module.hub.hub_vnet_name
+  vnet_avd_peering     = var.vnet_avd_peering
   // AVD Variables
   pooled_name            = var.pooled_name
   pooled_dag_name        = var.pooled_dag_name
   personal_hostpool_name = var.personal_hostpool_name
   personal_dag_name      = var.personal_dag_name
-  workspace_name         = var.workspace_name  
+  workspace_name         = var.workspace_name
 }

@@ -1,4 +1,4 @@
-// Create Variables for Hub Network
+## Create Variables for Hub Network
 
 variable "rg_hub_name" {
   type        = string
@@ -50,28 +50,6 @@ variable "bastion_ip_config_name" {
   description = "value of the bastion IP configuration name"
 }
 
-// Create Variables for Route Server
-
-variable "route_server_pip_name" {
-  type        = string
-  description = "value of the route server public IP address"
-}
-
-variable "route_server_name" {
-  type        = string
-  description = "value of the route server name"
-}
-
-variable "route_server_ip_config_name" {
-  type        = string
-  description = "value of the route server IP configuration name"
-}
-
-variable "route_server_bgp_connection_name" {
-  type        = string
-  description = "value of the route server BGP connection name"
-}
-
 // Create Variables for Azure Firewall Parent Policy
 
 variable "fw_parent_policy_name" {
@@ -79,7 +57,55 @@ variable "fw_parent_policy_name" {
   description = "value of the FW parent policy name"
 }
 
-// Create Variables for Azure Virtual Desktop
+// Create Variables for Virtual WAN
+
+variable "vwan_name" {
+  type        = string
+  description = "value of the virtual WAN name"
+}
+
+// Create Variables for Virtual Hub
+
+variable "vhub_name" {
+  type        = string
+  description = "value of the virtual hub name"
+}
+
+// Create Variables for Virtual Network Gateway
+
+variable "vng_pip_name" {
+  type        = string
+  description = "value of the VNG public IP address name"
+}
+
+variable "vng_name" {
+  type        = string
+  description = "value of the VNG name"
+}
+
+variable "vng_sku" {
+  type        = string
+  description = "value of the VNG SKU"
+}
+
+variable "vng_ip_config_name" {
+  type        = string
+  description = "value of the VNG IP configuration name"
+}
+
+// Create Variables for Virtual Network Gateway Connection
+
+variable "lng_name" {
+  type        = string
+  description = "value of the LNG name"
+}
+
+variable "lng_address_space" {
+  type        = list(string)
+  description = "value of the LNG address space"
+}
+
+## Create Variables for Azure Virtual Desktop
 
 // Create Variables for AVD
 

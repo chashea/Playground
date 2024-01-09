@@ -31,13 +31,12 @@ resource "azurerm_subnet" "bastion_subnet" {
   address_prefixes     = ["10.0.0.64/26"]
 }
 
-// Create a Subnet for Route Server
+// Create a Subnet for Virtual Network Gateway
 
-resource "azurerm_subnet" "route_server_subnet" {
-  name                 = "RouteServerSubnet"
+resource "azurerm_subnet" "gateway_subnet" {
+  name                 = "GatewaySubnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.0.128/27"]
+  address_prefixes     = ["10.0.2.0/24"]
 }
-
 
