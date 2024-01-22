@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "FTA-SecOps-Tools-Guides",
+			"path": "../../FTA-SecOps-Tools-Guides"
+		},
+		{
+			"path": "../../terraform-azurerm-avm-res-network-firewall-1"
+		},
+		{
+			"path": "../../terraform-azurerm-avm-res-network-firewallpolicy-1"
+		},
+		{
+			"path": "../../terraform-azurerm-avm-res-network-networkmanager"
+		},
+		{
+			"path": "../../terraform-azurerm-avm-res-operationalinsights-workspace-1"
+		},
+		{
+			"path": "../../terraform-azurerm-avm-ptn-avd-sessionhost"
+		}
+	],
+	"settings": {}
+}
