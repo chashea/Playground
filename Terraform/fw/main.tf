@@ -1,23 +1,18 @@
-module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "0.3.0"
-}
-
 # This is required for resource modules
-resource "azurerm_resource_group" "rg_fw" {
-  name     = module.naming.resource_group.name_unique
+resource "azurerm_resource_group" "rg" {
+  name     = "rg-fw-terraform"
   location = "eastus"
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  name                = module.naming.virtual_network.name_unique
-  resource_group_name = azurerm_resource_group.rg_fw.name
-  location            = azurerm_resource_group.rg_fw.location
+  name                = "vnet-fw-terraform"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
   address_space       = ["10.1.0.0/16"]
 }
 resource "azurerm_subnet" "subnet" {
   name                 = "AzureFirewallSubnet"
-  resource_group_name  = azurerm_resource_group.rg_fw.name
+  resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.1.0.0/26"]
 }
@@ -26,9 +21,9 @@ module "avm-res-network-publicipaddress" {
   source  = "Azure/avm-res-network-publicipaddress/azurerm"
   version = "0.1.0"
   # insert the 3 required variables here
-  name                = module.naming.public_ip.name_unique
-  location            = azurerm_resource_group.rg_fw.location
-  resource_group_name = azurerm_resource_group.rg_fw.name
+  name                = "pip-fw-terraform"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
   tags = {
@@ -42,9 +37,9 @@ module "avm-res-network-azurefirewall" {
   source  = "Azure/avm-res-network-azurefirewall/azurerm"
   version = "0.1.1"
   # source             = "Azure/avm-res-network-firewall/azurerm"
-  name                = module.naming.firewall.name_unique
-  location            = azurerm_resource_group.rg_fw.location
-  resource_group_name = azurerm_resource_group.rg_fw.name
+  name                = "fw-terraform"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   firewall_sku_tier   = "Standard"
   firewall_sku_name   = "AZFW_VNet"
   firewall_zones      = ["1", "2", "3"]
@@ -64,10 +59,10 @@ module "avm-res-network-azurefirewall" {
 module "avm-res-network-firewallpolicy" {
   source              = "Azure/avm-res-network-firewallpolicy/azurerm"
   version             = "0.1.0"
-  name                = module.naming.firewall_policy.name_unique
+  name                = "fw-policy-terraform"
   firewall_policy_sku = "Standard"
-  resource_group_name = azurerm_resource_group.rg_fw.name
-  location            = azurerm_resource_group.rg_fw.location
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
   tags = {
     deployment = "terraform"
   }
