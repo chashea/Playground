@@ -14,3 +14,4 @@ terraform  destroy -var-file local.tfvars
 
 $Env:TF_LOG_path="c:\users\chashea\terraform.log"
 $Env:TF_LOG="debug"
+
