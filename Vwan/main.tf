@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_resource_group" "rg" {
   name     = "rg-vwan-eus2-001"
   location = "eastus2"
