@@ -42,11 +42,11 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: Deploy Terraform to Azure
+name: Spin up AZ Environment
 
 on:
   schedule:
-    - cron: '0 13 * * *' # This runs the action every day at 1 PM UTC (8 AM EST)
+    - cron: '0 13 * * 1-5' # This runs the action Monday through Friday at 1 PM UTC (8 AM EST)
 
 jobs:
   terraform:
