@@ -4,13 +4,7 @@ name: Spin up Azure Environment
 on:
   schedule:
     - cron: '0 13 * * 1-5' # This runs the action Monday through Friday at 1 PM UTC (8 AM EST)
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+    
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -19,7 +13,6 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-    environment: production
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
