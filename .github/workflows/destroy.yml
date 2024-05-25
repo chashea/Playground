@@ -1,4 +1,4 @@
-name: Spins down Azure Environment
+name: Destroy Azure Environment
 
 on:
   schedule:
@@ -22,7 +22,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
@@ -31,12 +31,9 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./terraform
 
     - name: Terraform Plan Destroy
       run: terraform plan -destroy -out=tfplan
-      working-directory: ./terraform
 
     - name: Terraform Apply Destroy
       run: terraform apply -auto-approve tfplan
-      working-directory: ./terraform
