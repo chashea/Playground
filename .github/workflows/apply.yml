@@ -4,6 +4,9 @@ name: Spin up Azure Environment
 on:
   schedule:
     - cron: '0 13 * * 1-5' # This runs the action Monday through Friday at 1 PM UTC (8 AM EST)
+  push:
+   branches:
+    - main
 
 jobs:
   terraform:
