@@ -1,11 +1,9 @@
-name: Destroy Azure Environment
+
+name: Create Vwan Environment
 
 on:
   schedule:
-    - cron: '0 1 * * 2-6' # This runs the action Tuesday through Saturday at 1 AM UTC (8 PM EST Monday through Friday)
-  push:
-    branches:
-      - main
+    - cron: '0 13 * * 1-5' # This runs the action Monday through Friday at 1 PM UTC (8 AM EST)
 
 jobs:
   terraform:
@@ -16,9 +14,10 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
 
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
-       run:
-         shell: bash
+      run:
+        shell: bash
 
     steps:
     - name: Checkout repository
@@ -32,8 +31,11 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    - name: Terraform Plan Destroy
-      run: terraform plan -destroy -out=tfplan
+    - name: Terraform Format
+      run: terraform fmt -check
 
-    - name: Terraform Apply Destroy
-      run: terraform apply -auto-approve tfplan
+    - name: Terraform Plan
+      run: terraform plan
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
