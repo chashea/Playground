@@ -3,6 +3,7 @@ name: Destroy VWan Environment
 on:
   schedule:
     - cron: '0 1 * * 2-6' # This runs the action Tuesday through Saturday at 1 AM UTC (8 PM EST Monday through Friday)
+  workflow_dispatch:
 
 jobs:
   terraform:
