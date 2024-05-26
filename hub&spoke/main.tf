@@ -56,9 +56,9 @@ module "azfw" {
   firewall_policy_id  = module.fwpolicy.resource.id
   firewall_ip_configuration = [
     {
-    name                 = "ipconfig_fw"
-    subnet_id            = module.hub_vnet.subnets.AzureFirewallSubnet.id
-    public_ip_address_id = module.fw_public_ip.public_ip_id
+      name                 = "ipconfig_fw"
+      subnet_id            = module.hub_vnet.subnets.AzureFirewallSubnet.id
+      public_ip_address_id = module.fw_public_ip.public_ip_id
     }
   ]
 }
