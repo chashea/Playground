@@ -1,5 +1,5 @@
 
-name: Create Hub and Spoke Environment
+name: Create Hub&Spoke Environment
 
 on:
   schedule:
