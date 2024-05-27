@@ -1,7 +1,8 @@
-
-name: Create Azure Environment
+name: Destroy Azure Environment
 
 on:
+  schedule:
+    - cron: '0 1 * * 2-6' # This runs the action Tuesday through Saturday at 1 AM UTC (8 PM EST Monday through Friday)
   workflow_dispatch:
 
 jobs:
@@ -13,15 +14,14 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
-      run:
-        shell: bash
-
+       run:
+         shell: bash
+    
     strategy:
-      matrix:
+       matrix:
         directory: [ './vwan', './hub&spoke']
-        
+              
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -35,14 +35,10 @@ jobs:
       run: terraform init
       working-directory: ${{ matrix.directory }}
 
-    - name: Terraform Format
-      run: terraform fmt -check
+    - name: Terraform Plan Destroy
+      run: terraform plan -destroy -out=tfplan
       working-directory: ${{ matrix.directory }}
 
-    - name: Terraform Plan
-      run: terraform plan
-      working-directory: ${{ matrix.directory }}
-
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
+    - name: Terraform Apply Destroy
+      run: terraform apply -auto-approve tfplan
       working-directory: ${{ matrix.directory }}
