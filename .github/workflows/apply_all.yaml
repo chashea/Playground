@@ -1,5 +1,5 @@
 
-name: Create Vwan Environment
+name: Create Azure Environment
 
 on:
   workflow_dispatch:
@@ -18,6 +18,11 @@ jobs:
       run:
         shell: bash
 
+    strategy:
+      matrix:
+        directory: [ './vwan', './hub&spoke']
+        
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -29,16 +34,16 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./vwan
+      working-directory: ${{ matrix.directory }}
 
     - name: Terraform Format
       run: terraform fmt -check
-      working-directory: ./vwan
+      working-directory: ${{ matrix.directory }}
 
     - name: Terraform Plan
       run: terraform plan
-      working-directory: ./vwan
+      working-directory: ${{ matrix.directory }}
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: ./vwan
+      working-directory: ${{ matrix.directory }}
