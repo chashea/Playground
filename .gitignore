@@ -8,3 +8,4 @@ tf.plan
 *.tfstate.*
 
 *.lock.hcl
+plan.out
