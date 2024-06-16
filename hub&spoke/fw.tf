@@ -31,11 +31,19 @@ module "azfw" {
       public_ip_address_id = module.fw_public_ip.public_ip_id
     }
   ]
+  diagnostic_settings = {
+    log = {
+      log_groups                 = ["allLogs"]
+      metric_categories              = ["AllMetrics"]
+      workspace_resource_id          = module.law.resource.id
+      log_analytics_destination_type = "Dedicated"
+    }
+  }
 }
 
 module "firewall_policy" {
   source              = "Azure/avm-res-network-firewallpolicy/azurerm"
-  version             = ">=0.1.3"
+  version             = ">=0.2.0"
   name                = "fw-policy-terraform"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
@@ -47,5 +55,13 @@ module "firewall_policy" {
   tags = {
     deployment = "terraform"
   }
+}
+
+module "law" {
+  source              = "Azure/avm-res-operationalinsights-workspace/azurerm"
+  version             = ">=0.2.0"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  name                = "law-terraform"
 }
 

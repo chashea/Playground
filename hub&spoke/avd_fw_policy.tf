@@ -7,7 +7,7 @@ module "avd_core_rule_collection_group" {
   firewall_policy_rule_collection_group_network_rule_collection = [{
     action   = "Allow"
     name     = "AVDCoreNetworkRules"
-    priority = 500
+    priority = 400
     rule = [
       {
         name              = "Login to Microsoft"
@@ -195,14 +195,14 @@ module "m365rulecollectiongroup" {
   firewall_policy_rule_collection_group_network_rule_collection = [{
     action   = "Allow"
     name     = "M365NetworkRules"
-    priority = 500
+    priority = 600
     rule = [
       {
         name                  = "M365"
         source_addresses      = ["10.100.0.0/24"]
         destination_addresses = ["Office365.Common.Allow.Required"]
         protocols             = ["TCP"]
-        destination_ports     = ["443"]
+        destination_ports     = ["443", "80"]
       }
     ]
     }
@@ -218,7 +218,7 @@ module "internetrulecollectiongroup" {
   firewall_policy_rule_collection_group_network_rule_collection = [{
     action   = "Allow"
     name     = "InternetNetworkRules"
-    priority = 500
+    priority = 800
     rule = [
       {
         name                  = "Internet"
@@ -231,3 +231,4 @@ module "internetrulecollectiongroup" {
     }
   ]
 }
+
