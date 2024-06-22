@@ -57,6 +57,7 @@ module "firewall_policy" {
   }
 }
 
+
 module "law" {
   source              = "Azure/avm-res-operationalinsights-workspace/azurerm"
   version             = ">=0.2.0"
