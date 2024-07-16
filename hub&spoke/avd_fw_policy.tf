@@ -10,9 +10,6 @@ module "firewall_policy" {
     proxy_enabled = true
   }
   firewall_policy_threat_intelligence_mode = "Alert"
-  tags = {
-    deployment = "terraform"
-  }
 }
 
 

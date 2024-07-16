@@ -33,7 +33,7 @@ module "azfw" {
   ]
   diagnostic_settings = {
     log = {
-      log_groups                 = ["allLogs"]
+      log_groups                     = ["allLogs"]
       metric_categories              = ["AllMetrics"]
       workspace_resource_id          = module.law.resource.id
       log_analytics_destination_type = "Dedicated"
