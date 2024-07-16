@@ -1,6 +1,6 @@
 module "fw_public_ip" {
   source  = "Azure/avm-res-network-publicipaddress/azurerm"
-  version = ">=0.1.0"
+  version = "0.1.0"
   # insert the 3 required variables here
   name                = "pip-fw-terraform"
   location            = azurerm_resource_group.rg.location
@@ -16,7 +16,7 @@ module "fw_public_ip" {
 
 module "azfw" {
   source              = "Azure/avm-res-network-azurefirewall/azurerm"
-  version             = ">=0.1.0"
+  version             = "0.2.2"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   name                = "azfw-eus2-001"
@@ -41,26 +41,9 @@ module "azfw" {
   }
 }
 
-module "firewall_policy" {
-  source              = "Azure/avm-res-network-firewallpolicy/azurerm"
-  version             = ">=0.2.0"
-  name                = "fw-policy-terraform"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  firewall_policy_sku = "Premium"
-  firewall_policy_dns = {
-    proxy_enabled = true
-  }
-  firewall_policy_threat_intelligence_mode = "Alert"
-  tags = {
-    deployment = "terraform"
-  }
-}
-
-
 module "law" {
   source              = "Azure/avm-res-operationalinsights-workspace/azurerm"
-  version             = ">=0.2.0"
+  version             = "0.3.2"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   name                = "law-terraform"
