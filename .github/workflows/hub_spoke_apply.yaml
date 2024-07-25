@@ -3,8 +3,6 @@ name: Create Hub&Spoke Environment
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 13 * * 1-5" # This cron expression corresponds to 8 AM EST (which is 1 PM UTC) from Monday to Friday
 
 jobs:
   terraform:
