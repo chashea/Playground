@@ -37,6 +37,7 @@ module "azfw" {
       metric_categories              = ["AllMetrics"]
       workspace_resource_id          = module.law.resource.id
       log_analytics_destination_type = "Dedicated"
+      name = "fw-diag"
     }
   }
 }

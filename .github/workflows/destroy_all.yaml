@@ -31,6 +31,11 @@ jobs:
       with:
         terraform_version: 1.9.3
 
+    - name: Force Unlock State
+      run: terraform force-unlock -force dc6e4652-3dad-0ce8-0831-7e0e9d9a20e5
+      working-directory: ${{ matrix.directory }}
+      continue-on-error: true
+
     - name: Terraform Init
       run: terraform init
       working-directory: ${{ matrix.directory }}
