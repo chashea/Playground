@@ -1,8 +1,7 @@
 module "fw_public_ip" {
-  source  = "Azure/avm-res-network-publicipaddress/azurerm"
-  version = "0.1.0"
-  # insert the 3 required variables here
-  name                = "pip-fw-terraform"
+  source              = "Azure/avm-res-network-publicipaddress/azurerm"
+  version             = "0.1.0"
+  name                = "${module.naming.public_ip.name_unique}-fw"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
@@ -27,26 +26,35 @@ module "azfw" {
   firewall_ip_configuration = [
     {
       name                 = "ipconfig_fw"
-      subnet_id            = azurerm_subnet.fw_subnet.id
+      subnet_id            = module.hub_vnet.subnets["subnet0"].id
       public_ip_address_id = module.fw_public_ip.public_ip_id
     }
   ]
   diagnostic_settings = {
     log = {
-      log_groups                     = ["allLogs"]
-      metric_categories              = ["AllMetrics"]
       workspace_resource_id          = module.law.resource.id
       log_analytics_destination_type = "Dedicated"
-      name = "fw-diag"
+      name                           = "fw-dia-01"
     }
+  }
+  tags = {
+    deployment = "terraform"
   }
 }
 
-module "law" {
-  source              = "Azure/avm-res-operationalinsights-workspace/azurerm"
-  version             = "0.3.2"
+module "firewall_policy" {
+  source              = "Azure/avm-res-network-firewallpolicy/azurerm"
+  version             = "0.2.3"
+  name                = "fw-policy-terraform"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  name                = "law-terraform"
+  firewall_policy_sku = "Premium"
+  firewall_policy_dns = {
+    proxy_enabled = true
+  }
+  firewall_policy_threat_intelligence_mode = "Alert"
+  tags = {
+    deployment = "terraform"
+  }
 }
 

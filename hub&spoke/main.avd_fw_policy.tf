@@ -1,18 +1,4 @@
 
-module "firewall_policy" {
-  source              = "Azure/avm-res-network-firewallpolicy/azurerm"
-  version             = "0.2.3"
-  name                = "fw-policy-terraform"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  firewall_policy_sku = "Premium"
-  firewall_policy_dns = {
-    proxy_enabled = true
-  }
-  firewall_policy_threat_intelligence_mode = "Alert"
-}
-
-
 module "avd_core_rule_collection_group" {
   source = "Azure/avm-res-network-firewallpolicy/azurerm//modules/rule_collection_groups"
   # source             = "Azure/avm-res-network-firewallpolicy/azurerm//modules/rule_collection_groups"
