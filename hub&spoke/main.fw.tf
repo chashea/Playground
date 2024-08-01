@@ -26,7 +26,7 @@ module "azfw" {
   firewall_ip_configuration = [
     {
       name                 = "ipconfig_fw"
-      subnet_id            = module.hub_vnet.subnets["subnet0"].id
+      subnet_id            = module.hub_vnet.subnets["subnet0"].resource.id
       public_ip_address_id = module.fw_public_ip.public_ip_id
     }
   ]

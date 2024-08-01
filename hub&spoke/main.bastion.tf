@@ -6,7 +6,7 @@ module "bastion" {
   resource_group_name = azurerm_resource_group.rg.name
   ip_configuration = {
     name                 = "ipconfig-${module.naming.bastion_host.name_unique}"
-    subnet_id            = module.hub_vnet.subnets["subnet1"].id
+    subnet_id            = module.hub_vnet.subnets["subnet1"].resource.id
     public_ip_address_id = module.pip_bastion.public_ip_id
   }
   tags = {
