@@ -2,8 +2,8 @@
 name: Create Azure Environment
 
 on:
-  schedule:
-    - cron: "0 13 * * 1-5" # This cron expression corresponds to 8 AM EST (which is 1 PM UTC) from Monday to Friday
+  #schedule:
+  #  - cron: "0 13 * * 1-5" # This cron expression corresponds to 8 AM EST (which is 1 PM UTC) from Monday to Friday
   workflow_dispatch:
 
 jobs:

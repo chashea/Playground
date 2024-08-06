@@ -17,6 +17,3 @@ module "kv" {
     deployment = "terraform"
   }
 }
-
-
-

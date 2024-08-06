@@ -1,0 +1,53 @@
+# Define variables
+$resourceGroupName = "rg-terraform-backend"
+$location = "eastus2"
+$vnetName = "vnet-terraform-backend"
+$subnetName = "subnet-terraform-backend"
+$storageAccountName = "tfbackendstorageeus2001"
+$containerName = "tfstate"
+$keyVaultName = "vault-terraform-backend"
+$terraformStateKey = "terraform.tfstate"
+$spName = "sp-terraform-backend"
+$managedIdentityName = "mi-terraform-backend"
+
+# Create a resource group
+az group create --name $resourceGroupName --location $location
+
+# Create a virtual network
+az network vnet create --name $vnetName --resource-group $resourceGroupName --location $location --address-prefixes 10.110.0.0/24
+
+# Create a subnet within the virtual network
+az network vnet subnet create --name $subnetName --vnet-name $vnetName --resource-group $resourceGroupName --address-prefixes 10.110.0.0/24
+
+# Create a private DNS zone for the private links
+az network private-dns zone create --name "privatelink.blob.core.windows.net" --resource-group $resourceGroupName --zone-type Private --registration-vnets $vnetName
+
+# Create a storage account with private endpoint
+az storage account create --name $storageAccountName --resource-group $resourceGroupName --location $location --sku Standard_LRS --vnet-name $vnetName --subnet $subnetName --enable-private-endpoint --private-endpoint-network-policies "Disabled"
+
+# Get the storage account key
+$accountKey=$(az storage account keys list --account-name $storageAccountName --resource-group $resourceGroupName --query "[0].value" --output tsv)
+
+# Create a container in the storage account
+az storage container create --name $containerName --account-name $storageAccountName --account-key $accountKey
+
+# Create a Key Vault with private endpoint
+az keyvault create --name $keyVaultName --resource-group $resourceGroupName --location $location --network-acls default-action=Deny --enable-private-endpoint --private-endpoint-network-policies "Disabled" --vnet-name $vnetName --subnet $subnetName
+
+# Create a user assigned managed identity
+az identity create --name $managedIdentityName --resource-group $resourceGroupName --location $location
+
+# Assign the managed identity to the resource group as contributor
+az role assignment create --role "Contributor" --assignee $(az identity show --name $managedIdentityName --resource-group $resourceGroupName --query "principalId" --output tsv) --scope $(az group show --name $resourceGroupName --query "id" --output tsv)
+
+# Assign the managed identity to the Key Vault
+az keyvault set-policy --name $keyVaultName --resource-group $resourceGroupName --object-id $(az identity show --name $managedIdentityName --resource-group $resourceGroupName --query "principalId" --output tsv) --secret-permissions get list set
+
+# Create a service principal for Terraform
+$sp = az ad sp create-for-rbac --name $spName --skip-assignment
+
+# Assign the Contributor role to the service principal at the subscription level
+az role assignment create --role "Contributor" --assignee $sp.appId
+
+
+

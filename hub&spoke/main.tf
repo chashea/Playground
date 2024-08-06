@@ -107,10 +107,3 @@ resource "azurerm_route_table" "rt" {
   }
 }
 
-module "law" {
-  source              = "Azure/avm-res-operationalinsights-workspace/azurerm"
-  version             = "0.3.2"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  name                = "law-terraform"
-}
