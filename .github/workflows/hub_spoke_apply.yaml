@@ -1,5 +1,5 @@
 
-name: Create hub and spoke environment
+name: Deploy hub & spoke
 
 on:
   workflow_dispatch:
