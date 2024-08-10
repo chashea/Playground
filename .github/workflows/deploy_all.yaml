@@ -1,5 +1,5 @@
 
-name: Create Azure Environment
+name: Deploy Azure Environment
 
 on:
   #schedule:
