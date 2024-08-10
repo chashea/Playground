@@ -1,5 +1,5 @@
 
-name: Deploy hub & spoke
+name: Deploy Virtual Wan
 
 on:
   workflow_dispatch:
@@ -37,4 +37,4 @@ jobs:
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: Terraform/hub/
+      working-directory: Terraform/vwan/
