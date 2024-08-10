@@ -29,16 +29,16 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./hub&spoke
+      working-directory: /hub&spoke
 
     - name: Terraform Format
       run: terraform fmt -check
-      working-directory: ./hub&spoke
+      working-directory: /hub&spoke
 
     - name: Terraform Plan
       run: terraform plan
-      working-directory: ./hub&spoke
+      working-directory: /hub&spoke
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: ./hub&spoke
+      working-directory: /hub&spoke
