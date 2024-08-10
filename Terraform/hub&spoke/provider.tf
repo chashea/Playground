@@ -6,7 +6,7 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">= 3.71.0"
     }
- }
+  }
 }
 
 provider "azurerm" {
@@ -19,6 +19,6 @@ provider "azurerm" {
     }
     log_analytics_workspace {
       permanently_delete_on_destroy = true
-    }    
-  }  
+    }
+  }
 }

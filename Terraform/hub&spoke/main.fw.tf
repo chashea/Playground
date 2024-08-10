@@ -18,7 +18,7 @@ module "azfw" {
   version             = "0.2.2"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  name                = "azfw-eus2-001"
+  name                = module.naming.firewall.name_unique
   firewall_sku_name   = "AZFW_VNet"
   firewall_sku_tier   = "Premium"
   firewall_zones      = ["1", "2", "3"]
@@ -45,7 +45,7 @@ module "azfw" {
 module "firewall_policy" {
   source              = "Azure/avm-res-network-firewallpolicy/azurerm"
   version             = "0.2.3"
-  name                = "fw-policy-terraform"
+  name                = module.naming.firewall_policy.name_unique
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   firewall_policy_sku = "Premium"

@@ -1,9 +1,9 @@
 module "law" {
-  source              = "Azure/avm-res-operationalinsights-workspace/azurerm"
-  version             = "0.3.2"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  name                = "law-terraform"
+  source                                    = "Azure/avm-res-operationalinsights-workspace/azurerm"
+  version                                   = "0.3.2"
+  resource_group_name                       = azurerm_resource_group.rg.name
+  location                                  = azurerm_resource_group.rg.location
+  name                                      = "law-terraform"
   log_analytics_workspace_retention_in_days = 30
   log_analytics_workspace_sku               = "PerGB2018"
   log_analytics_workspace_identity = {

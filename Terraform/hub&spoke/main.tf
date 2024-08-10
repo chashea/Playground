@@ -24,7 +24,7 @@ module "hub_vnet" {
   version             = "0.3.0"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  name                = module.naming.virtual_network.name_unique
+  name                = "${module.naming.virtual_network.name_unique}-hub"
   address_space       = ["10.200.0.0/16"]
   subnets = {
     subnet0 = {
@@ -65,7 +65,7 @@ module "spoke_vnet" {
   version             = "0.2.0"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  name                = module.naming.virtual_network.name_unique
+  name                = "${module.naming.virtual_network.name_unique}-spoke"
   address_space       = ["10.100.0.0/16"]
 
   subnets = {

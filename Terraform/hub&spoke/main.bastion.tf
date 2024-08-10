@@ -1,7 +1,7 @@
 module "bastion" {
   source              = "Azure/avm-res-network-bastionhost/azurerm"
   version             = "0.3.0"
-  name                = module.naming.bastion_host.name_unique
+  name                = "bastion-${module.naming.bastion_host.name_unique}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   ip_configuration = {
