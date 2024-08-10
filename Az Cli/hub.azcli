@@ -1,0 +1,57 @@
+# Define variables
+$resource_group_name="rg-eus2-001"
+$location="eastus2"
+$nsg_name="nsg-eus2-001"
+$hub_vnet_name="vnet-hub-eus2-001"
+$fw_subnet="AzureFirewallSubnet"
+$bastion_subnet="AzureBastionSubnet"
+$gateway_subnet="GatewaySubnet"
+$pe_subnet="pe-mySubnet"
+$adds_subnet="adds-mySubnet"
+$peering_name_hub_to_spoke="myPeeringHubToSpoke"
+$fw_pip_name="pip-fw"
+$fw_pip_id=$(az network public-ip show --resource-group $resource_group_name --name $fw_pip_name --query id --output tsv)
+$fw_name="azfw-eus2-001"
+$fw_policy_name="fw-policy-terraform"
+$fw_sku_name="AZFW_VNet"
+$fw_sku_tier="Premium"
+$fw_zones="1 2 3"
+$bastion_name="myBastionHost"
+$bastion_pip_id=$(az network public-ip show --resource-group $resource_group_name --name $bastion_pip_name --query id --output tsv)
+$bastion_pip_name="pip-bastion"
+
+# Create a resource group
+az group create --name $resource_group_name --location $location
+
+# Create a network security group
+az network nsg create --resource-group $resource_group_name --name $nsg_name
+
+# Create a virtual network with address space
+az network vnet create --resource-group $resource_group_name --name $hub_vnet_name --address-prefix 10.200.0.0/16 --location $location
+
+# Create subnets within the virtual network
+az network vnet subnet create --resource-group $resource_group_name --vnet-name $vnet_name --name $fw_subnet --address-prefix 10.200.0.0/26
+az network vnet subnet create --resource-group $resource_group_name --vnet-name $vnet_name --name $bastion_subnet --address-prefix 10.200.0.64/26
+az network vnet subnet create --resource-group $resource_group_name --vnet-name $vnet_name --name $gateway_subnet --address-prefix 10.200.1.0/27
+az network vnet subnet create --resource-group $resource_group_name --vnet-name $vnet_name --name $pe_subnet --address-prefix 10.200.2.0/24
+az network vnet subnet create --resource-group $resource_group_name --vnet-name $vnet_name --name $adds_subnet --address-prefix 10.200.0.128/28
+
+# Create a public IP address for Azure Firewall
+az network public-ip create --resource-group $resource_group_name --name $public_ip_name --location $location --allocation-method Static --sku Standard --zones 1 2 3 --tags deployment=terraform
+
+# Create a firewall policy
+az network firewall policy create --resource-group $resource_group_name --name $fw_policy_name --location $location --sku fw_sku_tier --dns-settings proxy-enabled=true --threat-intel-mode Alert --tags deployment=terraform
+
+# Create an Azure Firewall
+az network firewall create --resource-group $resource_group_name --name $fwl_name --location $location --sku $fw_sku_name --tier $fw_sku_tier --zones $fw_zones --tags deployment=terraform
+
+# Configure the Azure Firewall IP configuration
+az network firewall ip-config create --firewall-name $firewall_name --resource-group $resource_group_name --name ipconfig_fw --public-ip-address $fw_pip_id --vnet-name $hub_vnet_name --subnet $fw_subnet
+
+# Create a public IP address for Azure Bastion
+az network public-ip create --resource-group $resource_group_name --name $bastion_pip_name --location $location --allocation-method Static --sku Standard --zones 1 2 3 --tags deployment=terraform
+
+# Create a Bastion Host
+az network bastion create --resource-group $resource_group_name --name $bastion_mname --location $location --public-ip-address $bastion_pip_id --vnet-name $hub_vnet_name --subnet $bastion_subnet --tags deployment=terraform
+
+
