@@ -11,7 +11,7 @@ jobs:
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_AD_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
 
     defaults:
@@ -20,7 +20,7 @@ jobs:
     
     strategy:
        matrix:
-        directory: [ './vwan', './hub&spoke']
+        directory: [ 'Terraform/vwan/', 'Terraform/hub&spoke/']
               
     steps:
     - name: Checkout repository
@@ -29,7 +29,7 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 1.8.0
+        terraform_version: 1.9.3
 
     - name: Force Unlock State
       run: terraform force-unlock -force dc6e4652-3dad-0ce8-0831-7e0e9d9a20e5

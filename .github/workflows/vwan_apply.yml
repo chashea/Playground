@@ -1,5 +1,5 @@
 
-name: Create Vwan Environment
+name: Deploy hub & spoke
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ jobs:
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_AD_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -25,20 +25,16 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 1.8.0
+        terraform_version: 1.9.3
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./vwan
-
-    - name: Terraform Format
-      run: terraform fmt -check
-      working-directory: ./vwan
+      working-directory: Terraform/vwan/
 
     - name: Terraform Plan
       run: terraform plan
-      working-directory: ./vwan
+      working-directory: Terraform/vwan/
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: ./vwan
+      working-directory: Terraform/hub/
