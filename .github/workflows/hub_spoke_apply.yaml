@@ -29,12 +29,12 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ./iac/terraform/hub&spoke
+      working-directory: iac/terraform/hub&spoke
 
     - name: Terraform Plan
       run: terraform plan
-      working-directory: ./iac/terraform/hub&spoke
+      working-directory: iac/terraform/hub&spoke
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: ./iac/terraform/hub&spoke
+      working-directory: iac/terraform/hub&spoke
