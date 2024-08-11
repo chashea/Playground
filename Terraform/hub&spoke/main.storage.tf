@@ -7,7 +7,8 @@ resource "azurerm_storage_account" "stg" {
   name = module.naming.storage_account.name_unique
   resource_group_name = azurerm_resource_group.rg_stg.name
   location = azurerm_resource_group.rg_stg.location
-  account_tier = "StandardV2"
+  account_tier = "Premium"
+  account_kind = "StorageV2"
   account_replication_type = "ZRS"
   default_to_oauth_authentication = true
   public_network_access_enabled = false
