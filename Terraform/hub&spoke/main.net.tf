@@ -6,7 +6,7 @@ module "naming" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = module.naming.resource_group.name_unique
+  name     = "${module.naming.resource_group.name_unique}-vnet"
   location = "eastus2"
 }
 
