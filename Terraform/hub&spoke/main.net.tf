@@ -16,7 +16,6 @@ module "nsg" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   name                = module.naming.network_security_group.name_unique
-
 }
 
 module "hub_vnet" {
@@ -48,16 +47,6 @@ module "hub_vnet" {
       address_prefix = "10.200.0.128/28"
     }
   }
-  peerings = {
-    peering0 = {
-      name                               = "${module.naming.virtual_network_peering.name_unique}-hub-to-spoke"
-      remote_virtual_network_resource_id = module.spoke_vnet.resource.id
-      allow_virtual_network_access       = true
-      allow_forwarded_traffic            = true
-      allow_gateway_transit              = false
-      use_remote_gateways                = false
-    }
-  }
 }
 
 module "spoke_vnet" {
@@ -82,15 +71,20 @@ module "spoke_vnet" {
       address_prefixes = ["10.100.1.0/24"]
     }
   }
-
   peerings = {
     peering1 = {
-      name                               = "${module.naming.virtual_network_peering.name_unique}-spoke-to-hub"
-      remote_virtual_network_resource_id = module.hub_vnet.resource.id
-      allow_virtual_network_access       = true
-      allow_forwarded_traffic            = true
-      allow_gateway_transit              = false
-      use_remote_gateways                = false
+      name                                 = "${module.naming.virtual_network_peering.name_unique}-spoke-to-hub"
+      remote_virtual_network_resource_id   = module.hub_vnet.resource.id
+      allow_virtual_network_access         = true
+      allow_forwarded_traffic              = true
+      allow_gateway_transit                = false
+      use_remote_gateways                  = false
+      create_reverse_peering               = true
+      reverse_virtual_network_resource_id  = "${module.naming.virtual_network_peering.name_unique}-hub-to-spoke"
+      reverse_allow_virtual_network_access = true
+      reverse_allow_forwarded_traffic      = true
+      reverse_allow_gateway_transit        = false
+      reverse_use_remote_gateways          = false
     }
   }
 }

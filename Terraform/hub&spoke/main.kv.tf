@@ -1,3 +1,8 @@
+resource "azurerm_resource_group" "rg_vault" {
+  name     = "${module.naming.resource_group.name}-kv"
+  location = "eastuse2"
+}
+
 module "kv" {
   source                   = "Azure/avm-res-keyvault-vault/azurerm"
   version                  = "0.3.0"
@@ -11,3 +16,4 @@ module "kv" {
     deployment = "terraform"
   }
 }
+
