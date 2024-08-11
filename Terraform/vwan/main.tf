@@ -23,7 +23,6 @@ resource "azurerm_virtual_hub" "vhub" {
 module "azfw" {
   source              = "Azure/avm-res-network-azurefirewall/azurerm"
   version             = ">=0.1.0"
-  enable_telemetry    = var.enable_telemetry
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   name                = "azfw-eus2-001"
