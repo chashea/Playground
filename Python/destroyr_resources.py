@@ -1,3 +1,5 @@
+### For Testing Purposes only
+
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.compute import ComputeManagementClient
@@ -12,7 +14,7 @@ from azure.core.exceptions import AzureError
 credential = DefaultAzureCredential()
 
 # Set your subscription ID
-subscription_id = "9e087dff-9c5b-4650-96ee-19cfe5269c5d"
+subscription_id = "<enter subscription id>"
 
 # Resource Management Client
 resource_client = ResourceManagementClient(credential, subscription_id)
