@@ -80,7 +80,7 @@ module "spoke_vnet" {
       allow_gateway_transit                = false
       use_remote_gateways                  = false
       create_reverse_peering               = true
-      reverse_name = "${module.naming.virtual_network_peering.name_unique}-hub-to-spoke"
+      reverse_name                         = "${module.naming.virtual_network_peering.name_unique}-hub-to-spoke"
       reverse_allow_virtual_network_access = true
       reverse_allow_forwarded_traffic      = true
       reverse_allow_gateway_transit        = false

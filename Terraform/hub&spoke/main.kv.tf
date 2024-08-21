@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "rg_vault" {
-  name     = "${module.naming.resource_group.name}-kv"
+  name     = "${module.naming.resource_group.name_unique}-vault"
   location = "eastus2"
 }
 
