@@ -59,6 +59,6 @@ module "nsg" {
   source              = "Azure/avm-res-network-networksecuritygroup/azurerm"
   version             = "0.2.0"
   resource_group_name = azurerm_resource_group.rg_spoke.name
-  location            = azurerm_resource_group.rg_spoke
+  location            = azurerm_resource_group.rg_spoke.location
   name                = module.naming.network_security_group.name_unique
 }
