@@ -2,8 +2,8 @@ module "fw_public_ip" {
   source              = "Azure/avm-res-network-publicipaddress/azurerm"
   version             = "0.1.0"
   name                = "${module.naming.public_ip.name_unique}-fw"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg_hub.location
+  resource_group_name = azurerm_resource_group.rg_hub.name
   allocation_method   = "Static"
   sku                 = "Standard"
   tags = {
@@ -16,8 +16,8 @@ module "fw_public_ip" {
 module "azfw" {
   source              = "Azure/avm-res-network-azurefirewall/azurerm"
   version             = "0.2.2"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg_hub.name
+  location            = azurerm_resource_group.rg_hub.location
   name                = module.naming.firewall.name_unique
   firewall_sku_name   = "AZFW_VNet"
   firewall_sku_tier   = "Premium"
@@ -46,8 +46,8 @@ module "firewall_policy" {
   source              = "Azure/avm-res-network-firewallpolicy/azurerm"
   version             = "0.2.3"
   name                = module.naming.firewall_policy.name_unique
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg_hub.name
+  location            = azurerm_resource_group.rg_hub.location
   firewall_policy_sku = "Premium"
   firewall_policy_dns = {
     proxy_enabled = true

@@ -39,10 +39,10 @@ module "stg" {
   name                     = module.naming.storage_account.name_unique
   resource_group_name      = azurerm_resource_group.rg_stg.name
   location                 = azurerm_resource_group.rg_stg.location
-  account_tier             = "Standard"
+  account_tier             = "Premium"
   account_replication_type = "ZRS"
   shared_access_key_enabled = false
-  account_kind = "StorageV2"
+  account_kind = "FileStorage"
   default_to_oauth_authentication = true
 
 }
