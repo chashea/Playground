@@ -11,7 +11,7 @@ module "kv" {
   location                 = azurerm_resource_group.rg_vault.location
   sku_name                 = "standard"
   tenant_id                = data.azurerm_client_config.current.tenant_id
-  purge_protection_enabled = true
+  purge_protection_enabled = true  
   tags = {
     deployment = "terraform"
   }
