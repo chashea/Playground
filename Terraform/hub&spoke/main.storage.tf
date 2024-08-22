@@ -5,7 +5,7 @@ resource "azurerm_resource_group" "rg_stg" {
 
 module "file_stg" {
   source                   = "Azure/avm-res-storage-storageaccount/azurerm"
-  version                  = "0.2.1"
+  version                  = "0.2.3"
   name                     = module.naming.storage_account.name_unique
   resource_group_name      = azurerm_resource_group.rg_stg.name
   location                 = azurerm_resource_group.rg_stg.location
@@ -16,8 +16,8 @@ module "file_stg" {
 
 module "stg" {
   source                   = "Azure/avm-res-storage-storageaccount/azurerm"
-  version                  = "0.2.1"
-  name                     = "${module.naming.storage_account.name_unique}-blob"
+  version                  = "0.2.3"
+  name                     = module.naming.storage_account.name_unique
   resource_group_name      = azurerm_resource_group.rg_stg.name
   location                 = azurerm_resource_group.rg_stg.location
   account_tier             = "Standard"
