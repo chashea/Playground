@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "rg_spoke" {
-    name     = "${module.naming.resource_group.name_unique}-spoke"
-    location = "eastus2" 
+  name     = "${module.naming.resource_group.name_unique}-spoke"
+  location = "eastus2"
 }
 
 module "spoke_vnet" {

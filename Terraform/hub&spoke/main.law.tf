@@ -3,9 +3,27 @@ resource "azurerm_resource_group" "rg_law" {
   location = "eastus2"
 }
 
+// Deploy Private DNS Zone
+module "privatednszone_law" {
+  source              = "Azure/avm-res-network-privatednszone/azurerm"
+  version             = "0.1.2"
+  resource_group_name = azurerm_resource_group.rg_law.name
+  domain_name         = "privatelink.workspace.azure.net"
+  virtual_network_links = {
+    vnetlink0 = {
+      vnetlinkname = "dnslinktovnet"
+      vnetid       = module.hub_vnet.resource.id
+    }
+  }
+  tags = {
+    deployment = "terraform"
+  }
+}
+
+
 module "law" {
-  source = "Azure/avm-res-operationalinsights-workspace/azurerm"
-  version = "0.3.2"
+  source                                    = "Azure/avm-res-operationalinsights-workspace/azurerm"
+  version                                   = "0.3.2"
   location                                  = azurerm_resource_group.rg_law.location
   resource_group_name                       = azurerm_resource_group.rg_law.name
   name                                      = module.naming.log_analytics_workspace.name_unique
@@ -26,8 +44,9 @@ module "law" {
     pe1 = {
       name                          = module.naming.private_endpoint.name_unique
       subnet_resource_id            = module.hub_vnet.subnets["subnet3"].resource.id
-      private_dns_zone_resource_ids = [module.private_dns_zone.resource.id]
+      private_dns_zone_resource_ids = [module.privatednszone_law.resource.id]
       network_interface_name        = "nic-pe-law"
     }
   }
 }
+
