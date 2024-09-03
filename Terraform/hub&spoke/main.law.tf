@@ -11,7 +11,7 @@ module "privatednszone_law" {
   domain_name         = "privatelink.workspace.azure.net"
   virtual_network_links = {
     vnetlink0 = {
-      vnetlinkname = "dnslinktovnet"
+      vnetlinkname = "dnslinktovnet001"
       vnetid       = module.hub_vnet.resource.id
     }
   }

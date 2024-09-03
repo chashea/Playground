@@ -139,33 +139,3 @@ module "pip_bastion" {
   }
   zones = ["1", "2", "3"]
 }
-
-// Deploy Jump Box
-module "jb" {
-  source              = "Azure/avm-res-compute-virtualmachine/azurerm//examples/default"
-  version             = "0.15.1"
-  name                = "${module.naming.virtual_machine.name_unique}-jb"
-  resource_group_name = azurerm_resource_group.rg_hub.name
-  location            = azurerm_resource_group.rg_hub.location
-  admin_password      = "Password1234!"
-  sku_size            = "Standard_D2ds_v5"
-  zone                = ["1", "2", "3"]
-  network_interfaces = {
-    nic0 = {
-      name = "${module.naming.network_interface.name_unique}jb"
-      ip_configuration = {
-        name                          = "ipconfig-${module.naming.network_interface.name_unique}"
-        private_ip_subnet_resource_id = module.hub_vnet.subnets["subnet5"].resource.id
-        private_ip_address_allocation = "Dynamic"
-      }
-
-    }
-  }
-  os_disk = {
-    storage_account_type = "Premium_LRS"
-    caching              = "ReadWrite"
-  }
-  tags = {
-    deployment = "terraform"
-  }
-}

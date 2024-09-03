@@ -11,7 +11,7 @@ module "privatednszone_kv" {
   domain_name         = "privatelink.vaultcore.azure.net"
   virtual_network_links = {
     vnetlink0 = {
-      vnetlinkname = "dnslinktovnet"
+      vnetlinkname = "dnslinktovnet002"
       vnetid       = module.hub_vnet.resource.id
     }
   }
@@ -22,13 +22,13 @@ module "privatednszone_kv" {
 
 
 module "kv" {
-  source                   = "Azure/avm-res-keyvault-vault/azurerm"
-  version                  = "0.3.0"
-  name                     = module.naming.key_vault.name_unique
-  resource_group_name      = azurerm_resource_group.rg_vault.name
-  location                 = azurerm_resource_group.rg_vault.location
-  sku_name                 = "standard"
-  tenant_id                = data.azurerm_client_config.current.tenant_id
+  source                        = "Azure/avm-res-keyvault-vault/azurerm"
+  version                       = "0.3.0"
+  name                          = module.naming.key_vault.name_unique
+  resource_group_name           = azurerm_resource_group.rg_vault.name
+  location                      = azurerm_resource_group.rg_vault.location
+  sku_name                      = "standard"
+  tenant_id                     = data.azurerm_client_config.current.tenant_id
   public_network_access_enabled = false
   private_endpoints = {
     primary = {
