@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "rg_vault" {
 module "privatednszone_kv" {
   source              = "Azure/avm-res-network-privatednszone/azurerm"
   version             = "0.1.2"
-  resource_group_name = azurerm_resource_group.rg_law.name
+  resource_group_name = azurerm_resource_group.rg_vault.name
   domain_name         = "privatelink.vaultcore.azure.net"
   virtual_network_links = {
     vnetlink0 = {

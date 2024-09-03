@@ -25,7 +25,6 @@ module "stg" {
   account_tier                    = "Standard"
   account_replication_type        = "RAGRS"
   account_kind                    = "StorageV2"
-  public_network_access_enabled   = true
   default_to_oauth_authentication = true
+  shared_access_key_enabled = true
 }
-
