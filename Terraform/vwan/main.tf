@@ -1,50 +1,67 @@
-data "azurerm_client_config" "current" {}
-
-resource "azurerm_resource_group" "rg" {
-  name     = "rg-vwan-eus2-001"
-  location = "eastus2"
+resource "random_pet" "vvan_name" {
+  length    = 2
+  separator = "-"
 }
 
-resource "azurerm_virtual_wan" "vwan" {
-  name                = "vwan-eus2-001"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  type                = "Standard"
-}
-
-resource "azurerm_virtual_hub" "vhub" {
-  name                = "vhub-eus2-001"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  virtual_wan_id      = azurerm_virtual_wan.vwan.id
-  address_prefix      = "10.1.0.0/16"
-}
-
-module "azfw" {
-  source              = "Azure/avm-res-network-azurefirewall/azurerm"
-  version             = ">=0.1.0"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  name                = "azfw-eus2-001"
-  firewall_sku_name   = "AZFW_Hub"
-  firewall_sku_tier   = "Premium"
-  firewall_virtual_hub = {
-    virtual_hub_id  = azurerm_virtual_hub.vhub.id
-    public_ip_count = 3
+locals {
+  firewall_key        = "aue-vhub-fw"
+  firewall_name       = "fw-avm-vwan-${random_pet.vvan_name.id}"
+  location            = "australiaeast"
+  resource_group_name = "rg-avm-vwan-${random_pet.vvan_name.id}"
+  tags = {
+    environment = "avm-vwan-testing"
+    deployment  = "terraform"
   }
-  firewall_zones     = ["1", "2", "3"]
-  firewall_policy_id = module.fwpolicy.resource.id
+  virtual_hub_key  = "aue-vhub"
+  virtual_hub_name = "vhub-avm-vwan-${random_pet.vvan_name.id}"
+  virtual_wan_name = "vwan-avm-vwan-${random_pet.vvan_name.id}"
 }
 
-module "fwpolicy" {
-  source              = "Azure/avm-res-network-firewallpolicy/azurerm"
-  version             = ">=0.1.0"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  name                = "fwpolicy-eus2-001"
-  firewall_policy_dns = {
-    proxy_enabled = true
+
+resource "azurerm_firewall_policy" "this" {
+  location            = local.location
+  name                = "vhub-avm-vwan-${random_pet.vvan_name.id}-fw-policy"
+  resource_group_name = module.vwan_with_vhub.resource_group_name
+}
+
+module "vwan_with_vhub" {
+  source                         = "Azure/avm-ptn-virtualwan/azurerm"
+  version                        = "0.5.0"
+  create_resource_group          = true
+  resource_group_name            = local.resource_group_name
+  location                       = local.location
+  virtual_wan_name               = local.virtual_wan_name
+  disable_vpn_encryption         = false
+  allow_branch_to_branch_traffic = true
+  type                           = "Standard"
+  virtual_wan_tags               = local.tags
+  virtual_hubs = {
+    (local.virtual_hub_key) = {
+      name           = local.virtual_hub_name
+      location       = local.location
+      resource_group = local.resource_group_name
+      address_prefix = "10.0.0.0/24"
+      tags           = local.tags
+    }
   }
-  firewall_policy_sku                      = "Premium"
-  firewall_policy_threat_intelligence_mode = "Alert"
+  firewalls = {
+    (local.firewall_key) = {
+      sku_name           = "AZFW_Hub"
+      sku_tier           = "Standard"
+      name               = local.firewall_name
+      virtual_hub_key    = local.virtual_hub_key
+      firewall_policy_id = azurerm_firewall_policy.this.id
+    }
+  }
+  routing_intents = {
+    "aue-vhub-routing-intent" = {
+      name            = "private-routing-intent"
+      virtual_hub_key = local.virtual_hub_key
+      routing_policies = [{
+        name                  = "aue-vhub-routing-policy-private"
+        destinations          = ["PrivateTraffic"]
+        next_hop_firewall_key = local.firewall_key
+      }]
+    }
+  }
 }

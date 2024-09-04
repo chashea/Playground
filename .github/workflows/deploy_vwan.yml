@@ -1,5 +1,5 @@
 
-name: Deploy Virtual Wan
+name: Deploy Virtual WAN
 
 on:
   workflow_dispatch:
@@ -29,10 +29,6 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: Terraform/vwan/
-
-    - name: Terraform Plan
-      run: terraform plan
       working-directory: Terraform/vwan/
 
     - name: Terraform Apply
