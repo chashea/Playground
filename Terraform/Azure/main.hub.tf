@@ -14,7 +14,7 @@ resource "azurerm_resource_group" "rg_hub" {
 // Deploy Hub Virtual Network
 module "hub_vnet" {
   source              = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version             = "0.4.0"
+  version             = "0.9.2"
   resource_group_name = azurerm_resource_group.rg_hub.name
   location            = azurerm_resource_group.rg_hub.location
   name                = "${module.naming.virtual_network.name_unique}-hub"
@@ -50,7 +50,7 @@ module "hub_vnet" {
 // Deploy Firewall Resources
 module "fw_public_ip" {
   source              = "Azure/avm-res-network-publicipaddress/azurerm"
-  version             = "0.1.0"
+  version             = "0.2.0"
   name                = "${module.naming.public_ip.name_unique}-fw"
   location            = azurerm_resource_group.rg_hub.location
   resource_group_name = azurerm_resource_group.rg_hub.name
@@ -65,7 +65,7 @@ module "fw_public_ip" {
 
 module "azfw" {
   source              = "Azure/avm-res-network-azurefirewall/azurerm"
-  version             = "0.2.2"
+  version             = "0.4.0"
   resource_group_name = azurerm_resource_group.rg_hub.name
   location            = azurerm_resource_group.rg_hub.location
   name                = module.naming.firewall.name_unique
@@ -111,7 +111,7 @@ module "firewall_policy" {
 // Deploy Bastion Resource
 module "bastion" {
   source              = "Azure/avm-res-network-bastionhost/azurerm"
-  version             = "0.3.0"
+  version             = "0.8.0"
   name                = "bastion-${module.naming.bastion_host.name_unique}"
   location            = azurerm_resource_group.rg_hub.location
   resource_group_name = azurerm_resource_group.rg_hub.name
@@ -127,7 +127,7 @@ module "bastion" {
 
 module "pip_bastion" {
   source  = "Azure/avm-res-network-publicipaddress/azurerm"
-  version = "0.1.0"
+  version = "0.2.0"
   # insert the 3 required variables here
   name                = "${module.naming.public_ip.name_unique}-bastion"
   location            = azurerm_resource_group.rg_hub.location
