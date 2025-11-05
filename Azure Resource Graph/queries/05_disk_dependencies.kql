@@ -1,0 +1,29 @@
+// Query: Managed Disk Dependencies
+// Description: Shows managed disks and which VMs they're attached to
+// Use Case: Finding orphaned disks or understanding disk attachments
+
+resources
+| where type == 'microsoft.compute/disks'
+| extend 
+    diskState = properties.diskState,
+    attachedToVm = properties.managedBy,
+    diskSizeGB = properties.diskSizeGB,
+    diskSku = sku.name,
+    diskTier = sku.tier,
+    osType = properties.osType,
+    creationTime = properties.timeCreated
+| project 
+    diskId = id,
+    diskName = name,
+    resourceGroup,
+    location,
+    diskState,
+    attachedToVmId = tostring(attachedToVm),
+    attachedToVmName = tostring(split(attachedToVm, '/')[8]),
+    diskSizeGB,
+    diskSku,
+    diskTier,
+    osType,
+    createdOn = creationTime,
+    subscriptionId
+| order by diskState, diskName

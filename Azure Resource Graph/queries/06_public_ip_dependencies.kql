@@ -1,0 +1,32 @@
+// Query: Public IP Address Dependencies
+// Description: Shows public IPs and what resources are using them
+// Use Case: Finding unused public IPs or understanding IP assignments
+
+resources
+| where type == 'microsoft.network/publicipaddresses'
+| extend 
+    ipConfiguration = properties.ipConfiguration.id,
+    ipAddress = properties.ipAddress,
+    allocationMethod = properties.publicIPAllocationMethod,
+    ipSku = sku.name,
+    ipVersion = properties.publicIPAddressVersion,
+    idleTimeout = properties.idleTimeoutInMinutes,
+    dnsSettings = properties.dnsSettings.fqdn
+| project 
+    publicIpId = id,
+    publicIpName = name,
+    resourceGroup,
+    location,
+    ipAddress,
+    allocationMethod,
+    ipSku,
+    ipVersion,
+    attachedToResource = tostring(ipConfiguration),
+    attachedToResourceType = tostring(split(ipConfiguration, '/')[7]),
+    attachedToResourceName = tostring(split(ipConfiguration, '/')[8]),
+    fqdn = dnsSettings,
+    idleTimeoutMinutes = idleTimeout,
+    zones = zones,
+    subscriptionId
+| extend isUnused = iff(isempty(attachedToResource), 'Yes', 'No')
+| order by isUnused desc, publicIpName

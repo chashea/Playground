@@ -1,0 +1,30 @@
+// Query: Azure Firewall Dependencies
+// Description: Shows Azure Firewall and all its dependencies
+// Use Case: Understanding what resources are needed for Azure Firewall
+
+resources
+| where type == 'microsoft.network/azurefirewalls'
+| extend 
+    ipConfigurations = properties.ipConfigurations,
+    firewallPolicy = properties.firewallPolicy.id,
+    sku = properties.sku.name,
+    tier = properties.sku.tier,
+    threatIntelMode = properties.threatIntelMode,
+    zones = zones
+| mv-expand ipConfigurations
+| project 
+    firewallId = id,
+    firewallName = name,
+    resourceGroup,
+    location,
+    sku,
+    tier,
+    threatIntelMode,
+    zones,
+    ipConfigName = tostring(ipConfigurations.name),
+    subnetId = tostring(ipConfigurations.properties.subnet.id),
+    publicIpId = tostring(ipConfigurations.properties.publicIPAddress.id),
+    privateIP = tostring(ipConfigurations.properties.privateIPAddress),
+    firewallPolicyId = tostring(firewallPolicy),
+    subscriptionId
+| order by firewallName

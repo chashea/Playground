@@ -1,0 +1,21 @@
+// Query: Resource Locks
+// Description: Shows all resource locks that might prevent deletion
+// Use Case: Finding what's preventing resource deletion
+
+authorizationresources
+| where type == 'microsoft.authorization/locks'
+| extend 
+    lockLevel = properties.level,
+    lockNotes = properties.notes,
+    lockedResourceId = substring(id, 0, indexof(id, '/providers/Microsoft.Authorization'))
+| project 
+    lockId = id,
+    lockName = name,
+    lockLevel,
+    lockNotes,
+    lockedResourceId,
+    lockedResourceName = tostring(split(lockedResourceId, '/')[8]),
+    lockedResourceType = tostring(strcat(split(lockedResourceId, '/')[6], '/', split(lockedResourceId, '/')[7])),
+    resourceGroup = tostring(split(lockedResourceId, '/')[4]),
+    subscriptionId
+| order by lockLevel, resourceGroup, lockName

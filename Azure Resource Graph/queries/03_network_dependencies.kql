@@ -1,0 +1,27 @@
+// Query: Network Resource Dependencies
+// Description: Shows network resources (Firewalls, Bastion, Gateways) and their dependencies
+// Use Case: Understanding network infrastructure dependencies
+
+resources
+| where type in (
+    'microsoft.network/azurefirewalls',
+    'microsoft.network/bastionhosts',
+    'microsoft.network/applicationgateways',
+    'microsoft.network/virtualnetworkgateways',
+    'microsoft.network/loadbalancers'
+)
+| extend ipConfigs = properties.ipConfigurations
+| mv-expand ipConfigs
+| project 
+    resourceId = id,
+    resourceName = name,
+    resourceType = type,
+    resourceGroup,
+    location,
+    subnetId = tostring(ipConfigs.properties.subnet.id),
+    publicIpId = tostring(ipConfigs.properties.publicIPAddress.id),
+    privateIP = tostring(ipConfigs.properties.privateIPAddress),
+    sku = properties.sku.name,
+    tier = properties.sku.tier,
+    subscriptionId
+| order by resourceType, resourceName

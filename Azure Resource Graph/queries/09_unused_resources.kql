@@ -1,0 +1,72 @@
+// Query: Potentially Unused Resources
+// Description: Finds resources that may be unused (orphaned disks, unattached NICs, etc.)
+// Use Case: Cost optimization by identifying resources that can be safely deleted
+
+// Unattached Managed Disks
+resources
+| where type == 'microsoft.compute/disks'
+| where properties.diskState == 'Unattached'
+| project 
+    resourceType = 'Unattached Disk',
+    resourceId = id,
+    resourceName = name,
+    resourceGroup,
+    location,
+    sizeGB = properties.diskSizeGB,
+    sku = sku.name,
+    createdOn = properties.timeCreated,
+    subscriptionId
+| union (
+    // Unattached Public IPs
+    resources
+    | where type == 'microsoft.network/publicipaddresses'
+    | where isnull(properties.ipConfiguration.id)
+    | project 
+        resourceType = 'Unattached Public IP',
+        resourceId = id,
+        resourceName = name,
+        resourceGroup,
+        location,
+        sizeGB = 0,
+        sku = sku.name,
+        createdOn = '',
+        subscriptionId
+)
+| union (
+    // Unattached NICs
+    resources
+    | where type == 'microsoft.network/networkinterfaces'
+    | where isnull(properties.virtualMachine.id)
+    | project 
+        resourceType = 'Unattached NIC',
+        resourceId = id,
+        resourceName = name,
+        resourceGroup,
+        location,
+        sizeGB = 0,
+        sku = '',
+        createdOn = '',
+        subscriptionId
+)
+| union (
+    // Empty Resource Groups
+    resourcecontainers
+    | where type == 'microsoft.resources/subscriptions/resourcegroups'
+    | extend resourceCount = toint(0)
+    | join kind=leftouter (
+        resources
+        | summarize resourceCount = count() by resourceGroup
+    ) on resourceGroup
+    | where resourceCount == 0 or isnull(resourceCount)
+    | project 
+        resourceType = 'Empty Resource Group',
+        resourceId = id,
+        resourceName = name,
+        resourceGroup = name,
+        location,
+        sizeGB = 0,
+        sku = '',
+        createdOn = '',
+        subscriptionId
+)
+| order by resourceType, resourceName
