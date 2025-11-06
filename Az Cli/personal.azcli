@@ -1,0 +1,39 @@
+$personalrgname = 'rg-weu-avdpoc-personal-dev'
+$location = 'westeurope'
+$tags = 'project=avdpoc'
+$poolfriendlyname = 'HostPool for Personal Users'
+$personalhostpooltype = 'Personal'
+$personalpoolname = 'hp-weu-avdpoc-personal-dev'
+$vmonconnect = true
+$customrdp = 'enablerdsaadauth:i:1'
+$validation = true
+$assignmenttype = 'Automatic'
+$sessionlimit = 1
+$personalappgrouptype = 'Desktop'
+$personalappgroupref2 = "/subscriptions/$subscriptionId/resourceGroups/$personalrgname/providers/Microsoft.DesktopVirtualization/applicationGroups/$personalappgroupname"
+$personalappgroupname = 'app-weu-avdpoc-personal-dev'
+$personalappgroupfriendlyname = 'App Group for Personal Users'
+$personalappgroupdescription = 'This is application group for Personal Users'
+$subscriptionId = $(az account show --query id -o tsv)
+$personalhostpoolarmparth = "/subscriptions/$subscriptionId/resourceGroups/$personalrgname/providers/Microsoft.DesktopVirtualization/hostPools/$personalpoolname"
+$workspaceName = 'ws-weu-avdpoc-personal-dev'
+$workspaceFriendlyName = 'Workspace for Personal Users'
+
+az group create --name $personalrgname --location $location --tags $tags
+
+az desktopvirtualization hostpool create --resource-group $personalrgname --name $personalpoolname -location $location --friendly-name $poolfriendlyname --host-pool-type $personalhostpooltype --preferred-app-group-type $personalappgrouptype --start-vm-on-connect $vmonconnect --personal-desktop-assignment-type "Automatic"
+
+az desktopvirtualization applicationgroup create  --name $personalappgroupname `
+                                                  --resource-group $personalrgname `
+                                                  --location $location `
+                                                  --friendly-name $personalappgroupfriendlyname `
+                                                  --description $personalappgroupdescription `
+                                                  --host-pool-arm-path $personalhostpoolarmparth `
+                                                  --application-group-type $personalappgrouptype
+
+                                
+az desktopvirtualization workspace create --name $workspaceName `
+                                          --resource-group $personalrgname `
+                                          --location $location `
+                                          --friendly-name $workspaceFriendlyName `
+                                          --application-group-references $personalappgroupref2

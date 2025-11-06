@@ -1,0 +1,40 @@
+# First, enable the EncryptionAtHost feature
+Write-Host "Enabling EncryptionAtHost feature..."
+az feature register --namespace Microsoft.Compute --name EncryptionAtHost
+
+# Wait for the feature to be registered
+Write-Host "Waiting for feature registration to complete..."
+do {
+    $status = $(az feature show --namespace Microsoft.Compute --name EncryptionAtHost --query "properties.state" -o tsv)
+    Write-Host "Registration status: $status"
+    if ($status -ne "Registered") {
+        Start-Sleep -Seconds 30
+    }
+} while ($status -ne "Registered")
+
+# Refresh the provider registration
+Write-Host "Refreshing Microsoft.Compute provider registration..."
+az provider register -n Microsoft.Compute
+
+# Enable encryption at host for multiple VMs
+# Using resource group approach
+$resourceGroup = "rg-weu-avdpoc-personal-dev"
+$vmList = $(az vm list -g $resourceGroup --query "[].{Name:name}" -o tsv)
+
+# Loop through each VM and enable encryption at host
+foreach ($vmName in $vmList.Split([Environment]::NewLine)) {
+    if ($vmName) {
+        Write-Host "Enabling encryption at host for VM: $vmName"
+        az vm update `
+            --name $vmName `
+            --resource-group $resourceGroup `
+            --set securityProfile.encryptionAtHost=true
+    }
+}
+
+
+# Verify encryption status for all VMs
+echo "Verifying encryption status..."
+az vm list --query "[].{Name:name, EncryptionAtHost:securityProfile.encryptionAtHost}" -o table
+
+

@@ -1,0 +1,91 @@
+resources
+| where type =~ "microsoft.compute/virtualmachines"
+| where subscriptionId in ("620f7fa6-934f-401b-9619-f064dc556cc5", "e0bb7e5f-1bc2-4525-8719-d80996c04508")
+| extend osDiskName = tostring(properties.storageProfile.osDisk.name)
+| extend dataDisks = properties.storageProfile.dataDisks
+| extend dataDiskNames = iif(isnotempty(dataDisks), 
+    strcat_array(array_slice(pack_array(dataDisks[0].name,dataDisks[1].name,dataDisks[2].name,dataDisks[3].name), 0, array_length(dataDisks)), ", "),
+    "No data disks")
+| mv-expand nic=properties.networkProfile.networkInterfaces
+| extend nicId = tostring(nic.id)
+| join kind=leftouter (
+    resources
+    | where type =~ "microsoft.network/networkinterfaces"
+    | mv-expand ipConfig=properties.ipConfigurations
+    | project nicId = id,
+             nicName = name,
+             nsgId = tostring(properties.networkSecurityGroup.id),
+             pipId = tostring(ipConfig.properties.publicIPAddress.id),
+             subnetId = tostring(ipConfig.properties.subnet.id)
+) on nicId
+| join kind=leftouter (
+    resources
+    | where type =~ "microsoft.network/publicipaddresses"
+    | project pipId = id, pipName = name
+) on pipId
+| join kind=leftouter (
+    resources
+    | where type =~ "microsoft.network/networksecuritygroups"
+    | project nsgId = id, nsgName = name
+) on nsgId
+| join kind=leftouter (
+    resources
+    | where type =~ "microsoft.network/virtualnetworks"
+    | mv-expand subnet=properties.subnets
+    | project vnetName = name,
+             subnetId = tostring(subnet.id),
+             subnetName = tostring(subnet.name)
+) on subnetId
+| join kind=leftouter (
+    resources
+    | where type =~ "microsoft.network/privateendpoints"
+    | mv-expand connection=properties.privateLinkServiceConnections
+    | extend targetResource = tostring(connection.properties.privateLinkServiceId)
+    | extend targetType = case(
+        targetResource contains "microsoft.storage", "Storage",
+        targetResource contains "microsoft.sql", "SQL",
+        targetResource contains "microsoft.dbformysql", "MySQL",
+        targetResource contains "microsoft.dbforpostgresql", "PostgreSQL",
+        targetResource contains "microsoft.documentdb", "CosmosDB",
+        "Other"
+    )
+    | join kind=leftouter (
+        resources
+        | where type in~ ("microsoft.storage/storageaccounts", 
+                         "microsoft.sql/servers", 
+                         "microsoft.dbformysql/flexibleservers",
+                         "microsoft.dbforpostgresql/flexibleservers",
+                         "microsoft.documentdb/databaseaccounts")
+        | project id, resourceName = name, resourceType = type
+    ) on $left.targetResource == $right.id
+    | project subnetId = tostring(properties.subnet.id),
+             peName = name,
+             targetType,
+             targetResource,
+             resourceName,
+             resourceType
+) on subnetId
+| summarize vmName = any(name),
+            resourceGroup = any(resourceGroup),
+            nicName = any(nicName),
+            pipName = any(pipName),
+            nsgName = any(nsgName),
+            subnetName = any(subnetName),
+            vnetName = any(vnetName),
+            osDiskName = any(osDiskName),
+            dataDiskNames = any(dataDiskNames),
+            connectedResources = make_set(iif(isnotempty(resourceName), 
+                strcat(resourceName, " (", targetType, ")"), "")) by id
+| project vmName,
+        subscriptionName,
+         resourceGroup,
+         nicName,
+         pipName,
+         nsgName,
+         subnetName,
+         vnetName,
+         osDiskName,
+         dataDiskNames,
+         connectedResources = iif(array_length(connectedResources) > 0, 
+            strcat_array(connectedResources, ", "), "No connected resources")
+| order by tolower(vmName) asc

@@ -1,0 +1,22 @@
+$netrgname = 'rg-weu-avdpoc-network'
+$location = 'westeurope'
+$tags = 'project=avdpoc'
+$vnetname = 'vnet-weu-avdpoc-network'
+$address = '10.160.200.0/24'
+$poolsubnetaddress = '10.160.200.0/26'
+$poolsubnetname = 'snet-weu-avdpoc-pooled-network'
+$personalsubnetaddress = '10.160.200.64/26'
+$personalsubnetname = 'snet-weu-avdpoc-personal-network'
+$personalnsgname = 'nsg-weu-avdpool-personal-network'
+$pooledsnsgname = 'nsg-weu-avdpool-pooled-network'
+
+az login --tenant '9415d6f5-a528-4cfc-89f7-5292c236c9d3'
+
+az group create --name $netrgname --location $location --tags $tags
+az network vnet create --resource-group $netrgname --name $vnetname --address-prefix $address
+az network vnet subnet create --resource-group $netrgname --vnet-name $vnetname --name $poolsubnetname --address-prefix $poolsubnetaddress
+az network vnet subnet create --resource-group $netrgname --vnet-name $vnetname --name $personalsubnetname --address-prefix $personalsubnetaddress
+az network nsg create --resource-group $netrgname --name $personalnsgname
+az network nsg create --resource-group $netrgname --name $pooledsnsgname
+az network vnet subnet update --resource-group $netrgname --vnet-name $vnetname --name $personalsubnetname --network-security-group $personalnsgname
+az network vnet subnet update --resource-group $netrgname --vnet-name $vnetname --name $poolsubnetname --network-security-group $pooledsnsgname
