@@ -7,9 +7,10 @@ locals {
     environment = "demo"
   }
   resource_groups = {
-    hub_primary = {
-      name     = "rg-hub-primary-${random_string.suffix.result}"
+    app_conn = {
+      name     = "rg-app-conn-${random_string.suffix.result}"
       location = "eastus"
     }
   }
 }
+
