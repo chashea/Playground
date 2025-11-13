@@ -1,7 +1,8 @@
 # Azure Dependency Mapping Script
-# Maps comprehensive dependencies between VMs, App Services, Functions, Databases, Storage, Logic Apps, and APIs
-# Captures: Disks, NICs, Private Endpoints, Subnets, VNets, NSGs, Keyvaults, Load Balancers, SQL Servers
-# Supports filtering by resource group and multiple output formats
+# Maps comprehensive dependencies between VMs, App Services, Functions, Databases, Storage, Logic Apps, API Connections, and APIs
+# Captures: Disks, NICs, Private Endpoints, Subnets, VNets, NSGs, KeyVaults, Load Balancers, SQL Servers, Service Bus, Event Hub, Cosmos DB
+# Includes: VM Extensions, Backup Vaults, TDE Keys, Failover Groups, Managed Identities, Front Door, Traffic Manager, Hybrid Connections
+# Supports filtering by resource group and multiple output formats (JSON/CSV/both)
 
 param(
     [string]$SubscriptionId,
@@ -68,7 +69,8 @@ $resourceTypes = @(
     "Microsoft.KeyVault/vaults",
     "Microsoft.ServiceBus/namespaces",
     "Microsoft.DocumentDB/databaseAccounts",
-    "Microsoft.EventHub/namespaces"
+    "Microsoft.EventHub/namespaces",
+    "Microsoft.Web/connections"
 )
 
 Write-Host "Discovering resources..."
@@ -1289,6 +1291,138 @@ foreach ($resource in $allResources) {
                                 DependencyName = $eh.Name
                                 DependencyType = "Event Hub"
                                 DependencyTarget = $eh.Id
+                            }
+                        }
+                    } catch { }
+                } catch { }
+            }
+            
+            "Microsoft.Web/connections" {
+                try {
+                    $apiConnection = Get-AzResource -ResourceId $resource.Id -ExpandProperties -ErrorAction SilentlyContinue
+                    
+                    # API Type
+                    if ($apiConnection.Properties.api) {
+                        $apiType = ($apiConnection.Properties.api.id -split '/')[-1]
+                        $resourceDeps += @{
+                            DependencyName = $apiType
+                            DependencyType = "API Connection Type"
+                            DependencyTarget = $apiConnection.Properties.api.id
+                        }
+                    }
+                    
+                    # Managed Identity
+                    if ($apiConnection.Identity) {
+                        $resourceDeps += @{
+                            DependencyName = "Managed Identity"
+                            DependencyType = "System/User Assigned Identity"
+                            DependencyTarget = $apiConnection.Identity.PrincipalId
+                        }
+                    }
+                    
+                    # Target Service Connection (Storage Account, Service Bus, SQL, etc.)
+                    if ($apiConnection.Properties.parameterValues) {
+                        # Storage Account connections
+                        if ($apiConnection.Properties.parameterValues.accountName) {
+                            $storageAccountName = $apiConnection.Properties.parameterValues.accountName
+                            try {
+                                $storageAccount = Get-AzStorageAccount | Where-Object { $_.StorageAccountName -eq $storageAccountName } | Select-Object -First 1
+                                if ($storageAccount) {
+                                    $resourceDeps += @{
+                                        DependencyName = $storageAccountName
+                                        DependencyType = "Storage Account"
+                                        DependencyTarget = $storageAccount.Id
+                                    }
+                                }
+                            } catch { }
+                        }
+                        
+                        # Service Bus connections
+                        if ($apiConnection.Properties.parameterValues.connectionString -match "Endpoint=sb://([^.]+)") {
+                            $serviceBusName = $Matches[1]
+                            try {
+                                $serviceBus = Get-AzServiceBusNamespace | Where-Object { $_.Name -eq $serviceBusName } | Select-Object -First 1
+                                if ($serviceBus) {
+                                    $resourceDeps += @{
+                                        DependencyName = $serviceBusName
+                                        DependencyType = "Service Bus Namespace"
+                                        DependencyTarget = $serviceBus.Id
+                                    }
+                                }
+                            } catch { }
+                        }
+                        
+                        # SQL Server connections
+                        if ($apiConnection.Properties.parameterValues.server -or $apiConnection.Properties.parameterValues.sqlConnectionString) {
+                            $sqlServerName = $null
+                            if ($apiConnection.Properties.parameterValues.server) {
+                                $sqlServerName = $apiConnection.Properties.parameterValues.server -replace '\.database\.windows\.net$', ''
+                            } elseif ($apiConnection.Properties.parameterValues.sqlConnectionString -match "Server=([^;,]+)") {
+                                $sqlServerName = $Matches[1] -replace '\.database\.windows\.net$', ''
+                            }
+                            
+                            if ($sqlServerName) {
+                                try {
+                                    $sqlServer = Get-AzSqlServer | Where-Object { $_.ServerName -eq $sqlServerName } | Select-Object -First 1
+                                    if ($sqlServer) {
+                                        $resourceDeps += @{
+                                            DependencyName = $sqlServerName
+                                            DependencyType = "SQL Server"
+                                            DependencyTarget = $sqlServer.ResourceId
+                                        }
+                                    }
+                                } catch { }
+                            }
+                        }
+                        
+                        # Event Hub connections
+                        if ($apiConnection.Properties.parameterValues.connectionString -match "Endpoint=sb://([^.]+)\.servicebus") {
+                            $eventHubName = $Matches[1]
+                            try {
+                                $eventHub = Get-AzEventHubNamespace | Where-Object { $_.Name -eq $eventHubName } | Select-Object -First 1
+                                if ($eventHub) {
+                                    $resourceDeps += @{
+                                        DependencyName = $eventHubName
+                                        DependencyType = "Event Hub Namespace"
+                                        DependencyTarget = $eventHub.Id
+                                    }
+                                }
+                            } catch { }
+                        }
+                        
+                        # Cosmos DB connections
+                        if ($apiConnection.Properties.parameterValues.databaseAccount) {
+                            $cosmosAccountName = $apiConnection.Properties.parameterValues.databaseAccount
+                            try {
+                                $cosmosAccount = Get-AzCosmosDBAccount | Where-Object { $_.Name -eq $cosmosAccountName } | Select-Object -First 1
+                                if ($cosmosAccount) {
+                                    $resourceDeps += @{
+                                        DependencyName = $cosmosAccountName
+                                        DependencyType = "Cosmos DB Account"
+                                        DependencyTarget = $cosmosAccount.Id
+                                    }
+                                }
+                            } catch { }
+                        }
+                    }
+                    
+                    # Find Logic Apps that reference this API Connection
+                    try {
+                        $logicApps = Get-AzResource -ResourceType "Microsoft.Logic/workflows" -ErrorAction SilentlyContinue
+                        foreach ($la in $logicApps) {
+                            $laResource = Get-AzResource -ResourceId $la.Id -ExpandProperties -ErrorAction SilentlyContinue
+                            if ($laResource.Properties.parameters.'$connections'.value) {
+                                $connections = $laResource.Properties.parameters.'$connections'.value
+                                foreach ($conn in $connections.PSObject.Properties) {
+                                    if ($conn.Value.connectionId -eq $resource.Id) {
+                                        $resourceDeps += @{
+                                            DependencyName = $la.Name
+                                            DependencyType = "Logic App"
+                                            DependencyTarget = $la.Id
+                                        }
+                                        break
+                                    }
+                                }
                             }
                         }
                     } catch { }
