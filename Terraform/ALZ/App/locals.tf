@@ -11,6 +11,10 @@ locals {
       name     = "rg-app-conn-${random_string.suffix.result}"
       location = "eastus"
     }
+    app_mgmt = {
+      name     = "rg-app-mgmt-${random_string.suffix.result}"
+      location = "eastus"
+    }
   }
 }
 
