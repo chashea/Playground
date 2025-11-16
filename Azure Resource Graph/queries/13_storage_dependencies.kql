@@ -1,0 +1,28 @@
+// Query: Storage Account Dependencies
+// Description: Shows storage accounts and what might depend on them
+// Use Case: Understanding storage account usage before deletion
+
+resources
+| where type == 'microsoft.storage/storageaccounts'
+| extend 
+    sku = sku.name,
+    kind = kind,
+    accessTier = properties.accessTier,
+    supportsHttpsOnly = properties.supportsHttpsTrafficOnly,
+    allowBlobPublicAccess = properties.allowBlobPublicAccess,
+    minimumTlsVersion = properties.minimumTlsVersion,
+    creationTime = properties.creationTime
+| project 
+    storageAccountId = id,
+    storageAccountName = name,
+    resourceGroup,
+    location,
+    sku,
+    kind,
+    accessTier,
+    supportsHttpsOnly,
+    allowBlobPublicAccess,
+    minimumTlsVersion,
+    createdOn = creationTime,
+    subscriptionId
+| order by storageAccountName

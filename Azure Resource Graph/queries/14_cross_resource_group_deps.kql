@@ -1,0 +1,39 @@
+// Query: Cross-Resource Group Dependencies
+// Description: Finds dependencies that span across resource groups
+// Use Case: Understanding cross-RG dependencies before RG deletion
+
+resources
+| where type == 'microsoft.network/networkinterfaces'
+| extend 
+    nicRg = resourceGroup,
+    vmId = properties.virtualMachine.id,
+    vmRg = tostring(split(properties.virtualMachine.id, '/')[4]),
+    subnetId = properties.ipConfigurations[0].properties.subnet.id,
+    subnetRg = tostring(split(properties.ipConfigurations[0].properties.subnet.id, '/')[4])
+| where nicRg != vmRg or nicRg != subnetRg
+| project 
+    nicName = name,
+    nicResourceGroup = nicRg,
+    vmId,
+    vmResourceGroup = vmRg,
+    subnetId,
+    subnetResourceGroup = subnetRg,
+    crossRgDependency = 'Yes',
+    subscriptionId
+| union (
+    resources
+    | where type == 'microsoft.compute/virtualmachines'
+    | extend 
+        vmRg = resourceGroup,
+        osDiskId = properties.storageProfile.osDisk.managedDisk.id,
+        diskRg = tostring(split(properties.storageProfile.osDisk.managedDisk.id, '/')[4])
+    | where vmRg != diskRg
+    | project 
+        vmName = name,
+        vmResourceGroup = vmRg,
+        osDiskId,
+        diskResourceGroup = diskRg,
+        crossRgDependency = 'Yes',
+        subscriptionId
+)
+| order by nicName, vmName

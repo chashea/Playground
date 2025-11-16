@@ -1,0 +1,26 @@
+// Query: Network Interface Card (NIC) Dependencies
+// Description: Shows NICs and what they're attached to (VMs, subnets, public IPs)
+// Use Case: Finding which VMs use which NICs and network resources
+
+resources
+| where type == 'microsoft.network/networkinterfaces'
+| extend 
+    ipConfigs = properties.ipConfigurations[0],
+    attachedToVm = properties.virtualMachine.id,
+    enableAcceleratedNetworking = properties.enableAcceleratedNetworking,
+    nsgId = properties.networkSecurityGroup.id
+| project 
+    nicId = id,
+    nicName = name,
+    resourceGroup,
+    location,
+    attachedToVmId = tostring(attachedToVm),
+    attachedToVmName = tostring(split(attachedToVm, '/')[8]),
+    subnetId = tostring(ipConfigs.properties.subnet.id),
+    privateIpAddress = tostring(ipConfigs.properties.privateIPAddress),
+    publicIpId = tostring(ipConfigs.properties.publicIPAddress.id),
+    nsgId = tostring(nsgId),
+    acceleratedNetworking = enableAcceleratedNetworking,
+    primary = ipConfigs.properties.primary,
+    subscriptionId
+| order by nicName
