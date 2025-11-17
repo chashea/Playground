@@ -2,7 +2,7 @@ module "alznetwork" {
   source  = "Azure/avm-ptn-alz-connectivity-hub-and-spoke-vnet/azurerm"
   version = "0.15.0"
   default_naming_convention = {
-    virtual_network_name = "vnet-hub-conn-${random_string.suffix.result}-001"
+    virtual_network_name = "vnet-hub-conn-${var.location}-001"
   }
   enable_telemetry = false
   depends_on       = [module.resource_groups]
@@ -23,10 +23,10 @@ module "alznetwork" {
       }
       firewall = {
         management_ip_enabled = false
-        name                  = "fw-hub-conn-eus-001"
+        name                  = "fw-hub-conn-${var.location}-001"
       }
       firewall_policy = {
-        name = "fwpolicy-hub-conn-eus-001"
+        name = "fwpolicy-hub-conn-${var.location}-001"
         insights = {
           enabled                            = true
           default_log_analytics_workspace_id = module.law-mgmt.resource_id
@@ -36,7 +36,7 @@ module "alznetwork" {
       virtual_network_gateways = {
         vpn = {
           parent_id                 = module.resource_groups["hub_conn"].resource_id
-          name                      = "vng-hub-conn-vpn-001"
+          name                      = "vng-hub-conn-${var.location}-001"
           vpn_active_active_enabled = false
           ip_configurations = {
             ipconfig01 = {
@@ -45,7 +45,7 @@ module "alznetwork" {
           }
           local_network_gateways = {
             lng01 = {
-              name            = "lng-01-eus"
+              name            = "lng-hub-conn-${var.location}-001"
               address_space   = ["10.1.0.0/16", "10.20.0.0/16"]
               gateway_address = "250.10.24.1"
               connection = {

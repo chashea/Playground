@@ -8,16 +8,16 @@ locals {
   }
   resource_groups = {
     hub_conn = {
-      name     = "rg-hub-conn-${random_string.suffix.result}"
-      location = "eastus"
+      name     = "rg-hub-conn-${var.location}-001"
+      location = var.location
     }
     hub_mgmt = {
-      name     = "rg-hub-mgmt-${random_string.suffix.result}"
-      location = "eastus"
+      name     = "rg-hub-mgmt-${var.location}-001"
+      location = var.location
     }
     hub_dns = {
-      name     = "rg-hub-dns-${random_string.suffix.result}"
-      location = "eastus"
+      name     = "rg-hub-dns-${var.location}-001"
+      location = var.location
     }
   }
   private_dns_zones_exclude = [
@@ -76,8 +76,8 @@ locals {
     "privatelink.managedhsm.azure.net",
     "privatelink.azconfig.io",
     "privatelink.attest.azure.net",
-    #"privatelink.vaultcore.azure.net",
-    #"privatelink.blob.core.windows.net",
+    "privatelink.vaultcore.azure.net",
+    "privatelink.blob.core.windows.net",
     "privatelink.table.core.windows.net",
     "privatelink.queue.core.windows.net",
     "privatelink.dfs.core.windows.net",
