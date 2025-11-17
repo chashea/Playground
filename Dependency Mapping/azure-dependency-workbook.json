@@ -215,88 +215,6 @@
               "visualization": "barchart"
             },
             "name": "query - resources by type"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "Resources\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\n| extend \n    HasManagedIdentity = case(\n        isnotnull(identity.principalId), \"Yes\",\n        \"No\"\n    ),\n    HasPrivateEndpoint = case(\n        isnotnull(properties.privateEndpointConnections) and array_length(properties.privateEndpointConnections) > 0, \"Yes\",\n        \"No\"\n    ),\n    VNetIntegrated = case(\n        isnotnull(properties.virtualNetworkSubnetId) or \n        isnotnull(properties.subnetId) or\n        isnotnull(properties.networkProfile), \"Yes\",\n        \"No\"\n    )\n| project \n    ResourceName = name,\n    ResourceType = type,\n    ResourceGroup = resourceGroup,\n    Location = location,\n    ManagedIdentity = iff(HasManagedIdentity == \"Yes\", \"Yes\", \"No\"),\n    PrivateEndpoint = HasPrivateEndpoint,\n    VNetIntegrated = VNetIntegrated\n| order by ResourceType asc, ResourceName asc",
-              "size": 0,
-              "title": "All Resources with Security Features",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "crossComponentResources": [
-                "{Subscription}"
-              ],
-              "gridSettings": {
-                "formatters": [
-                  {
-                    "columnMatch": "ManagedIdentity",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "icons",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Yes",
-                          "representation": "success",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "representation": "Blank",
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "columnMatch": "PrivateEndpoint",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "icons",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Yes",
-                          "representation": "success",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "representation": "Blank",
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "columnMatch": "VNetIntegrated",
-                    "formatter": 18,
-                    "formatOptions": {
-                      "thresholdsOptions": "icons",
-                      "thresholdsGrid": [
-                        {
-                          "operator": "==",
-                          "thresholdValue": "Yes",
-                          "representation": "success",
-                          "text": "{0}{1}"
-                        },
-                        {
-                          "operator": "Default",
-                          "thresholdValue": null,
-                          "representation": "Blank",
-                          "text": "{0}{1}"
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            },
-            "name": "query - all resources"
           }
         ]
       },
@@ -451,7 +369,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "Resources\r\n| where type == \"microsoft.web/sites\"\r\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\r\n| where isnotnull(properties.virtualNetworkSubnetId)\r\n| extend \r\n    SubnetId = tostring(properties.virtualNetworkSubnetId),\r\n    HasManagedIdentity = isnotnull(identity.principalId),\r\n    VNetRouteAllEnabled = properties.vnetRouteAllEnabled\r\n| extend \r\n    SubnetName = split(SubnetId, '/')[-1],\r\n    VNetName = split(SubnetId, '/')[-3],\r\n    VNetResourceGroup = split(SubnetId, '/')[-5]\r\n| project \r\n    AppName = name,\r\n    ResourceGroup = resourceGroup,\r\n    Location = location,\r\n    Kind = kind,\r\n    VirtualNetwork = VNetName,\r\n    VNetResourceGroup,\r\n    Subnet = SubnetName,\r\n    RouteAllTraffic = VNetRouteAllEnabled,\r\n    State = properties.state,\r\n    DefaultHostName = properties.defaultHostName,\r\n    ResourceId = id\r\n| order by tostring(AppName) asc",
+              "query": "Resources\r\n| where type == \"microsoft.web/sites\"\r\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\r\n| where isnotnull(properties.virtualNetworkSubnetId)\r\n| extend \r\n    SubnetId = tostring(properties.virtualNetworkSubnetId),\r\n    HasManagedIdentity = isnotnull(identity.principalId),\r\n    VNetRouteAllEnabled = properties.vnetRouteAllEnabled\r\n| extend \r\n    SubnetName = split(SubnetId, '/')[-1],\r\n    VNetName = split(SubnetId, '/')[-3],\r\n    VNetResourceGroup = split(SubnetId, '/')[-7]\r\n| project \r\n    AppName = name,\r\n    ResourceGroup = resourceGroup,\r\n    Location = location,\r\n    Kind = kind,\r\n    VirtualNetwork = VNetName,\r\n    VNetResourceGroup,\r\n    Subnet = SubnetName,\r\n    RouteAllTraffic = VNetRouteAllEnabled,\r\n    State = properties.state,\r\n    DefaultHostName = properties.defaultHostName,\r\n    ResourceId = id\r\n| order by tostring(AppName) asc",
               "size": 0,
               "title": "App Services with VNet Integration",
               "queryType": 1,
@@ -481,7 +399,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "Resources\r\n| where type == \"microsoft.web/certificates\"\r\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\r\n| extend \r\n    ExpirationDate = todatetime(properties.expirationDate),\r\n    DaysUntilExpiry = datetime_diff('day', todatetime(properties.expirationDate), now())\r\n| project \r\n    CertificateName = name,\r\n    ResourceGroup = resourceGroup,\r\n    ExpirationDate,\r\n    DaysUntilExpiry\r\n| order by DaysUntilExpiry asc",
+              "query": "Resources\r\n| where type == \"microsoft.web/certificates\"\r\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\r\n| extend \r\n    ExpirationDate = todatetime(properties.expirationDate),\r\n    DaysUntilExpiry = datetime_diff('day', todatetime(properties.expirationDate), now()),\r\n    CertExpired = iff(todatetime(properties.expirationDate) < now(), \"Yes\", \"No\")\r\n| project \r\n    CertificateName = name,\r\n    ResourceGroup = resourceGroup,\r\n    ExpirationDate,\r\n    DaysUntilExpiry,\r\n    CertExpired\r\n| order by DaysUntilExpiry asc",
               "size": 0,
               "title": "SSL Certificates",
               "queryType": 1,
@@ -518,7 +436,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "Resources\r\n| where type == \"microsoft.sql/servers\"\r\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\r\n| extend \r\n    HasManagedIdentity = isnotnull(identity.principalId),\r\n    ManagedIdentityPrincipalId = identity.principalId,\r\n    PublicNetworkAccess = properties.publicNetworkAccess,\r\n    MinTLSVersion = properties.minimalTlsVersion\r\n| project \r\n    ServerName = name,\r\n    ResourceGroup = resourceGroup,\r\n    Location = location,\r\n    FullyQualifiedDomainName = properties.fullyQualifiedDomainName,\r\n    Version = properties.version,\r\n    ManagedIdentityId = coalesce(ManagedIdentityPrincipalId, \"N/A\"),\r\n    PublicNetworkAccess,\r\n    MinTLSVersion,\r\n    ResourceId = id\r\n| order by tostring(ServerName) asc",
+              "query": "Resources\r\n| where type == \"microsoft.sql/servers\"\r\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\r\n| extend ServerId = tolower(id)\r\n| join kind=leftouter (\r\n    Resources\r\n    | where type == \"microsoft.sql/servers/databases\"\r\n    | where name != \"master\"\r\n    | extend ServerId = tolower(substring(id, 0, indexof(id, '/databases/')))\r\n    | summarize DatabaseCount = count() by ServerId\r\n) on ServerId\r\n| join kind=leftouter (\r\n    Resources\r\n    | where type == \"microsoft.sql/servers/elasticpools\"\r\n    | extend ServerId = tolower(substring(id, 0, indexof(id, '/elasticpools/')))\r\n    | summarize ElasticPoolCount = count() by ServerId\r\n) on ServerId\r\n| join kind=leftouter (\r\n    Resources\r\n    | where type == \"microsoft.sql/servers/failovergroups\"\r\n    | extend ServerId = tolower(substring(id, 0, indexof(id, '/failovergroups/')))\r\n    | summarize FailoverGroupCount = count() by ServerId\r\n) on ServerId\r\n| extend \r\n    HasManagedIdentity = isnotnull(identity.principalId),\r\n    ManagedIdentityPrincipalId = identity.principalId,\r\n    PublicNetworkAccess = properties.publicNetworkAccess,\r\n    MinTLSVersion = properties.minimalTlsVersion,\r\n    HasPrivateEndpoint = iff(isnotnull(properties.privateEndpointConnections) and array_length(properties.privateEndpointConnections) > 0, \"Yes\", \"No\"),\r\n    HasBackups = iff(DatabaseCount > 0, \"Yes\", \"No\"),\r\n    HasFailoverGroups = iff(FailoverGroupCount > 0, \"Yes\", \"No\")\r\n| project \r\n    ServerName = name,\r\n    ResourceGroup = resourceGroup,\r\n    Location = location,\r\n    FullyQualifiedDomainName = properties.fullyQualifiedDomainName,\r\n    Version = properties.version,\r\n    DatabaseCount = coalesce(DatabaseCount, 0),\r\n    ElasticPoolCount = coalesce(ElasticPoolCount, 0),\r\n    HasBackups,\r\n    HasFailoverGroups,\r\n    HasPrivateEndpoint,\r\n    ManagedIdentityId = coalesce(ManagedIdentityPrincipalId, \"N/A\"),\r\n    PublicNetworkAccess,\r\n    MinTLSVersion,\r\n    ResourceId = id\r\n| order by tostring(ServerName) asc",
               "size": 0,
               "title": "SQL Servers",
               "queryType": 1,
@@ -533,7 +451,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "Resources\r\n| where type == \"microsoft.sql/servers/databases\"\r\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\r\n| where name != \"master\"\r\n| extend \r\n    ServerName = split(id, '/')[-3],\r\n    MaxSizeGB = toint(properties.maxSizeBytes) / 1024 / 1024 / 1024\r\n| project \r\n    ServerName,\r\n    DatabaseName = name,\r\n    ResourceGroup = resourceGroup,\r\n    Location = location,\r\n    SKU = sku.name,\r\n    Tier = sku.tier,\r\n    MaxSizeGB,\r\n    Status = properties.status,\r\n    ElasticPoolId = properties.elasticPoolId,\r\n    ResourceId = id\r\n| order by tostring(ServerName) asc, DatabaseName asc",
+              "query": "Resources\r\n| where type == \"microsoft.sql/servers/databases\"\r\n| where resourceGroup in ({ResourceGroup}) or '*' in ({ResourceGroup})\r\n| where name != \"master\"\r\n| extend \r\n    ServerName = tostring(split(id, '/')[-3]),\r\n    MaxSizeGB = toint(properties.maxSizeBytes) / 1024 / 1024 / 1024\r\n| project \r\n    DatabaseName = name,\r\n    ServerName,\r\n    ResourceGroup = resourceGroup,\r\n    Location = location,\r\n    SKU = sku.name,\r\n    Tier = sku.tier,\r\n    MaxSizeGB,\r\n    Status = properties.status,\r\n    ElasticPoolId = properties.elasticPoolId,\r\n    ResourceId = id\r\n| order by tostring(DatabaseName) asc, tostring(ServerName) asc",
               "size": 0,
               "title": "SQL Databases",
               "queryType": 1,
