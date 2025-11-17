@@ -20,6 +20,11 @@ locals {
       location = var.location
     }
   }
+  network_watcher_name                = "NetworkWatcher_${local.resource_groups["hub_mgmt"].location}"
+  network_watcher_resource_group_name = "NetworkWatcherRG"
+  tags = {
+    scenario = "Network Watcher Flow Logs AVM Sample"
+  }
   private_dns_zones_exclude = [
     "privatelink.api.azureml.ms",
     "privatelink.notebooks.azure.net",

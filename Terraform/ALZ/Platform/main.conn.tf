@@ -16,50 +16,56 @@ module "alznetwork" {
     primary_hub = {
       enabled_resources = {
         virtual_network_gateway_express_route = false
+        bastion                               = false
+        firewall                              = false
+        firewall_policy                       = false
+        private_dns_zones                     = false
+        virtual_network_gateway_vpn           = false
+        private_dns_resolver                  = false
       }
       location                  = local.resource_groups["hub_conn"].location
       default_parent_id         = module.resource_groups["hub_conn"].resource_id
       default_hub_address_space = "10.0.0.0/16"
-      }
-      firewall = {
-        management_ip_enabled = false
-        name                  = "fw-hub-conn-${var.location}-001"
-      }
-      firewall_policy = {
-        name = "fwpolicy-hub-conn-${var.location}-001"
-        insights = {
-          enabled                            = true
-          default_log_analytics_workspace_id = module.law-mgmt.resource_id
-        }
-        location = local.resource_groups["hub_conn"].location
-      }
-      virtual_network_gateways = {
-        vpn = {
-          parent_id                 = module.resource_groups["hub_conn"].resource_id
-          name                      = "vng-hub-conn-${var.location}-001"
-          vpn_active_active_enabled = false
-          ip_configurations = {
-            ipconfig01 = {
-              name = "vpnipconfig"
-            }
-          }
-          local_network_gateways = {
-            lng01 = {
-              name            = "lng-hub-conn-${var.location}-001"
-              address_space   = ["10.1.0.0/16", "10.20.0.0/16"]
-              gateway_address = "250.10.24.1"
-              connection = {
-                name = "lng-to-vng"
-                type = "IPsec"
-              }
-            }
-          }
-      } }
-      private_dns_zones = {
-        resource_group_name = local.resource_groups["hub_dns"].name
-        private_link_excluded_zones = local.private_dns_zones_exclude
-      }
     }
+    firewall = {
+      management_ip_enabled = false
+      name                  = "fw-hub-conn-${var.location}-001"
+    }
+    firewall_policy = {
+      name = "fwpolicy-hub-conn-${var.location}-001"
+      insights = {
+        enabled                            = true
+        default_log_analytics_workspace_id = module.law-mgmt.resource_id
+      }
+      location = local.resource_groups["hub_conn"].location
+    }
+    virtual_network_gateways = {
+      vpn = {
+        parent_id                 = module.resource_groups["hub_conn"].resource_id
+        name                      = "vng-hub-conn-${var.location}-001"
+        vpn_active_active_enabled = false
+        ip_configurations = {
+          ipconfig01 = {
+            name = "vpnipconfig"
+          }
+        }
+        local_network_gateways = {
+          lng01 = {
+            name            = "lng-hub-conn-${var.location}-001"
+            address_space   = ["10.1.0.0/16", "10.20.0.0/16"]
+            gateway_address = "250.10.24.1"
+            connection = {
+              name = "lng-to-vng"
+              type = "IPsec"
+            }
+          }
+        }
+    } }
+    private_dns_zones = {
+      resource_group_name = local.resource_groups["hub_dns"].name
+      private_link_excluded_zones = local.private_dns_zones_exclude
+    }
+  }
   tags = local.common_tags
 }
 
