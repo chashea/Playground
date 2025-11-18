@@ -16,12 +16,6 @@ module "alznetwork" {
     primary_hub = {
       enabled_resources = {
         virtual_network_gateway_express_route = false
-        bastion                               = false
-        firewall                              = false
-        firewall_policy                       = false
-        private_dns_zones                     = false
-        virtual_network_gateway_vpn           = false
-        private_dns_resolver                  = false
       }
       location                  = local.resource_groups["hub_conn"].location
       default_parent_id         = module.resource_groups["hub_conn"].resource_id
@@ -55,7 +49,7 @@ module "alznetwork" {
             address_space   = ["10.1.0.0/16", "10.20.0.0/16"]
             gateway_address = "250.10.24.1"
             connection = {
-              name = "lng-to-vng"
+              name = "vpnconn-hub-conn-${var.location}-001"
               type = "IPsec"
             }
           }
@@ -73,7 +67,7 @@ module "rcg-fwpolicy" {
   source                                                   = "Azure/avm-res-network-firewallpolicy/azurerm//modules/rule_collection_groups"
   version                                                  = "0.3.3"
   firewall_policy_rule_collection_group_firewall_policy_id = module.alznetwork.firewall_policies["primary_hub"].id
-  firewall_policy_rule_collection_group_name               = "fcg-hub-conn-eus-001"
+  firewall_policy_rule_collection_group_name               = "fwrcg-hub-conn-${var.location}-001"
   firewall_policy_rule_collection_group_priority           = 1000
   firewall_policy_rule_collection_group_network_rule_collection = [
     {

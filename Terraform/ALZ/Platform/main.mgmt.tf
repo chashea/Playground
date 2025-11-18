@@ -1,13 +1,13 @@
 module "law-mgmt" {
   source              = "Azure/avm-res-operationalinsights-workspace/azurerm"
   version             = "0.4.2"
-  name                = "logmgmt-eus-001"
+  name                = "law-mgmt-  -${var.location}-001"
   resource_group_name = local.resource_groups["hub_mgmt"].name
   location            = local.resource_groups["hub_mgmt"].location
 }
 
 resource "azurerm_monitor_diagnostic_setting" "fw_diag" {
-  name                       = "diag-fw-mgmt-monitoring"
+  name                       = "diag-fw-${var.env}-${var.location}-001"
   target_resource_id         = module.alznetwork.firewall_resource_ids["primary_hub"]
   log_analytics_workspace_id = module.law-mgmt.resource_id
   enabled_log {
@@ -21,7 +21,7 @@ resource "azurerm_monitor_diagnostic_setting" "fw_diag" {
 module "kv-mgmt" {
   source              = "Azure/avm-res-keyvault-vault/azurerm"
   version             = "0.10.2"
-  name                = "kv-mgmt-${random_string.suffix.result}-eus-001"
+  name                = "kv-mgmt-${var.env}-${var.location}-001"
   resource_group_name = local.resource_groups["hub_mgmt"].name
   location            = local.resource_groups["hub_mgmt"].location
   tenant_id           = data.azurerm_client_config.current.tenant_id
@@ -29,7 +29,7 @@ module "kv-mgmt" {
 }
 
 resource "azurerm_storage_account" "stg-mgmt" {
-  name                     = "stgflowmgmt${random_string.suffix.result}eus001"
+  name                     = "stgflwlogsmgmt${var.env}${var.location}-001"
   resource_group_name      = local.resource_groups["hub_mgmt"].name
   location                 = local.resource_groups["hub_mgmt"].location
   account_tier             = "Standard"
@@ -61,7 +61,7 @@ module "network_watcher_flow_log" {
   flow_logs = {
     vnet_flowlog = {
       enabled            = true
-      name               = "fl-vnet-conn"
+      name               = "fl-vnet-${var.env}-${var.location}-001"
       target_resource_id = module.alznetwork.virtual_network_resource_ids["primary_hub"]
       storage_account_id = azurerm_storage_account.stg-mgmt.id
       version            = 2

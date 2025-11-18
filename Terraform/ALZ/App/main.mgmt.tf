@@ -2,8 +2,8 @@ module "kv-mgmt" {
   source              = "Azure/avm-res-keyvault-vault/azurerm"
   version             = "0.10.2"
   name                = "kv-app-eus-${random_string.suffix.result}-001"
-  resource_group_name = local.resource_groups["app_conn"].name
-  location            = local.resource_groups["app_conn"].location
+  resource_group_name = local.resource_groups["app_mgmt"].name
+  location            = local.resource_groups["app_mgmt"].location
   tenant_id           = data.azurerm_client_config.current.tenant_id
 }
 

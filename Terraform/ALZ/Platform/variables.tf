@@ -9,13 +9,8 @@ variable "location" {
   default     = "eastus"
 }
 
-
-
-
-
-
-
-
-
-
-
+variable "env" {
+  type = string
+  description = "Prod/Dev/Test/QA/Nonprod"
+  default = "dev"
+}
