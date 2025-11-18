@@ -13,11 +13,11 @@ locals {
       location = var.location
     }
     hub_dns = {
-      name     = "rg-hub-identity-${var.location}-001"
+      name     = "rg-hub-dns-${var.location}-001"
       location = var.location
     }
     hub_mgmt = {
-      name     = "rg-hub-mgmt-${local.resource_groups["hub_mgmt"].name}-001"
+      name     = "rg-hub-mgmt-${var.location}-001"
       location = var.location
     }
   }
