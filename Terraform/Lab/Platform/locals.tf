@@ -2,22 +2,16 @@
 locals {
   common_tags = {
     created_by  = "terraform"
-    project     = "Azure Landing Zones"
     owner       = "Charles Shea"
-    EndDate     = "2025-12-31"
-    environment = "demo"
+    environment = "Lab"
   }
   resource_groups = {
     hub_conn = {
-      name     = "rg-hub-conn-${var.location}-001"
-      location = var.location
-    }
-    hub_dns = {
-      name     = "rg-hub-dns-${var.location}-001"
+      name     = "rg-hub-conn-${random_string.suffix.result}-${var.location}-001"
       location = var.location
     }
     hub_mgmt = {
-      name     = "rg-hub-mgmt-${var.location}-001"
+      name     = "rg-hub-mgmt-${random_string.suffix.result}-${var.location}-001"
       location = var.location
     }
   }
@@ -26,7 +20,7 @@ locals {
   tags = {
     scenario = "Network Watcher Flow Logs AVM Sample"
   }
-  
+
   # Comment out which private dns zone exclusions you want to use
   private_dns_zones_exclude = [
     "privatelink.api.azureml.ms",
@@ -72,8 +66,8 @@ locals {
     "privatelink.azureiotcentral.com",
     "privatelink.digitaltwins.azure.net",
     "privatelink.media.azure.net",
-    #"privatelink.azure-automation.net",
-    #"privatelink.siterecovery.windowsazure.com",
+    "privatelink.azure-automation.net",
+    "privatelink.siterecovery.windowsazure.com",
     "privatelink.oms.opinsights.azure.com",
     "privatelink.ods.opinsights.azure.com",
     "privatelink.agentsvc.azure-automation.net",
@@ -84,8 +78,8 @@ locals {
     "privatelink.managedhsm.azure.net",
     "privatelink.azconfig.io",
     "privatelink.attest.azure.net",
-    #"privatelink.vaultcore.azure.net",
-    #"privatelink.blob.core.windows.net",
+    "privatelink.vaultcore.azure.net",
+    "privatelink.blob.core.windows.net",
     "privatelink.table.core.windows.net",
     "privatelink.queue.core.windows.net",
     "privatelink.dfs.core.windows.net",

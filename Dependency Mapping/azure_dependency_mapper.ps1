@@ -32,13 +32,16 @@ $requiredModules = @(
 foreach ($module in $requiredModules) {
     if (-not (Get-Module -ListAvailable -Name $module)) {
         Write-Host "Installing $module..."
-        Install-Module -Name $module -Force -AllowClobber
+        Install-Module -Name $module -Force -AllowClobber -Scope CurrentUser
     }
     Import-Module -Name $module -Force -WarningAction SilentlyContinue | Out-Null
 }
 
 # Authenticate to Azure
-Connect-AzAccount -SubscriptionId $SubscriptionId
+Connect-AzAccount
+if ($SubscriptionId) {
+    Set-AzContext -SubscriptionId $SubscriptionId
+}
 
 $resources = @()
 $dependencyList = @()
@@ -96,9 +99,9 @@ foreach ($resource in $allResources) {
     
     $resourceDeps = @()
     
-    # Get resource configuration
-    try {
-        $config = Get-AzResource -ResourceId $resource.Id -ExpandProperties -ErrorAction SilentlyContinue
+        # Get resource configuration
+        try {
+            $config = Get-AzResource -ResourceId $resource.Id -ErrorAction SilentlyContinue
         
         # Extract dependencies based on resource type
         switch ($resource.Type) {
@@ -750,7 +753,7 @@ foreach ($resource in $allResources) {
                     
                     # Virtual Network Rules (for flexible servers)
                     if ($resource.Type -like "*flexible*") {
-                        $mysqlServer = Get-AzResource -ResourceId $resource.Id -ExpandProperties
+                        $mysqlServer = Get-AzResource -ResourceId $resource.Id
                         if ($mysqlServer.Properties.network.delegatedSubnetResourceId) {
                             $subnetId = $mysqlServer.Properties.network.delegatedSubnetResourceId
                             $subnetName = ($subnetId -split '/')[-1]
@@ -776,7 +779,7 @@ foreach ($resource in $allResources) {
                     
                     # Virtual Network Rules (for flexible servers)
                     if ($resource.Type -like "*flexible*") {
-                        $pgServer = Get-AzResource -ResourceId $resource.Id -ExpandProperties
+                        $pgServer = Get-AzResource -ResourceId $resource.Id
                         if ($pgServer.Properties.network.delegatedSubnetResourceId) {
                             $subnetId = $pgServer.Properties.network.delegatedSubnetResourceId
                             $subnetName = ($subnetId -split '/')[-1]

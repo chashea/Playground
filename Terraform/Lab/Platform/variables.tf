@@ -10,7 +10,7 @@ variable "location" {
 }
 
 variable "env" {
-  type = string
+  type        = string
   description = "Prod/Dev/Test/QA/Nonprod"
-  default = "dev"
+  default     = "dev"
 }

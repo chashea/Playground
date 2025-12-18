@@ -1,14 +1,14 @@
 module "law-mgmt" {
   source              = "Azure/avm-res-operationalinsights-workspace/azurerm"
   version             = "0.4.2"
-  name                = "law-mgmt-  -${var.location}-001"
+  name                = "law-${random_string.suffix.result}-001"
   resource_group_name = local.resource_groups["hub_mgmt"].name
   location            = local.resource_groups["hub_mgmt"].location
 }
 
 resource "azurerm_monitor_diagnostic_setting" "fw_diag" {
-  name                       = "diag-fw-${var.env}-${var.location}-001"
-  target_resource_id         = module.alznetwork.firewall_resource_ids["primary_hub"]
+  name                       = "diag-fw-${random_string.suffix.result}-001"
+  target_resource_id         = module.fw.resource_id
   log_analytics_workspace_id = module.law-mgmt.resource_id
   enabled_log {
     category_group = "allLogs"
@@ -21,7 +21,7 @@ resource "azurerm_monitor_diagnostic_setting" "fw_diag" {
 module "kv-mgmt" {
   source              = "Azure/avm-res-keyvault-vault/azurerm"
   version             = "0.10.2"
-  name                = "kv-mgmt-${var.env}-${var.location}-001"
+  name                = "kv-${random_string.suffix.result}-001"
   resource_group_name = local.resource_groups["hub_mgmt"].name
   location            = local.resource_groups["hub_mgmt"].location
   tenant_id           = data.azurerm_client_config.current.tenant_id
@@ -29,7 +29,7 @@ module "kv-mgmt" {
 }
 
 resource "azurerm_storage_account" "stg-mgmt" {
-  name                     = "stgflwlogsmgmt${var.env}${var.location}-001"
+  name                     = "stgflwlogs${random_string.suffix.result}001"
   resource_group_name      = local.resource_groups["hub_mgmt"].name
   location                 = local.resource_groups["hub_mgmt"].location
   account_tier             = "Standard"
@@ -41,7 +41,7 @@ resource "azurerm_storage_account" "stg-mgmt" {
 resource "time_sleep" "wait_10_seconds_for_network_watcher_creation" {
   create_duration = "10s"
 
-  depends_on = [module.alznetwork]
+  depends_on = [module.vnet-hub]
 }
 
 data "azurerm_network_watcher" "this" {
@@ -61,8 +61,8 @@ module "network_watcher_flow_log" {
   flow_logs = {
     vnet_flowlog = {
       enabled            = true
-      name               = "fl-vnet-${var.env}-${var.location}-001"
-      target_resource_id = module.alznetwork.virtual_network_resource_ids["primary_hub"]
+      name               = "fl-vnet-${random_string.suffix.result}-${var.location}-001"
+      target_resource_id = module.vnet-hub.resource_id
       storage_account_id = azurerm_storage_account.stg-mgmt.id
       version            = 2
       retention_policy = {

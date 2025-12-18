@@ -1,4 +1,3 @@
-
 module "resource_groups" {
   source           = "Azure/avm-res-resources-resourcegroup/azurerm"
   version          = "0.2.0"
