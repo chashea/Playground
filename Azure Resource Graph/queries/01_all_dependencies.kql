@@ -1,0 +1,19 @@
+// Query: Get All Resources with Their Dependencies
+// Description: Shows all resources and their dependency information
+// Use Case: Initial overview of all resources and relationships
+
+resources
+| extend 
+    dependencies = properties.dependencies,
+    dependsOn = properties.dependsOn
+| project 
+    resourceId = id,
+    resourceName = name,
+    resourceType = type,
+    resourceGroup,
+    location,
+    subscriptionId,
+    dependencies,
+    dependsOn,
+    tags
+| order by resourceType, resourceName

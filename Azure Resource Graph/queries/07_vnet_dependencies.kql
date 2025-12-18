@@ -1,0 +1,24 @@
+// Query: Virtual Network Dependencies
+// Description: Shows VNets with their subnets and connected resources
+// Use Case: Understanding VNet structure and subnet utilization
+
+resources
+| where type == 'microsoft.network/virtualnetworks'
+| extend subnets = properties.subnets
+| mv-expand subnets
+| project 
+    vnetId = id,
+    vnetName = name,
+    resourceGroup,
+    location,
+    addressSpaces = properties.addressSpace.addressPrefixes,
+    subnetName = tostring(subnets.name),
+    subnetPrefix = tostring(subnets.properties.addressPrefix),
+    subnetId = tostring(subnets.id),
+    connectedDevices = array_length(subnets.properties.ipConfigurations),
+    nsgId = tostring(subnets.properties.networkSecurityGroup.id),
+    routeTableId = tostring(subnets.properties.routeTable.id),
+    serviceEndpoints = subnets.properties.serviceEndpoints,
+    delegations = subnets.properties.delegations,
+    subscriptionId
+| order by vnetName, subnetName

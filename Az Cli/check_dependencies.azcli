@@ -1,0 +1,184 @@
+# Azure CLI Script to Check Resource Dependencies
+# This is a lightweight alternative using only Azure CLI and Resource Graph
+
+# Variables - Update these
+$subscription_id="<your-subscription-id>"
+$resource_group=""  # Leave empty for all resources, or specify a resource group name
+
+# Set the subscription
+az account set --subscription $subscription_id
+
+Write-Output "================================"
+Write-Output "Azure Dependency Checker (Azure CLI)"
+Write-Output "================================"
+Write-Output ""
+
+# Check if Resource Graph extension is installed
+if (-not (az extension list --query "[?name=='resource-graph']" -o tsv)) {
+    Write-Output "Installing Resource Graph extension..."
+    az extension add --name resource-graph
+}
+
+# Query 1: Get all resources with their basic info
+Write-Output "📊 Querying all resources..."
+Write-Output ""
+
+$query1 = @"
+resources
+| project id, name, type, resourceGroup, location
+| order by type, name
+"@
+
+az graph query -q $query1 --subscriptions $subscription_id
+
+# Query 2: Get VM dependencies (NICs and Disks)
+Write-Output ""
+Write-Output "🖥️  VM Dependencies..."
+Write-Output ""
+
+$query2 = @"
+resources
+| where type == 'microsoft.compute/virtualmachines'
+| extend nicIds = properties.networkProfile.networkInterfaces
+| extend osDisk = properties.storageProfile.osDisk.managedDisk.id
+| mv-expand nicIds
+| project 
+    vmName = name,
+    vmId = id,
+    resourceGroup,
+    nicId = tostring(nicIds.id),
+    osDisk
+| order by vmName
+"@
+
+az graph query -q $query2 --subscriptions $subscription_id
+
+# Query 3: Get Network resource dependencies
+Write-Output ""
+Write-Output "🌐 Network Dependencies..."
+Write-Output ""
+
+$query3 = @"
+resources
+| where type in (
+    'microsoft.network/azurefirewalls',
+    'microsoft.network/bastionhosts',
+    'microsoft.network/applicationgateways',
+    'microsoft.network/virtualnetworkgateways'
+)
+| extend ipConfigs = properties.ipConfigurations
+| mv-expand ipConfigs
+| project 
+    resourceName = name,
+    resourceType = type,
+    resourceGroup,
+    subnetId = tostring(ipConfigs.properties.subnet.id),
+    publicIpId = tostring(ipConfigs.properties.publicIPAddress.id)
+| order by resourceType, resourceName
+"@
+
+az graph query -q $query3 --subscriptions $subscription_id
+
+# Query 4: Get Public IP attachments
+Write-Output ""
+Write-Output "🔌 Public IP Attachments..."
+Write-Output ""
+
+$query4 = @"
+resources
+| where type == 'microsoft.network/publicipaddresses'
+| extend attachedTo = properties.ipConfiguration.id
+| project 
+    publicIpName = name,
+    resourceGroup,
+    attachedTo = tostring(attachedTo),
+    allocationMethod = properties.publicIPAllocationMethod,
+    ipAddress = properties.ipAddress
+| order by publicIpName
+"@
+
+az graph query -q $query4 --subscriptions $subscription_id
+
+# Query 5: Get managed disks and their attachments
+Write-Output ""
+Write-Output "💾 Disk Attachments..."
+Write-Output ""
+
+$query5 = @"
+resources
+| where type == 'microsoft.compute/disks'
+| extend diskState = properties.diskState
+| extend vmId = properties.managedBy
+| project 
+    diskName = name,
+    resourceGroup,
+    diskState,
+    attachedToVm = tostring(vmId),
+    sizeGB = properties.diskSizeGB
+| order by diskName
+"@
+
+az graph query -q $query5 --subscriptions $subscription_id
+
+# Query 6: Get NICs and their attachments
+Write-Output ""
+Write-Output "🔗 NIC Attachments and Subnets..."
+Write-Output ""
+
+$query6 = @"
+resources
+| where type == 'microsoft.network/networkinterfaces'
+| extend ipConfigs = properties.ipConfigurations[0]
+| project 
+    nicName = name,
+    resourceGroup,
+    attachedToVm = tostring(properties.virtualMachine.id),
+    subnetId = tostring(ipConfigs.properties.subnet.id),
+    privateIp = tostring(ipConfigs.properties.privateIPAddress),
+    publicIpId = tostring(ipConfigs.properties.publicIPAddress.id)
+| order by nicName
+"@
+
+az graph query -q $query6 --subscriptions $subscription_id
+
+# Query 7: Check for resource locks
+Write-Output ""
+Write-Output "🔒 Resource Locks..."
+Write-Output ""
+
+$query7 = @"
+authorizationresources
+| where type == 'microsoft.authorization/locks'
+| project 
+    lockName = name,
+    lockLevel = properties.level,
+    lockedResource = split(id, '/providers/Microsoft.Authorization')[0],
+    notes = properties.notes
+| order by lockName
+"@
+
+az graph query -q $query7 --subscriptions $subscription_id
+
+# Query 8: Summary of resources by type
+Write-Output ""
+Write-Output "📈 Resource Summary by Type..."
+Write-Output ""
+
+$query8 = @"
+resources
+| summarize count() by type
+| order by count_ desc
+"@
+
+az graph query -q $query8 --subscriptions $subscription_id
+
+Write-Output ""
+Write-Output "================================"
+Write-Output "✅ Dependency check complete!"
+Write-Output "================================"
+
+# Optional: Export to JSON
+# Uncomment the following lines to export results to a file
+# $output_file = "azure_dependencies_$(Get-Date -Format 'yyyyMMdd_HHmmss').json"
+# az graph query -q $query1 --subscriptions $subscription_id > $output_file
+# Write-Output "Results exported to $output_file"

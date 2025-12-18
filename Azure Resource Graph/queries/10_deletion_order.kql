@@ -1,0 +1,50 @@
+// Query: Resource Deletion Order Analysis
+// Description: Helps determine safe deletion order by showing resource dependencies
+// Use Case: Planning resource deletion to avoid dependency errors
+
+resources
+| where resourceGroup == 'YOUR_RESOURCE_GROUP'  // Replace with your RG name
+| extend resourceType = type
+| extend priority = case(
+    // Priority 1: Delete first (no dependencies)
+    type == 'microsoft.compute/virtualmachines', 1,
+    type == 'microsoft.web/sites', 1,
+    type == 'microsoft.sql/servers/databases', 1,
+    type == 'microsoft.containerservice/managedclusters', 1,
+    
+    // Priority 2: Delete after apps/VMs
+    type == 'microsoft.network/azurefirewalls', 2,
+    type == 'microsoft.network/bastionhosts', 2,
+    type == 'microsoft.network/applicationgateways', 2,
+    type == 'microsoft.network/virtualnetworkgateways', 2,
+    type == 'microsoft.network/loadbalancers', 2,
+    
+    // Priority 3: Delete after network appliances
+    type == 'microsoft.network/networkinterfaces', 3,
+    type == 'microsoft.compute/disks', 3,
+    
+    // Priority 4: Delete after NICs and disks
+    type == 'microsoft.network/publicipaddresses', 4,
+    type == 'microsoft.network/networksecuritygroups', 4,
+    type == 'microsoft.network/routetables', 4,
+    
+    // Priority 5: Delete after all network resources
+    type == 'microsoft.network/virtualnetworks', 5,
+    
+    // Priority 6: Delete infrastructure resources last
+    type == 'microsoft.storage/storageaccounts', 6,
+    type == 'microsoft.keyvault/vaults', 6,
+    type == 'microsoft.operationalinsights/workspaces', 6,
+    
+    // Default priority for unknown types
+    7
+)
+| project 
+    deletionPriority = priority,
+    resourceType,
+    resourceName = name,
+    resourceId = id,
+    resourceGroup,
+    location,
+    subscriptionId
+| order by deletionPriority asc, resourceType, resourceName
