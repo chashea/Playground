@@ -1,0 +1,24 @@
+// Query: Azure Bastion Dependencies
+// Description: Shows Azure Bastion hosts and their dependencies
+// Use Case: Understanding Bastion configuration and dependencies
+
+resources
+| where type == 'microsoft.network/bastionhosts'
+| extend 
+    ipConfiguration = properties.ipConfigurations[0],
+    sku = sku.name,
+    scaleUnits = properties.scaleUnits
+| project 
+    bastionId = id,
+    bastionName = name,
+    resourceGroup,
+    location,
+    sku,
+    scaleUnits,
+    ipConfigName = tostring(ipConfiguration.name),
+    subnetId = tostring(ipConfiguration.properties.subnet.id),
+    publicIpId = tostring(ipConfiguration.properties.publicIPAddress.id),
+    privateIP = tostring(ipConfiguration.properties.privateIPAddress),
+    provisioningState = properties.provisioningState,
+    subscriptionId
+| order by bastionName

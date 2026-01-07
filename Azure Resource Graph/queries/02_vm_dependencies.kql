@@ -1,0 +1,27 @@
+// Query: Virtual Machine Dependencies
+// Description: Shows VMs and all their dependencies (NICs, Disks, etc.)
+// Use Case: Understanding what resources are attached to VMs
+
+resources
+| where type == 'microsoft.compute/virtualmachines'
+| extend 
+    nicIds = properties.networkProfile.networkInterfaces,
+    osDiskId = properties.storageProfile.osDisk.managedDisk.id,
+    dataDisks = properties.storageProfile.dataDisks,
+    availabilitySetId = properties.availabilitySet.id,
+    vmSize = properties.hardwareProfile.vmSize,
+    powerState = properties.extended.instanceView.powerState.code
+| mv-expand nicIds
+| project 
+    vmId = id,
+    vmName = name,
+    resourceGroup,
+    location,
+    vmSize,
+    powerState,
+    nicId = tostring(nicIds.id),
+    osDiskId,
+    dataDisksCount = array_length(dataDisks),
+    availabilitySetId,
+    subscriptionId
+| order by vmName

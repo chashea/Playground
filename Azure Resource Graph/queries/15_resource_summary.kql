@@ -1,0 +1,29 @@
+// Query: Resource Summary by Type
+// Description: Provides a high-level summary of all resources
+// Use Case: Quick overview of your Azure environment
+
+resources
+| summarize 
+    count = count(),
+    resourceGroups = dcount(resourceGroup),
+    locations = dcount(location)
+    by type
+| extend 
+    category = case(
+        type startswith 'microsoft.compute/', 'Compute',
+        type startswith 'microsoft.network/', 'Networking',
+        type startswith 'microsoft.storage/', 'Storage',
+        type startswith 'microsoft.sql/', 'Database',
+        type startswith 'microsoft.web/', 'Web + Mobile',
+        type startswith 'microsoft.containerservice/', 'Containers',
+        type startswith 'microsoft.keyvault/', 'Security',
+        type startswith 'microsoft.operationalinsights/', 'Monitoring',
+        'Other'
+    )
+| project 
+    category,
+    resourceType = type,
+    totalResources = count,
+    resourceGroups,
+    locations
+| order by category, totalResources desc

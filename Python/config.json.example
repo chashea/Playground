@@ -1,0 +1,30 @@
+{
+  "subscription_ids": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "resource_groups": [
+    "rg-eus2-001",
+    "rg-hub-prod"
+  ],
+  "options": {
+    "dry_run": true,
+    "export_json": true,
+    "output_file": "azure_dependencies.json",
+    "check_locks": true,
+    "verbose": true
+  },
+  "exclusions": {
+    "resource_types": [
+      "microsoft.insights/diagnosticsettings"
+    ],
+    "resource_groups": [
+      "NetworkWatcherRG",
+      "cloud-shell-storage"
+    ]
+  },
+  "notifications": {
+    "enabled": false,
+    "webhook_url": "https://your-webhook-url.com",
+    "email": "admin@example.com"
+  }
+}
