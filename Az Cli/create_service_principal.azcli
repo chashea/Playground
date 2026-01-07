@@ -1,6 +1,0 @@
-# Run this command to create the service principal, associate it with the Contributor role, and scope it to the subscription. 
-# Output the service principal credentials in JSON format to add to GitHub Actions secrets.
-# Replace {SUBSCRIPTION_ID} with your subscription ID.
-# Copy the client id and the client secret to create the GitHub Actions secrets.
-$subid = "/subscriptions/<SUBSCRIPTION_ID>"
-az ad sp create-for-rbac --name "sp-tf" --role="Contributor" --scopes=$subid --sdk-auth

@@ -1,9 +1,0 @@
-$lawrgname = 'rg-weu-avdpoc-monitoring'
-$location = 'westeurope'
-$tags = 'project=avdpoc'
-$laworkspace = 'law-weu-avdpoc-monitoring'
-$lasku = 'PerGB2018'
-$laRetention = 30
-
-az group create --name $lawrgname --location $location --tags $tags
-az monitor log-analytics workspace create --resource-group $lawrgname --workspace-name $laworkspace --location $location --sku $lasku --retention-time $laRetention
